@@ -1,0 +1,12 @@
+Package: RDB
+Version: 1.0.1
+Date: 2008-03-20
+Title: R Internal Database
+Author: Herodotos Herodotou, Yi Zhang
+Maintainer: Herodotos Herodotou <hero@cs.duke.edu>
+Depends: R (>= 2.3.0), methods
+Description: A database interface (DBI) definition for communication
+        between R and an internal relational database management 
+	systems.
+License: LGPL (version 2 or later)
+URL: http://www.r-project.org

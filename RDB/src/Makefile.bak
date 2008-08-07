@@ -1,0 +1,29 @@
+#Makefile for building the C language shared libray
+
+C = gcc
+# for building objects
+OPTS    =  -g -Wall -ansi -I/usr/include/mysql -I../../include
+# for building R dynamic lib
+PKG_CFLAGS= -Wall -ansi -I/usr/include/mysql
+PKG_LIBS= -L/usr/lib/mysql -lmysqlclient -lnsl -lm -lz
+
+OBJECTS = mainDriver/rdb_basics.o\
+mainDriver/rdb_handle_vector_tables.o\
+mainDriver/rdb_handle_vector_views.o\
+mainDriver/rdb_insert_vector_data.o \
+mainDriver/rdb_handle_vectors.o \
+mainDriver/rdb_get_vector_data.o\
+mainDriver/rdb_set_vector_data.o\
+mainDriver/rdb_binary_operators.o
+
+all: dbvector_wrapper.so
+	
+
+dbvector_wrapper.so:  $(OBJECTS) utils.c new.c arith.c access.c 
+	CFLAGS="-g " PKG_CFLAGS="$(PKG_CFLAGS)" PKG_LIBS="$(PKG_LIBS)" R CMD SHLIB -o $@ $^
+
+.c.o: 
+	$(C) $(OPTS) -c $<
+
+clean:
+	-rm *.o *.so mainDriver/*.o
