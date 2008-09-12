@@ -18,8 +18,8 @@ SEXP dbvector_copy(SEXP from)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = malloc(MAX_TABLE_NAME*sizeof(char));
 	initRDBVector(&vec, 0, 0);
+	vec->tableName = malloc(MAX_TABLE_NAME*sizeof(char));
 
 	int len = length(from);
 
@@ -102,8 +102,8 @@ SEXP logical_db(SEXP len)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
 	initRDBVector(&vec, 0, 0);
+	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
 
 	createNewLogicVectorTable(sqlconn, vec);
 	insertSeqLogicVectorTable(sqlconn, vec, 0, length);
@@ -150,8 +150,8 @@ SEXP dbcomplex(SEXP len, SEXP x, SEXP y, SEXP type)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
 	initRDBVector(&vec, 0, 0);
+	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
 
 	int k = asInteger(type);
 	double *real, *imaginary;
@@ -235,8 +235,8 @@ Rprintf("type %d\n",TYPEOF(ret));
 
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
 	initRDBVector(&vec, 0, 0);
+	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
 
 
 	if (useInt)

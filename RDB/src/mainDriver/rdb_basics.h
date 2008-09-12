@@ -1,6 +1,7 @@
 #ifndef _RDB_BASICS_H
 #define _RDB_BASICS_H
 
+#include "mysql.h"
 
 /* Useful constrants */
 #define MAX_INT_LENGTH       12

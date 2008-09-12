@@ -17,6 +17,9 @@
 	setMethod("/", signature(e1="dbvector",e2="dbvector"), divide_dbvectors)
 	setMethod("Compare", signature(e1="dbvector",e2="numeric"), compare_dbvector_numeric)
 	setMethod("Math", signature(x="dbvector"), math_dbvector)
+	setMethod("sqrt", signature(x="dbvector"), sqrt_dbvector)
+	setMethod("^", signature(e1="dbvector",e2="numeric"), pow_dbvector)
+	setMethod("-", signature(e1="dbvector",e2="numeric"), subtract_dbvector_numeric)
 
 	setMethod("max", signature(x="dbvector"), function(x,na.rm=FALSE){
 		.Call("max_dbvector", x, na.rm)	
@@ -55,6 +58,12 @@
 	})
 }
 
+sqrt_dbvector <- function(x) {
+.Call("sqrt_dbvector", x)
+}
+pow_dbvector <- function(e1,e2) {
+.Call("pow_dbvector", e1, e2)
+}
 mean.dbvector <- function(x, na.rm=F) {
 	.Call("mean_dbvector", x, na.rm)
 }
@@ -121,4 +130,25 @@ multiply_dbvectors <- function(e1,e2) {
 }
 divide_dbvectors <- function(e1,e2) {
 	.Call("divide_dbvectors", e1, e2)
+}
+
+sort.dbvector <- function(x, decreasing=FALSE) {
+print("sort entered")
+.Call("dbvector_sort", x, decreasing)
+}
+
+load.db <- function(name) {
+	if (missing(name) || mode(name)!='numeric')
+		stop("table metadata ID must be provided")
+
+	.Call("load_dbvector", as.integer(name))
+}
+persist <- function(x) {
+	.Call("persist",x)
+}
+
+subtract_dbvector_numeric <- function(e1,e2) {
+if (length(e2) ==1)
+	.Call("subtract_dbvector_numeric", e1, e2)
+else stop("second argument must be of length 1")
 }

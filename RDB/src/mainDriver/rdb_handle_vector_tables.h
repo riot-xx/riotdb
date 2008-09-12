@@ -1,17 +1,17 @@
 #ifndef _RDB_HANDLE_VECTOR_TABLES_H
 #define _RDB_HANDLE_VECTOR_TABLES_H
 
-
+#include "rdb_basics.h"
 /* Templates to create vector tables */
 #define sqlTemplateCreateIntVector  "CREATE TABLE %s ( \
-                                    vIndex INT(10) UNSIGNED AUTO_INCREMENT, \
-                                    vValue INT(12), \
+                                    vIndex INT UNSIGNED AUTO_INCREMENT, \
+                                    vValue INT NOT NULL, \
                                     PRIMARY KEY (vIndex), \
                                     INDEX (vIndex) )"
 
 #define sqlTemplateCreateDoubleVector  "CREATE TABLE %s ( \
-                                    vIndex INT(10) UNSIGNED AUTO_INCREMENT, \
-                                    vValue DOUBLE(22,12), \
+                                    vIndex INT UNSIGNED AUTO_INCREMENT, \
+                                    vValue DOUBLE NOT NULL, \
                                     PRIMARY KEY (vIndex), \
                                     INDEX (vIndex) )"
 

@@ -20,6 +20,9 @@
 
 
 /* Templates to execute binary operations */
+#define sqlTemplateUnaryFunction "SELECT vIndex, %s(vValue) from %s"
+#define sqlTemplateBinaryFunction "SELECT vIndex, %s(vValue,%f) from %s"
+#define sqlTemplateSimpleNumericBinary "SELECT vIndex, vValue%s%f from %s"
 #define sqlTemplateNumericBinaryOps_EQ "SELECT T1.vIndex, T1.vValue %s T2.vValue \
                                         FROM %s as T1, %s as T2 \
                                         WHERE T1.vIndex = T2.vIndex"
@@ -30,7 +33,7 @@
 
 
 #define sqlTemplateComplexAddSub_EQ    "SELECT T1.vIndex, T1.vReal %s T2.vReal, \
-                                        T1.vImag %s T2.vImag \
+                                       T1.vImag %s T2.vImag \
                                         FROM %s as T1, %s as T2 \
                                         WHERE T1.vIndex = T2.vIndex"
 
@@ -113,6 +116,8 @@ void buildComplexAddSubSQL(rdbVector * input1, rdbVector * input2,
 void buildComplexMultDivSQL(rdbVector * input1, rdbVector * input2, 
 			    char * sqlTemplateEQ, char * sqlTemplateNE, 
 			    char ** sqlStr);
+int powNumericVector(MYSQL*, rdbVector*, rdbVector*, double);
+int sqrtNumericVector(MYSQL*, rdbVector*, rdbVector*);
 
 #endif
 

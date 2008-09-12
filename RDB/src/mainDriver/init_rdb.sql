@@ -12,14 +12,15 @@ CREATE TABLE DB_Sources (
     username        VARCHAR(30),
     password        VARCHAR(64),
     next_vec_index  INT(10),
-    PRIMARY KEY  (db_source_id)
-);
+    PRIMARY KEY  (db_source_id),
+	index (db_source_id)
+) engine=innodb;
 
 
 CREATE TABLE Metadata (
     metadata_id     INT(6)  UNSIGNED AUTO_INCREMENT,
     table_name      VARCHAR(40) NOT NULL,
-    db_source_id    INT(6)  UNSIGNED DEFAULT 1,
+    db_source_id    INT(6)  UNSIGNED ,
     size            INT(10) UNSIGNED NOT NULL,
     is_view         INT(2)  UNSIGNED DEFAULT 0,
     ref_counter     INT(6)  UNSIGNED DEFAULT 1,
@@ -34,17 +35,19 @@ CREATE TABLE Metadata (
     sxp_gcgen       SMALLINT(2) UNSIGNED DEFAULT 0,
     sxp_gccls       SMALLINT(2) UNSIGNED DEFAULT 0,
     PRIMARY KEY     (metadata_id),
-    FOREIGN KEY     (db_source_id) REFERENCES DB_Sources ON DELETE CASCADE,
+---    FOREIGN KEY     (db_source_id) REFERENCES DB_Sources ON DELETE CASCADE,
     INDEX           (metadata_id)
-);
+---    index (db_source_id)
+) engine=innodb;
 
 
 CREATE TABLE View_Reference (
     view_id         INT(6) UNSIGNED,
     table1_id       INT(6) UNSIGNED,
     table2_id       INT(6) UNSIGNED,
-    PRIMARY KEY  (view_id)
-);
+    PRIMARY KEY  (view_id),
+	index (view_id)
+) engine=innodb;
 
 
 --- Create Triggers ---

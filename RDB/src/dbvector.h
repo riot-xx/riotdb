@@ -19,6 +19,7 @@
 #include "mainDriver/rdb_aggregate_functions.h"
 #include "mainDriver/rdb_element_functions.h"
 #include "mainDriver/rdb_delete_vector_data.h"
+#include "mainDriver/rdb_sort_vector.h"
 
 #define MAX_TABLE_NAME 64
 

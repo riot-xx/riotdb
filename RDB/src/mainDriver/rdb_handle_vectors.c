@@ -472,8 +472,11 @@ int insertMetadataInfo(MYSQL * sqlConn, rdbVector * vectorInfo)
 
   /* Execute the query */
   int success = mysql_query(sqlConn, strInsertMetadataInfo);
-  if( success != 0 )
+  if( success) {
+	fprintf(stderr, "insert metadata failed: %u (%s)\n",
+			mysql_errno(sqlConn), mysql_error(sqlConn));
      return 0;
+  }
 
   /* Get the metadata info index */
   vectorInfo->metadataID = (unsigned int)mysql_insert_id(sqlConn);

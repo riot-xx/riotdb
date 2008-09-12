@@ -19,7 +19,7 @@ int connectToLocalDB(MYSQL ** sqlConn)
   /* Connect to local db */
   *sqlConn = mysql_init(NULL);
   *sqlConn = mysql_real_connect(*sqlConn, strServer, strUser, strPwd, 
-			        strDatabase, 0, NULL, 0);
+								strDatabase, 0, NULL, 0/*CLIENT_MULTI_STATEMENTS*/);
 
   if( sqlConn == NULL || *sqlConn == NULL )
   {
@@ -188,7 +188,7 @@ int loadRDBVector(MYSQL * sqlConn, rdbVector ** vectorInfo,
   sqlRow = mysql_fetch_row(sqlRes);
   if( sqlRow != NULL )
   {
-     initRDBVector(vectorInfo, 0, 1);
+     initRDBVector(vectorInfo, 0, 0);
 
      int length = strlen(sqlRow[1]) + 1;
      (*vectorInfo)->tableName = (char *)malloc(length * sizeof(char));

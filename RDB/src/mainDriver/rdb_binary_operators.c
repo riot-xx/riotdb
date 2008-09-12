@@ -10,6 +10,95 @@
 
 /* --- Functions to execute binary operations on Ints and Doubles --- */
 
+int subtractVectorNumeric(MYSQL * sqlConn, rdbVector * result, rdbVector *input1, double y)
+{
+
+  /* Both inputs must either be integers or doubles or logic */
+  if( input1->sxp_type != SXP_TYPE_INTEGER &&
+      input1->sxp_type != SXP_TYPE_DOUBLE &&
+      input1->sxp_type != SXP_TYPE_LOGIC )
+    return 0;
+
+  /* Build the sql string and create the view */
+  char *sqlString = malloc(sizeof(char)*200);
+sprintf(sqlString, sqlTemplateSimpleNumericBinary, "-", y, input1->tableName);
+
+
+  initRDBVector(&result, 1, 0);
+	result->size = input1->size;
+  /*result->size = (input1->size > input2->size)? input1->size : input2->size;*/
+  
+  int success = 0;
+     success = createNewDoubleVectorView(sqlConn, result, sqlString);
+  free(sqlString);
+
+  if( success )
+     createViewReferences(sqlConn, result, input1, input1);
+  else
+     result->size = 0;
+
+  return success;
+}
+int sqrtNumericVector(MYSQL * sqlConn, rdbVector * result, rdbVector * input1)
+{
+
+  /* Both inputs must either be integers or doubles or logic */
+  if( input1->sxp_type != SXP_TYPE_INTEGER &&
+      input1->sxp_type != SXP_TYPE_DOUBLE &&
+      input1->sxp_type != SXP_TYPE_LOGIC )
+    return 0;
+
+  /* Build the sql string and create the view */
+  char *sqlString = malloc(sizeof(char)*200);
+sprintf(sqlString, sqlTemplateUnaryFunction, "sqrt", input1->tableName);
+
+
+  initRDBVector(&result, 1, 0);
+	result->size = input1->size;
+  /*result->size = (input1->size > input2->size)? input1->size : input2->size;*/
+  
+  int success = 0;
+     success = createNewDoubleVectorView(sqlConn, result, sqlString);
+  free(sqlString);
+
+  if( success )
+     createViewReferences(sqlConn, result, input1, input1);
+  else
+     result->size = 0;
+
+  return success;
+}
+
+int powNumericVector(MYSQL * sqlConn, rdbVector * result, rdbVector * input1, double exponent)
+{
+
+  /* Both inputs must either be integers or doubles or logic */
+  if( input1->sxp_type != SXP_TYPE_INTEGER &&
+      input1->sxp_type != SXP_TYPE_DOUBLE &&
+      input1->sxp_type != SXP_TYPE_LOGIC )
+    return 0;
+
+  /* Build the sql string and create the view */
+  char *sqlString = malloc(sizeof(char)*200);
+sprintf(sqlString, sqlTemplateBinaryFunction, "pow", exponent, input1->tableName);
+
+
+  initRDBVector(&result, 1, 0);
+	result->size = input1->size;
+  /*result->size = (input1->size > input2->size)? input1->size : input2->size;*/
+  
+  int success = 0;
+     success = createNewDoubleVectorView(sqlConn, result, sqlString);
+  free(sqlString);
+
+  if( success )
+     createViewReferences(sqlConn, result, input1,input1);
+  else
+     result->size = 0;
+
+  return success;
+}
+
 int addNumericVectors(MYSQL * sqlConn, rdbVector * result, 
 		      rdbVector * input1, rdbVector * input2)
 {
