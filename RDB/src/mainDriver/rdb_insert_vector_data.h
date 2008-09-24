@@ -1,6 +1,13 @@
 #ifndef _RDB_INSERT_VECTOR_DATA_H
 #define _RDB_INSERT_VECTOR_DATA_H
 
+/*****************************************************************************
+ * Contains functions for inserting data to a vector either explicitely 
+ * or load from a file
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 
 /* Useful Constant */
 #define MAX_NUM_INTEGERS 200
@@ -22,12 +29,6 @@
 #define sqlTemplateInsertVector         "INSERT INTO %s (vValue) VALUES %s"
 
 #define sqlTemplateInsertComplexVector  "INSERT INTO %s (vReal, vImag) VALUES %s"
-
-#define sqlTemplateGetCurrentSize       "SELECT size FROM Metadata \
-                                         WHERE metadata_id = %ld"
-
-#define sqlTemplateSetCurrentSize       "UPDATE Metadata SET size = %d \
-                                         WHERE metadata_id = %ld"
 
 
 
@@ -94,8 +95,6 @@ int insertPartLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 /* Other Helper functions */
 int insertIntoVectorTable(MYSQL * sqlConn, char * sqlTemplate, 
 			  char * tableName, char * strValues);
-
-int updateSizeVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, int newSize);
 
 
 

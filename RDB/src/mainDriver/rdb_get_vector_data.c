@@ -1,3 +1,11 @@
+/*****************************************************************************
+ * Contains functions for accessing elements in vectors (get all, single 
+ * values, range of values, sparse values, with other dbvectors as indexes 
+ * or with logic dbvectors)
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,10 +13,10 @@
 #include "Rinternals.h"
 #include "rdb_basics.h"
 #include "rdb_get_vector_data.h"
-#include "rdb_handle_vectors.h"
+#include "rdb_handle_vector_tables.h"
 #include "rdb_handle_vector_views.h"
 #include "rdb_insert_vector_data.h"
-
+#include "rdb_handle_metadata.h"
 
 
 /* --------- Functions to access vector tables by element -------------- */
@@ -765,7 +773,7 @@ int getIntElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
   int success = createNewIntegerVectorView(sqlConn, resultVector, strGetElems);
 
   if( success )
-     createViewReferences(sqlConn, resultVector, dataVector, indexVector);
+     createVectorViewReferences(sqlConn, resultVector, dataVector, indexVector);
   else
      resultVector->size = 0;
 
@@ -794,7 +802,7 @@ int getDoubleElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
   int success = createNewDoubleVectorView(sqlConn, resultVector, strGetElems);
 
   if( success )
-     createViewReferences(sqlConn, resultVector, dataVector, indexVector);
+     createVectorViewReferences(sqlConn, resultVector, dataVector, indexVector);
   else
      resultVector->size = 0;
 
@@ -823,7 +831,7 @@ int getStringElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
   int success = createNewStringVectorView(sqlConn, resultVector, strGetElems);
 
   if( success )
-     createViewReferences(sqlConn, resultVector, dataVector, indexVector);
+     createVectorViewReferences(sqlConn, resultVector, dataVector, indexVector);
   else
      resultVector->size = 0;
 
@@ -852,7 +860,7 @@ int getComplexElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
   int success = createNewComplexVectorView(sqlConn, resultVector, strGetElems);
 
   if( success )
-     createViewReferences(sqlConn, resultVector, dataVector, indexVector);
+     createVectorViewReferences(sqlConn, resultVector, dataVector, indexVector);
   else
      resultVector->size = 0;
 
@@ -881,7 +889,7 @@ int getLogicElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
   int success = createNewLogicVectorView(sqlConn, resultVector, strGetElems);
 
   if( success )
-     createViewReferences(sqlConn, resultVector, dataVector, indexVector);
+     createVectorViewReferences(sqlConn, resultVector, dataVector, indexVector);
   else
      resultVector->size = 0;
 
@@ -988,7 +996,7 @@ int internalGetElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
   }
 
   if( success )
-     createViewReferences(sqlConn, tempView, dataVector, logicVector);
+     createVectorViewReferences(sqlConn, tempView, dataVector, logicVector);
   else {
      clearRDBVector(&tempView);
      free(strResults);
@@ -1023,12 +1031,12 @@ int internalGetElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
   /* Get the results from the view */
   if( success )
   {
-     createViewReferences(sqlConn, resultVector, tempView, logicVector);
+     createVectorViewReferences(sqlConn, resultVector, tempView, logicVector);
 
      int numResults = 0;
-     success *= getLogicalTableSize(sqlConn, resultVector, &numResults);
+     success *= getLogicalVectorSize(sqlConn, resultVector, &numResults);
      if( success )
-       success *= updateSizeVectorTable(sqlConn, resultVector, numResults);
+       success *= setLogicalVectorSize(sqlConn, resultVector, numResults);
   }
 
   /* Clean up */

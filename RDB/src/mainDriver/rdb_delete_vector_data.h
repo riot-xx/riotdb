@@ -1,6 +1,13 @@
 #ifndef _RDB_DELETE_VECTOR_DATA_H
 #define _RDB_DELETE_VECTOR_DATA_H
 
+/*****************************************************************************
+ * Contains functions for deleting elements from vectors (delete all, 
+ * single values, range of values or sparse values)
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 
 /* Templates to delete elements from vector tables */
 #define sqlTemplateDeleteAllValues      "DELETE FROM %s"
@@ -11,6 +18,9 @@
                                          WHERE vIndex >= %d AND vIndex <= %d"
 
 #define sqlTemplateDeleteSparseValues   "DELETE FROM %s WHERE %s"
+
+#define sqlTemplateSparseVIndex         "vIndex = %d"
+#define sqlTemplateSparseVIndexOR       "vIndex = %d OR "
 
 /* Functions to delete elements from vector tables */
 int deleteAllElements(MYSQL * sqlConn, rdbVector * vectorInfo);

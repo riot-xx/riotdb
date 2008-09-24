@@ -1,6 +1,14 @@
 #ifndef _RDB_SET_VECTOR_DATA_H
 #define _RDB_SET_VECTOR_DATA_H
 
+/*****************************************************************************
+ * Contains functions for updating elements in an existing vector (setting a 
+ * single value, range of values, sparce values, with dbvectors containing
+ * indexes and logic vectors).
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 
 /* Templates to update vector tables */
 #define sqlTemplateInsertIntElement       "INSERT INTO %s VALUES (%d,%d)"

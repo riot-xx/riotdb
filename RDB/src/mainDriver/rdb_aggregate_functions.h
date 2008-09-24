@@ -1,6 +1,12 @@
 #ifndef _RDB_AGGREGATE_FUNCTIONS_H
 #define _RDB_AGGREGATE_FUNCTIONS_H
 
+/*****************************************************************************
+ * Contains aggregate functions for vectors (sum, avg, max, min)
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 
 /* Templates for SUM */
 #define sqlTemplateNumericSum    "SELECT SUM(vValue) from %s"

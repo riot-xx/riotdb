@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "rdb_handle_vector_tables.h"
 #include "rdb_sort_vector.h"
-#include "rdb_handle_vectors.h"
+#include "rdb_handle_metadata.h"
 
 int sortVector(MYSQL *conn, rdbVector *aInfo, rdbVector *bInfo, int desc)
 {

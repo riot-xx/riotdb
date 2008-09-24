@@ -1,3 +1,10 @@
+/*****************************************************************************
+ * Contains aggregate functions for vectors (sum, avg, max, min)
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

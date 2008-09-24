@@ -1,13 +1,19 @@
+/*****************************************************************************
+ * Contains functions for deleting elements from vectors (delete all, 
+ * single values, range of values or sparse values)
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <mysql.h>
 #include "Rinternals.h"
 #include "rdb_basics.h"
-#include "rdb_handle_vectors.h"
 #include "rdb_delete_vector_data.h"
-#include "rdb_insert_vector_data.h"
-#include "rdb_get_vector_data.h"
+#include "rdb_handle_metadata.h"
+#include "rdb_handle_vector_tables.h"
 
 
 /* ---------- Functions to delete elements from vector tables ----------- */
@@ -24,7 +30,7 @@ int deleteAllElements(MYSQL * sqlConn, rdbVector * vectorInfo)
    if(success != 0)
      return 0;
 
-   updateSizeVectorTable(sqlConn, vectorInfo, 0);
+   setLogicalVectorSize(sqlConn, vectorInfo, 0);
 
    return 1;
 }
@@ -46,7 +52,7 @@ int deleteSingleElement(MYSQL * sqlConn, rdbVector * vectorInfo,
      return 0;
 
    if( index == vectorInfo->size )
-      updateSizeVectorTable(sqlConn, vectorInfo, vectorInfo->size - 1);
+      setLogicalVectorSize(sqlConn, vectorInfo, vectorInfo->size - 1);
 
    return 1;
 }
@@ -69,10 +75,10 @@ int deleteRangeElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 
    if( vectorInfo->size >= greaterThan && vectorInfo->size <= lessThan ) {
      if( greaterThan > 0 ) {
-       updateSizeVectorTable(sqlConn, vectorInfo, greaterThan - 1);
+       setLogicalVectorSize(sqlConn, vectorInfo, greaterThan - 1);
      }
      else {
-       updateSizeVectorTable(sqlConn, vectorInfo, 0);
+       setLogicalVectorSize(sqlConn, vectorInfo, 0);
      }
    }
 
@@ -85,19 +91,19 @@ int deleteSparseElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 {
   /* Initialize necessary strings */
   int i;
-  int stringSize = size * (MAX_INT_LENGTH + strlen(sqlTemplateVIndexOR)) + 1;
+  int stringSize = size * (MAX_INT_LENGTH + strlen(sqlTemplateSparseVIndexOR)) + 1;
   char * strIndexes = (char *)malloc( stringSize * sizeof(char) );
-  char temp[MAX_INT_LENGTH + strlen(sqlTemplateVIndexOR)];
+  char temp[MAX_INT_LENGTH + strlen(sqlTemplateSparseVIndexOR)];
   strIndexes[0] = '\0';
 
   /* Build string of the form: "vIndex = n OR vIndex = n ..." */
   for( i = 0 ; i < size - 1 ; i++ )
   {
-     sprintf(temp, sqlTemplateVIndexOR, indexes[i]);
+     sprintf(temp, sqlTemplateSparseVIndexOR, indexes[i]);
      strcat(strIndexes, temp);
   }
   
-  sprintf(temp, sqlTemplateVIndex, indexes[i]);
+  sprintf(temp, sqlTemplateSparseVIndex, indexes[i]);
   strcat(strIndexes, temp);
 
   /* Build the sql string */
@@ -114,9 +120,9 @@ int deleteSparseElements(MYSQL * sqlConn, rdbVector * vectorInfo,
     return 0;
 
   int newSize;
-  if( getLogicalTableSize(sqlConn, vectorInfo, &newSize) && 
+  if( getLogicalVectorSize(sqlConn, vectorInfo, &newSize) && 
       newSize != vectorInfo->size )
-       updateSizeVectorTable(sqlConn, vectorInfo, newSize);
+       setLogicalVectorSize(sqlConn, vectorInfo, newSize);
 
   return 1;
 }

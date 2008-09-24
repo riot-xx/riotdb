@@ -1,20 +1,29 @@
+/*****************************************************************************
+ * Contains functions for updating elements in an existing vector (setting a 
+ * single value, range of values, sparce values, with dbvectors containing
+ * indexes and logic vectors).
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <mysql.h>
 #include "Rinternals.h"
 #include "rdb_basics.h"
-#include "rdb_handle_vectors.h"
 #include "rdb_set_vector_data.h"
 #include "rdb_get_vector_data.h"
-#include "rdb_insert_vector_data.h"
+#include "rdb_handle_vector_tables.h"
+#include "rdb_handle_vector_views.h"
+#include "rdb_handle_metadata.h"
 
 
 /* ---------- Functions to update vector tables by element ----------- */
 int setIntElement(MYSQL * sqlConn, rdbVector * vectorInfo, 
 		  unsigned int index, int value)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   return internalSetIntElement(sqlConn, vectorInfo, index, value);
@@ -24,7 +33,7 @@ int setIntElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 int setDoubleElement(MYSQL * sqlConn, rdbVector * vectorInfo, 
 		     unsigned  int index, double value)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   return internalSetDoubleElement(sqlConn, vectorInfo, index, value);
@@ -34,7 +43,7 @@ int setDoubleElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 int setStringElement(MYSQL * sqlConn, rdbVector * vectorInfo, 
 		     unsigned int index, char * value)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   return internalSetStringElement(sqlConn, vectorInfo, index, value);
@@ -44,7 +53,7 @@ int setStringElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 int setComplexElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 		      unsigned int index, Rcomplex value)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   return internalSetComplexElement(sqlConn, vectorInfo, index, value);
@@ -54,7 +63,7 @@ int setComplexElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 int setLogicElement(MYSQL * sqlConn, rdbVector * vectorInfo, 
 		    unsigned int index, int value)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   return internalSetLogicElement(sqlConn, vectorInfo, index, value);
@@ -67,7 +76,7 @@ int setRangeIntElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 		        unsigned int greaterThan,  unsigned int lessThan, 
 			int values[], int numValues)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1, j = 0;
@@ -83,7 +92,7 @@ int setRangeDoubleElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 			   unsigned int greaterThan,  unsigned int lessThan, 
 			   double values[], int numValues)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1, j = 0;
@@ -101,7 +110,7 @@ int setRangeStringElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 			   unsigned int greaterThan,  unsigned int lessThan, 
 			   char* values[], int numValues)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1, j = 0;
@@ -119,7 +128,7 @@ int setRangeComplexElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 			    unsigned int greaterThan,  unsigned int lessThan, 
 			    Rcomplex values[], int numValues)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1, j = 0;
@@ -137,7 +146,7 @@ int setRangeLogicElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 			  unsigned int greaterThan,  unsigned int lessThan, 
 			  int values[], int numValues)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1, j = 0;
@@ -156,7 +165,7 @@ int setSparseIntElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 			 unsigned int indexes[], int numIndexes, 
 			 int values[], int numValues)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1;
@@ -174,7 +183,7 @@ int setSparseDoubleElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 			    unsigned int indexes[], int numIndexes, 
 			    double values[], int numValues)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1;
@@ -192,7 +201,7 @@ int setSparseStringElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 			    unsigned int indexes[], int numIndexes, 
 			    char * values[], int numValues)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1;
@@ -210,7 +219,7 @@ int setSparseComplexElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 			     unsigned int indexes[], int numIndexes, 
 			     Rcomplex values[], int numValues)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1;
@@ -228,7 +237,7 @@ int setSparseLogicElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 			   unsigned int indexes[], int numIndexes, 
 			   int values[], int numValues)
 {
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1;
@@ -251,7 +260,7 @@ int setIntElementsWDBVector(MYSQL * sqlConn, rdbVector * vectorInfo,
       indexVector->sxp_type != SXP_TYPE_DOUBLE )
     return 0;
 
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1;
@@ -284,7 +293,7 @@ int setDoubleElementsWDBVector(MYSQL * sqlConn, rdbVector * vectorInfo,
       indexVector->sxp_type != SXP_TYPE_DOUBLE )
     return 0;
 
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1;
@@ -317,7 +326,7 @@ int setStringElementsWDBVector(MYSQL * sqlConn, rdbVector * vectorInfo,
       indexVector->sxp_type != SXP_TYPE_DOUBLE )
     return 0;
 
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1;
@@ -350,7 +359,7 @@ int setComplexElementsWDBVector(MYSQL * sqlConn, rdbVector * vectorInfo,
       indexVector->sxp_type != SXP_TYPE_DOUBLE )
     return 0;
 
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1;
@@ -383,7 +392,7 @@ int setLogicElementsWDBVector(MYSQL * sqlConn, rdbVector * vectorInfo,
       indexVector->sxp_type != SXP_TYPE_DOUBLE )
     return 0;
 
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int i, success = 1;
@@ -416,7 +425,7 @@ int setIntElementsWithLogic(MYSQL * sqlConn, rdbVector * vectorInfo,
   if( logicVector->sxp_type != SXP_TYPE_LOGIC || logicVector->size <= 0 )
     return 0;
 
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int lIndex, lSize = logicVector->size;
@@ -449,7 +458,7 @@ int setDoubleElementsWithLogic(MYSQL * sqlConn, rdbVector * vectorInfo,
   if( logicVector->sxp_type != SXP_TYPE_LOGIC || logicVector->size <= 0 )
     return 0;
 
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int lIndex, lSize = logicVector->size;
@@ -483,7 +492,7 @@ int setStringElementsWithLogic(MYSQL * sqlConn, rdbVector * vectorInfo,
   if( logicVector->sxp_type != SXP_TYPE_LOGIC || logicVector->size <= 0 )
     return 0;
 
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int lIndex, lSize = logicVector->size;
@@ -517,7 +526,7 @@ int setComplexElementsWithLogic(MYSQL * sqlConn, rdbVector * vectorInfo,
   if( logicVector->sxp_type != SXP_TYPE_LOGIC || logicVector->size <= 0 )
     return 0;
 
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int lIndex, lSize = logicVector->size;
@@ -551,7 +560,7 @@ int setLogicElementsWithLogic(MYSQL * sqlConn, rdbVector * vectorInfo,
   if( logicVector->sxp_type != SXP_TYPE_LOGIC || logicVector->size <= 0 )
     return 0;
 
-  if( !ensureMaterialization(sqlConn, vectorInfo) )
+  if( !ensureVectorMaterialization(sqlConn, vectorInfo) )
     return 0;
 
   int lIndex, lSize = logicVector->size;
@@ -587,7 +596,7 @@ int internalSetIntElement(MYSQL * sqlConn, rdbVector * vectorInfo,
   if( index > vectorInfo->size )
   {
      vectorInfo->size = index;
-     updateSizeVectorTable(sqlConn, vectorInfo, index);
+     setLogicalVectorSize(sqlConn, vectorInfo, index);
      return internalInsertIntElement(sqlConn, vectorInfo, index, value);
   }
 
@@ -612,7 +621,7 @@ int internalSetDoubleElement(MYSQL * sqlConn, rdbVector * vectorInfo,
   if( index > vectorInfo->size )
   {
      vectorInfo->size = index;
-     updateSizeVectorTable(sqlConn, vectorInfo, index);
+     setLogicalVectorSize(sqlConn, vectorInfo, index);
      return internalInsertDoubleElement(sqlConn, vectorInfo, index, value);
   }
 
@@ -637,7 +646,7 @@ int internalSetStringElement(MYSQL * sqlConn, rdbVector * vectorInfo,
   if( index > vectorInfo->size )
   {
      vectorInfo->size = index;
-     updateSizeVectorTable(sqlConn, vectorInfo, index);
+     setLogicalVectorSize(sqlConn, vectorInfo, index);
      return internalInsertStringElement(sqlConn, vectorInfo, index, value);
   }
 
@@ -662,7 +671,7 @@ int internalSetComplexElement(MYSQL * sqlConn, rdbVector * vectorInfo,
   if( index > vectorInfo->size )
   {
      vectorInfo->size = index;
-     updateSizeVectorTable(sqlConn, vectorInfo, index);
+     setLogicalVectorSize(sqlConn, vectorInfo, index);
      return internalInsertComplexElement(sqlConn, vectorInfo, index, value);
   }
 
@@ -687,7 +696,7 @@ int internalSetLogicElement(MYSQL * sqlConn, rdbVector * vectorInfo,
   if( index > vectorInfo->size )
   {
      vectorInfo->size = index;
-     updateSizeVectorTable(sqlConn, vectorInfo, index);
+     setLogicalVectorSize(sqlConn, vectorInfo, index);
      return internalInsertLogicElement(sqlConn, vectorInfo, index, value);
   }
 

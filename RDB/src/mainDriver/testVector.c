@@ -7,7 +7,8 @@
 #include "rdb_basics.h"
 #include "rdb_handle_vector_tables.h"
 #include "rdb_handle_vector_views.h"
-#include "rdb_handle_vectors.h"
+#include "rdb_handle_metadata.h"
+#include "rdb_convert_vectors.h"
 #include "rdb_insert_vector_data.h"
 #include "rdb_get_vector_data.h"
 #include "rdb_set_vector_data.h"
@@ -106,41 +107,41 @@ int main()
   printf("Connected to DB\n");
 
   /* Choose which tests to perform */
-  int testInts    = 0;
-  int testDoubles = 0;
-  int testStrings = 0;
-  int testComplex = 0;
-  int testLogic   = 0;
+  int testInts    = 1;
+  int testDoubles = 1;
+  int testStrings = 1;
+  int testComplex = 1;
+  int testLogic   = 1;
 
   int testInsert    = 1;
-  int testLoad      = 0;
-  int testGetRange  = 0;
-  int testGetSparse = 0;
-  int testGetWDBVec = 0;
-  int testGetWLogic = 0;
+  int testLoad      = 1;
+  int testGetRange  = 1;
+  int testGetSparse = 1;
+  int testGetWDBVec = 1;
+  int testGetWLogic = 1;
 
   /* ------------------------------ */
   int testSetInts    = 1;
   int testSetDoubles = 1;
-  int testSetStrings = 0;
-  int testSetComplex = 0;
-  int testSetLogic   = 0;
+  int testSetStrings = 1;
+  int testSetComplex = 1;
+  int testSetLogic   = 1;
 
-  int testSetElem   = 0;
-  int testSetRange  = 0;
-  int testSetSparse = 0;
+  int testSetElem   = 1;
+  int testSetRange  = 1;
+  int testSetSparse = 1;
   int testSetWDBV   = 1;
   int testSetWLogic = 1;
 
   /* ------------------------------ */
-  int testIntSeq    = 0;
-  int testDoubleSeq = 0;
+  int testIntSeq    = 1;
+  int testDoubleSeq = 1;
 
   /* ------------------------------ */
-  int testIntBinOp     = 0;
-  int testDoubleBinOp  = 0;
-  int testComplexBinOp = 0;
-  int testLogicBinOp   = 0;
+  int testIntBinOp     = 1;
+  int testDoubleBinOp  = 1;
+  int testComplexBinOp = 1;
+  int testLogicBinOp   = 1;
 
   int testAdd   = 1;
   int testMinus = 1;
@@ -149,7 +150,7 @@ int main()
   int testMod   = 1;
 
   /* ------------------------------ */
-  int testMaterialization = 0;
+  int testMaterialization = 1;
 
   int testMat1 = 1;
   int testMat2 = 1;
@@ -157,13 +158,13 @@ int main()
   int testMat4 = 1;
 
   /* ------------------------------ */
-  int testDuplicateTable = 0;
+  int testDuplicateTable = 1;
 
   int testFromTable  = 1;
   int testFromView   = 1;
 
   /* ------------------------------ */
-  int testComparisons = 0;
+  int testComparisons = 1;
 
   int testCompInts      = 1;
   int testCompDoubles   = 1;
@@ -171,7 +172,7 @@ int main()
   int testCompDBVectors = 1;
 
   /* ------------------------------ */
-  int testFunctions = 0;
+  int testFunctions = 1;
 
   int testFuncInts     = 1;
   int testFuncDoubles  = 1;
@@ -179,11 +180,11 @@ int main()
   int testFuncStrings  = 1;
 
   /* ------------------------------ */
-  int testConvert = 0;
+  int testConvert = 1;
 
   /* ------------------------------ */
   int testLoadVectors = 1;
-  int testDelete = 1;
+  int testDelete = 0;
 
   /* ------------------------------ */
 
@@ -367,7 +368,7 @@ int TestIntegerVectors(MYSQL * sqlConn, int testInsert, int testLoad,
   
   if( testLoad )
   {
-    if( !loadIntoVectorTable(sqlConn, vectorInfo, "data/dataInt.txt") )
+    if( !loadIntoVectorTable(sqlConn, vectorInfo, "dataDir/dataInt.txt") )
     {
       printf("ERROR Load Ints: %s\n", mysql_error(sqlConn));
       return 0;
@@ -601,7 +602,7 @@ int TestDoubleVectors(MYSQL * sqlConn, int testInsert, int testLoad,
 
   if( testLoad )
   {
-    if( !loadIntoVectorTable(sqlConn, vectorInfo, "data/dataDouble.txt") )
+    if( !loadIntoVectorTable(sqlConn, vectorInfo, "dataDir/dataDouble.txt") )
     {
       printf("ERROR Load Doubless: %s\n", mysql_error(sqlConn));
       return 0;
@@ -825,7 +826,7 @@ int TestStringVectors(MYSQL * sqlConn, int testInsert, int testLoad,
 
   if( testLoad )
   {
-    if( !loadIntoVectorTable(sqlConn, vectorInfo, "data/dataStrings.txt") )
+    if( !loadIntoVectorTable(sqlConn, vectorInfo, "dataDir/dataStrings.txt") )
     {
       printf("ERROR Load Strings: %s\n", mysql_error(sqlConn));
       return 0;
@@ -1052,7 +1053,7 @@ int TestComplexVectors(MYSQL * sqlConn, int testInsert, int testLoad,
 
   if( testLoad )
   {
-    if(!loadIntoComplexVectorTable(sqlConn, vectorInfo, "data/dataComplex.txt"))
+    if(!loadIntoComplexVectorTable(sqlConn, vectorInfo, "dataDir/dataComplex.txt"))
     {
       printf("ERROR Load Complex: %s\n", mysql_error(sqlConn));
       return 0;
@@ -1277,7 +1278,7 @@ int TestLogicVectors(MYSQL * sqlConn, int testInsert, int testLoad,
 
   if( testLoad )
   {
-    if( !loadIntoVectorTable(sqlConn, vectorInfo, "data/dataLogic.txt") )
+    if( !loadIntoVectorTable(sqlConn, vectorInfo, "dataDir/dataLogic.txt") )
     {
       printf("ERROR Load Logicss: %s\n", mysql_error(sqlConn));
       return 0;
@@ -1814,9 +1815,9 @@ int TestComplexBinaryOps(MYSQL* sqlConn, int testAdd, int testMinus,
   double reals[5] = {2.5, 3.2, 7.4, 9.1, 14.0};
   double imags[5] = {2.5, 8.2, -7.4, 1.1, 7};
   if( !insertIntoComplexVectorTable(sqlConn, input1, reals, 5, imags, 5, 5) ||
-      !loadIntoComplexVectorTable(sqlConn, input2, "data/dataComplex.txt") ||
-      !loadIntoVectorTable(sqlConn, inputInts, "data/dataInt.txt") ||
-      !loadIntoVectorTable(sqlConn, inputDoubles, "data/dataDouble.txt") )
+      !loadIntoComplexVectorTable(sqlConn, input2, "dataDir/dataComplex.txt") ||
+      !loadIntoVectorTable(sqlConn, inputInts, "dataDir/dataInt.txt") ||
+      !loadIntoVectorTable(sqlConn, inputDoubles, "dataDir/dataDouble.txt") )
   {
     printf("ERROR Insert/Load Tables: %s\n", mysql_error(sqlConn));
     return 0;
@@ -2043,7 +2044,7 @@ int TestIntegerSetters(MYSQL* sqlConn, int testSetElem, int testSetRange,
   printf("Integer Table:\t%ld\t%s\n", vectorInfo->metadataID, 
 	 vectorInfo->tableName);
 
-  if( !loadIntoVectorTable(sqlConn, vectorInfo, "data/dataInt.txt") )
+  if( !loadIntoVectorTable(sqlConn, vectorInfo, "dataDir/dataInt.txt") )
   {
     printf("ERROR Load Ints: %s\n", mysql_error(sqlConn));
     return 0;
@@ -2055,8 +2056,8 @@ int TestIntegerSetters(MYSQL* sqlConn, int testSetElem, int testSetRange,
   if( testSetElem )
   {
     int lSize, aSize, flag;
-    getLogicalTableSize(sqlConn, vectorInfo, &lSize);
-    getActualTableSize(sqlConn, vectorInfo, &aSize);
+    getLogicalVectorSize(sqlConn, vectorInfo, &lSize);
+    getActualVectorSize(sqlConn, vectorInfo, &aSize);
     hasRDBVectorAnyNA(sqlConn, vectorInfo, &flag);
     printf("Logic Size: %d\t Actual Size: %d\tHas NA: %d\n", lSize, aSize, flag);
 
@@ -2071,8 +2072,8 @@ int TestIntegerSetters(MYSQL* sqlConn, int testSetElem, int testSetRange,
     if( !printIntegerRDBVector(sqlConn, vectorInfo) )
       return 0;
 
-    getLogicalTableSize(sqlConn, vectorInfo, &lSize);
-    getActualTableSize(sqlConn, vectorInfo, &aSize);
+    getLogicalVectorSize(sqlConn, vectorInfo, &lSize);
+    getActualVectorSize(sqlConn, vectorInfo, &aSize);
     hasRDBVectorAnyNA(sqlConn, vectorInfo, &flag);
     printf("Logic Size: %d\t Actual Size: %d\tHas NA: %d\n", lSize, aSize, flag);
 
@@ -2210,7 +2211,7 @@ int TestDoubleSetters(MYSQL* sqlConn, int testSetElem, int testSetRange,
   printf("Double Table:\t%ld\t%s\n", vectorInfo->metadataID, 
 	 vectorInfo->tableName);
 
-  if( !loadIntoVectorTable(sqlConn, vectorInfo, "data/dataDouble.txt") )
+  if( !loadIntoVectorTable(sqlConn, vectorInfo, "dataDir/dataDouble.txt") )
   {
     printf("ERROR Load Doubles: %s\n", mysql_error(sqlConn));
     return 0;
@@ -2367,7 +2368,7 @@ int TestStringSetters(MYSQL* sqlConn, int testSetElem, int testSetRange,
   printf("String Table:\t%ld\t%s\n", vectorInfo->metadataID, 
 	 vectorInfo->tableName);
 
-  if( !loadIntoVectorTable(sqlConn, vectorInfo, "data/dataStrings.txt") )
+  if( !loadIntoVectorTable(sqlConn, vectorInfo, "dataDir/dataStrings.txt") )
   {
     printf("ERROR Load Strings: %s\n", mysql_error(sqlConn));
     return 0;
@@ -2456,7 +2457,7 @@ int TestComplexSetters(MYSQL* sqlConn, int testSetElem, int testSetRange,
   printf("Complex Table:\t%ld\t%s\n", vectorInfo->metadataID, 
 	 vectorInfo->tableName);
 
-  if( !loadIntoComplexVectorTable(sqlConn, vectorInfo, "data/dataComplex.txt") )
+  if( !loadIntoComplexVectorTable(sqlConn, vectorInfo, "dataDir/dataComplex.txt") )
   {
     printf("ERROR Load Complex: %s\n", mysql_error(sqlConn));
     return 0;
@@ -2548,7 +2549,7 @@ int TestLogicSetters(MYSQL* sqlConn, int testSetElem, int testSetRange,
   printf("Logic Table:\t%ld\t%s\n", vectorInfo->metadataID, 
 	 vectorInfo->tableName);
 
-  if( !loadIntoVectorTable(sqlConn, vectorInfo, "data/dataLogic.txt") )
+  if( !loadIntoVectorTable(sqlConn, vectorInfo, "dataDir/dataLogic.txt") )
   {
     printf("ERROR Load Logic: %s\n", mysql_error(sqlConn));
     return 0;
@@ -2649,8 +2650,8 @@ int TestMaterialization(MYSQL* sqlConn, int testMat1, int testMat2,
   int array2[8] = {4, 6, 5, -8, 10, -11, 15, 20};
   if( !insertIntoIntVectorTable(sqlConn, input1, array1, size1) ||
       !insertIntoIntVectorTable(sqlConn, input2, array2, size2) ||
-      !loadIntoComplexVectorTable(sqlConn, inputComplex,"data/dataComplex.txt")||
-      !loadIntoVectorTable(sqlConn, inputDoubles, "data/dataDouble.txt") )
+      !loadIntoComplexVectorTable(sqlConn, inputComplex,"dataDir/dataComplex.txt")||
+      !loadIntoVectorTable(sqlConn, inputDoubles, "dataDir/dataDouble.txt") )
   {
     printf("ERROR Insert data in tables: %s\n", mysql_error(sqlConn));
     return 0;
@@ -2786,8 +2787,8 @@ int TestDuplicateTable(MYSQL* sqlConn, int testFromTable, int testFromView)
   int size1 = 5;
   int array1[5] = {2, -3, 7, 9, 14};
   if( !insertIntoIntVectorTable(sqlConn, inputInt, array1, size1) ||
-      !loadIntoVectorTable(sqlConn, inputDouble, "data/dataDouble.txt") ||
-      !loadIntoComplexVectorTable(sqlConn, inputComplex,"data/dataComplex.txt"))
+      !loadIntoVectorTable(sqlConn, inputDouble, "dataDir/dataDouble.txt") ||
+      !loadIntoComplexVectorTable(sqlConn, inputComplex,"dataDir/dataComplex.txt"))
   {
     printf("ERROR Insert data in tables: %s\n", mysql_error(sqlConn));
     return 0;
@@ -2933,7 +2934,7 @@ int TestComparisons(MYSQL* sqlConn, int testCompInts, int testCompDoubles,
      }
 
      /* Insert test values */
-     if( !loadIntoVectorTable(sqlConn, dataVector, "data/dataStrings.txt") )
+     if( !loadIntoVectorTable(sqlConn, dataVector, "dataDir/dataStrings.txt") )
      {
        printf("ERROR Load data in table: %s\n", mysql_error(sqlConn));
        return 0;
@@ -3018,7 +3019,7 @@ int TestFunctions(MYSQL* sqlConn, int testFuncInts, int testFuncDoubles,
      initRDBVector(&dataVector, 0, 1);
 
      if( !createNewIntVectorTable(sqlConn, dataVector) ||
-	 !loadIntoVectorTable(sqlConn, dataVector, "data/dataInt.txt") )
+	 !loadIntoVectorTable(sqlConn, dataVector, "dataDir/dataInt.txt") )
      {
        printf("ERROR Create/Load into Table: %s\n", mysql_error(sqlConn)); 
        return 0;
@@ -3088,7 +3089,7 @@ int TestFunctions(MYSQL* sqlConn, int testFuncInts, int testFuncDoubles,
      initRDBVector(&dataVector, 0, 1);
 
      if( !createNewDoubleVectorTable(sqlConn, dataVector) ||
-	 !loadIntoVectorTable(sqlConn, dataVector, "data/dataDouble.txt") )
+	 !loadIntoVectorTable(sqlConn, dataVector, "dataDir/dataDouble.txt") )
      {
        printf("ERROR Create/Load into Table: %s\n", mysql_error(sqlConn)); 
        return 0;
@@ -3159,7 +3160,7 @@ int TestFunctions(MYSQL* sqlConn, int testFuncInts, int testFuncDoubles,
      initRDBVector(&dataVector, 0, 1);
 
      if( !createNewStringVectorTable(sqlConn, dataVector) ||
-	 !loadIntoVectorTable(sqlConn, dataVector, "data/dataStrings.txt") )
+	 !loadIntoVectorTable(sqlConn, dataVector, "dataDir/dataStrings.txt") )
      {
        printf("ERROR Create/Load into Table: %s\n", mysql_error(sqlConn)); 
        return 0;
@@ -3196,7 +3197,7 @@ int TestFunctions(MYSQL* sqlConn, int testFuncInts, int testFuncDoubles,
 
      if( !createNewComplexVectorTable(sqlConn, dataVector) ||
 	 !loadIntoComplexVectorTable(sqlConn, dataVector,
-				     "data/dataComplex.txt") )
+				     "dataDir/dataComplex.txt") )
      {
        printf("ERROR Create/Load into Table: %s\n", mysql_error(sqlConn)); 
        return 0;
@@ -3263,9 +3264,9 @@ int TestConvertions(MYSQL* sqlConn)
   }
 
   /* Insert some test values */
-  if( !loadIntoVectorTable(sqlConn, inputInt, "data/dataInt.txt") ||
-      !loadIntoVectorTable(sqlConn, inputDouble, "data/dataDouble.txt") ||
-      !loadIntoVectorTable(sqlConn, inputLogic, "data/dataLogic.txt"))
+  if( !loadIntoVectorTable(sqlConn, inputInt, "dataDir/dataInt.txt") ||
+      !loadIntoVectorTable(sqlConn, inputDouble, "dataDir/dataDouble.txt") ||
+      !loadIntoVectorTable(sqlConn, inputLogic, "dataDir/dataLogic.txt"))
   {
     printf("ERROR Load data in tables: %s\n", mysql_error(sqlConn));
     return 0;

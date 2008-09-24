@@ -1,6 +1,12 @@
 #ifndef _RDB_BINARY_OPERATORS_H
 #define _RDB_BINARY_OPERATORS_H
 
+/*****************************************************************************
+ * Contains functions for binary operators for vectors (+, -, *, /, %)
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 
 /* Mathematical Signs */
 #define PLUS_SIGN   "+"
@@ -18,11 +24,7 @@
 #define TABLE_1     "T1"
 #define TABLE_2     "T2"
 
-
 /* Templates to execute binary operations */
-#define sqlTemplateUnaryFunction "SELECT vIndex, %s(vValue) from %s"
-#define sqlTemplateBinaryFunction "SELECT vIndex, %s(vValue,%f) from %s"
-#define sqlTemplateSimpleNumericBinary "SELECT vIndex, vValue%s%f from %s"
 #define sqlTemplateNumericBinaryOps_EQ "SELECT T1.vIndex, T1.vValue %s T2.vValue \
                                         FROM %s as T1, %s as T2 \
                                         WHERE T1.vIndex = T2.vIndex"
@@ -33,7 +35,7 @@
 
 
 #define sqlTemplateComplexAddSub_EQ    "SELECT T1.vIndex, T1.vReal %s T2.vReal, \
-                                       T1.vImag %s T2.vImag \
+                                        T1.vImag %s T2.vImag \
                                         FROM %s as T1, %s as T2 \
                                         WHERE T1.vIndex = T2.vIndex"
 
@@ -65,6 +67,9 @@
 ((T1.vImag*T2.vReal)-(T1.vReal*T2.vImag))/((T2.vReal*T2.vReal)+(T2.vImag*T2.vImag)) \
                                         FROM %s as T1, %s as T2 \
                                         WHERE T1.vIndex %% %d = T2.vIndex %% %d"
+
+#define sqlTemplateSimpleNumericBinary "SELECT vIndex, vValue %s %f from %s"
+
 
 /* Functions to execute binary operations on ints and doubles */
 int addNumericVectors(MYSQL * sqlConn, rdbVector * result, 
@@ -116,8 +121,11 @@ void buildComplexAddSubSQL(rdbVector * input1, rdbVector * input2,
 void buildComplexMultDivSQL(rdbVector * input1, rdbVector * input2, 
 			    char * sqlTemplateEQ, char * sqlTemplateNE, 
 			    char ** sqlStr);
-int powNumericVector(MYSQL*, rdbVector*, rdbVector*, double);
-int sqrtNumericVector(MYSQL*, rdbVector*, rdbVector*);
+
+/* Other functions */
+int subtractDoubleFromNumericVector(MYSQL * sqlConn, rdbVector * result, 
+				    rdbVector *input1, double y);
+
 
 #endif
 

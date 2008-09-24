@@ -1,3 +1,9 @@
+/*****************************************************************************
+ * Contains functions for vector comparisons with other vectors or values.
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,7 +37,7 @@ int compareWithDBVector(MYSQL * sqlConn, rdbVector * resultVector,
   int success = createNewLogicVectorView(sqlConn, resultVector, strCompareSQL);
 
   if( success )
-     createViewReferences(sqlConn, resultVector, dataVector, compareVector);
+     createVectorViewReferences(sqlConn, resultVector, dataVector, compareVector);
   else
      resultVector->size = 0;
 
@@ -110,7 +116,7 @@ int internalCompareWithValues(MYSQL * sqlConn, rdbVector * resultVector,
   int success = createNewLogicVectorView(sqlConn, resultVector, strCompareSQL);
 
   if( success )
-     createViewReferences(sqlConn, resultVector, dataVector, dataVector);
+     createVectorViewReferences(sqlConn, resultVector, dataVector, dataVector);
   else
      resultVector->size = 0;
 

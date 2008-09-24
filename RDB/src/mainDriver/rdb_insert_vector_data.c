@@ -1,10 +1,18 @@
+/*****************************************************************************
+ * Contains functions for inserting data to a vector either explicitely 
+ * or load from a file
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <mysql.h>
 #include "rdb_basics.h"
 #include "rdb_insert_vector_data.h"
-
+#include "rdb_handle_metadata.h"
+#include "rdb_handle_vector_tables.h"
 
 
 /* ---------- Functions to load data from a local file ------------ */
@@ -43,7 +51,7 @@ int internalLoadIntoAnyVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
   if( numElems >= 0 )
   {
      int newSize = numElems + vectorInfo->size;
-     success = updateSizeVectorTable(sqlConn, vectorInfo, newSize);
+     success = setLogicalVectorSize(sqlConn, vectorInfo, newSize);
   }
 
   return success;
@@ -78,7 +86,7 @@ int insertIntoIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
   /* Update the size */
   int newSize = size + vectorInfo->size;
-  success *= updateSizeVectorTable(sqlConn, vectorInfo, newSize);
+  success *= setLogicalVectorSize(sqlConn, vectorInfo, newSize);
 
   return success;
 }
@@ -112,7 +120,7 @@ int insertIntoDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
   /* Update the size */
   int newSize = size + vectorInfo->size;
-  success *= updateSizeVectorTable(sqlConn, vectorInfo, newSize);
+  success *= setLogicalVectorSize(sqlConn, vectorInfo, newSize);
 
   return success;
 }
@@ -146,7 +154,7 @@ int insertIntoStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
   /* Update the size */
   int newSize = size + vectorInfo->size;
-  success *= updateSizeVectorTable(sqlConn, vectorInfo, newSize);
+  success *= setLogicalVectorSize(sqlConn, vectorInfo, newSize);
 
   return success;
 }
@@ -186,7 +194,7 @@ int insertIntoComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
   /* Update the size */
   int newSize = desiredSize + vectorInfo->size;
-  success *= updateSizeVectorTable(sqlConn, vectorInfo, newSize);
+  success *= setLogicalVectorSize(sqlConn, vectorInfo, newSize);
 
   return success;
 }
@@ -219,7 +227,7 @@ int insertIntoLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
   /* Update the size */
   int newSize = size + vectorInfo->size;
-  success *= updateSizeVectorTable(sqlConn, vectorInfo, newSize);
+  success *= setLogicalVectorSize(sqlConn, vectorInfo, newSize);
 
   return success;
 }
@@ -272,7 +280,7 @@ int insertSeqIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
   /* Update the size */
   int newSize = numElems + vectorInfo->size;
-  success *= updateSizeVectorTable(sqlConn, vectorInfo, newSize);
+  success *= setLogicalVectorSize(sqlConn, vectorInfo, newSize);
 
   return success;
 }
@@ -325,7 +333,7 @@ int insertSeqDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
   /* Update the size */
   int newSize = numElems + vectorInfo->size;
-  success *= updateSizeVectorTable(sqlConn, vectorInfo, newSize);
+  success *= setLogicalVectorSize(sqlConn, vectorInfo, newSize);
 
   return success;
 }
@@ -370,7 +378,7 @@ int insertSeqLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
   /* Update the size */
   int newSize = repeats + vectorInfo->size;
-  success *= updateSizeVectorTable(sqlConn, vectorInfo, newSize);
+  success *= setLogicalVectorSize(sqlConn, vectorInfo, newSize);
 
   return success;
 }
@@ -385,7 +393,7 @@ int insertPartIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
   /* Initialize necessary strings */
   int stringSize = (right - left) * (MAX_INT_LENGTH + 3) + 1;
   char * strValues = (char *)malloc( stringSize * sizeof(char) );
-  char value[MAX_INT_LENGTH + 3];
+  char value[MAX_INT_LENGTH + 4];
   strValues[0] = '\0';
 
   /* Build string with the values of the form "(n),(n),...,(n)" */
@@ -415,7 +423,7 @@ int insertPartDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
   /* Initialize necessary strings */
   int stringSize = (right - left) * (MAX_DOUBLE_LENGTH + 3) + 1;
   char * strValues = (char *)malloc( stringSize * sizeof(char) );
-  char value[MAX_DOUBLE_LENGTH + 3];
+  char value[MAX_DOUBLE_LENGTH + 4];
   strValues[0] = '\0';
 
   /* Build string with the values of the form "(n),(n),...,(n)" */
@@ -498,7 +506,7 @@ int insertPartComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
   /* Initialize necessary strings */
   int stringSize = (right-left) * (2*MAX_DOUBLE_LENGTH + 4) + 1;
   char * strValues = (char *)malloc( stringSize * sizeof(char) );
-  char value[2*MAX_DOUBLE_LENGTH + 4];
+  char value[2*MAX_DOUBLE_LENGTH + 5];
   strValues[0] = '\0';
 
   /* Build string with the values of the form "(r,i),(r,i),...,(r,i)" */
@@ -528,7 +536,7 @@ int insertPartLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
   /* Initialize necessary strings */
   int stringSize = (right - left) * (MAX_LOGIC_LENGTH + 3) + 1;
   char * strValues = (char *)malloc( stringSize * sizeof(char) );
-  char value[MAX_LOGIC_LENGTH + 3];
+  char value[MAX_LOGIC_LENGTH + 4];
   strValues[0] = '\0';
 
   /* Build string with the values of the form "(n),(n),...,(n)" */
@@ -568,21 +576,4 @@ int insertIntoVectorTable(MYSQL * sqlConn, char * sqlTemplate,
   return (success != 0) ? 0 : 1;
 }
 
-
-int updateSizeVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, int newSize)
-{
-  /* Build the sql string */
-  int length = strlen(sqlTemplateSetCurrentSize) + 2*MAX_INT_LENGTH + 1;
-  char strUpdateSize[length];
-  sprintf( strUpdateSize, sqlTemplateSetCurrentSize, 
-	   newSize, vectorInfo->metadataID);
- 
-  /* Execute the query */
-  int success = mysql_query(sqlConn, strUpdateSize);
-
-  /* Update the structure*/
-  vectorInfo->size = newSize;
-
-  return (success != 0) ? 0 : 1;
-}
 

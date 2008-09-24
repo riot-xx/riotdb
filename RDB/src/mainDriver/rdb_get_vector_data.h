@@ -1,6 +1,14 @@
 #ifndef _RDB_GET_VECTOR_DATA_H
 #define _RDB_GET_VECTOR_DATA_H
 
+/*****************************************************************************
+ * Contains functions for accessing elements in vectors (get all, single 
+ * values, range of values, sparse values, with other dbvectors as indexes 
+ * or with logic dbvectors)
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 
 /* Templates to access vector tables */
 #define sqlTemplateGetAllValues          "SELECT * FROM %s ORDER BY vIndex"

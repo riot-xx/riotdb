@@ -1,7 +1,15 @@
 #ifndef _RDB_HANDLE_VECTOR_TABLES_H
 #define _RDB_HANDLE_VECTOR_TABLES_H
 
+/*****************************************************************************
+ * Contains functions for managing vector tables (create, delete, dublicate,
+ * check for N/A).
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 #include "rdb_basics.h"
+
 /* Templates to create vector tables */
 #define sqlTemplateCreateIntVector  "CREATE TABLE %s ( \
                                     vIndex INT UNSIGNED AUTO_INCREMENT, \
@@ -34,11 +42,26 @@
                                     PRIMARY KEY (vIndex), \
                                     INDEX (vIndex) )"
 
-/* Templates to handle tables */
-#define sqlTemplateDropTable        "DROP TABLE %s"
+/* Templates to drop tables */
+#define sqlTemplateDropVectorTable        "DROP TABLE %s"
 
-#define sqlTemplateTableName        "VectorTable%d"
 
+/* Template to create a dublicate table */
+#define sqlTemplateDublicateTable    "INSERT INTO %s SELECT * \
+                                      FROM %s ORDER BY vIndex"
+
+/* Template to check for NA */
+#define sqlTemplateCheckForNA        "UPDATE %s AS DT, %s AS LT \
+                                      SET LT.vValue = 0 \
+                                      WHERE LT.vIndex = DT.vIndex;"
+
+/* Template to handle vector sizes */
+#define sqlTemplateGetVectorLogicalSize    "SELECT MAX(vIndex) FROM %s"
+
+#define sqlTemplateGetVectorActualSize     "SELECT COUNT(*) FROM %s"
+
+#define sqlTemplateSetVectorCurrentSize    "UPDATE Metadata SET size = %d \
+                                            WHERE metadata_id = %ld"
 
 
 /* Functions to create vector tables */
@@ -56,12 +79,37 @@ int internalCreateNewVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				 char * sqlTemplate);
 
 
-/* Functions to drop vector tables */
+/* Functions for naming tables */
+int buildUniqueVectorTableName(MYSQL * sqlConn, char ** newTableName);
+
+
+/* Functions to Delete an RDBVector i.e. decrement refCounter or drop */
+int deleteRDBVector(MYSQL * sqlConn, rdbVector * vectorInfo);
+
 int dropVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo);
 
 
-/* Functions for naming tables */
-int buildUniqueTableName(MYSQL * sqlConn, char ** newTableName);
+/* Functions to dublicate a vector table */
+int duplicateVectorTable(MYSQL * sqlConn, rdbVector * orignalVector,
+			 rdbVector * copyVector);
+
+
+/* Functions to check for NA */
+int checkRDBVectorForNA(MYSQL * sqlConn, rdbVector * vectorInfo,
+		       rdbVector * resultVector);
+
+int hasRDBVectorAnyNA(MYSQL * sqlConn, rdbVector * vectorInfo, int * flag);
+
+
+/* Function to handle vector sizes */
+int getLogicalVectorSize(MYSQL * sqlConn, rdbVector * vectorInfo, int * size);
+
+int getActualVectorSize(MYSQL * sqlConn, rdbVector * vectorInfo, int * size);
+
+int internalGetVectorSize(MYSQL * sqlConn, rdbVector * vectorInfo, int * size,
+			 char* sqlTemplate);
+
+int setLogicalVectorSize(MYSQL * sqlConn, rdbVector * vectorInfo, int newSize);
 
 
 #endif

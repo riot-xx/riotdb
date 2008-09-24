@@ -1,6 +1,12 @@
 #ifndef _RDB_COMPARE_VECTORS_H
 #define _RDB_COMPARE_VECTORS_H
 
+/*****************************************************************************
+ * Contains functions for vector comparisons with other vectors or values.
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 
 /* Templates to perform comparisons */
 #define sqlTemplateCompareWDBVector "SELECT T1.vIndex, \
@@ -17,7 +23,7 @@
 /* Templates to build strings for comparisons */
 #define sqlTemplateIntegerComparisonOR "(vIndex %% %d = %d AND vValue %s %d) OR "
 #define sqlTemplateDoubleComparisonOR  "(vIndex %% %d = %d AND vValue %s %lf) OR "
-#define sqlTemplateStringComparisonOR "(vIndex %% %d = %d AND vValue %s '%s') OR "
+#define sqlTemplateStringComparisonOR  "(vIndex %% %d = %d AND vValue %s '%s') OR "
 
 #define sqlTemplateIntegerComparison   "(vIndex %% %d = %d AND vValue %s %d)"
 #define sqlTemplateDoubleComparison    "(vIndex %% %d = %d AND vValue %s %lf)"

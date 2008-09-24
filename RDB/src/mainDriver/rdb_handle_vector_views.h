@@ -1,11 +1,18 @@
 #ifndef _RDB_HANDLE_VECTOR_VIEWS_H
 #define _RDB_HANDLE_VECTOR_VIEWS_H
 
+/*****************************************************************************
+ * Contains functions for handling vector views (i.e create, drop, 
+ * materialize views and keep track of view references)
+ *
+ * Author: Herodotos Herodotou
+ * Date:   Sep 17, 2008
+ ****************************************************************************/
 
 /* Templates to create views */
-#define sqlTemplateCreateView        "CREATE VIEW %s (vIndex, vValue) AS %s"
+#define sqlTemplateCreateVectorView  "CREATE VIEW %s (vIndex, vValue) AS %s"
 
-#define sqlTemplateCreateComplexView "CREATE VIEW %s (vIndex,vReal,vImag) AS %s"
+#define sqlTemplateCreateComplexVectorView "CREATE VIEW %s (vIndex,vReal,vImag) AS %s"
 
 
 /* Templates to handle view references */
@@ -31,15 +38,12 @@
                                          WHERE view_id = %ld"
 
 
-/* Templates to handle views */
-#define sqlTemplateDropView             "DROP VIEW %s"
-
-#define sqlTemplateViewName             "VectorView%d"
-
+/* Templates to drop views */
+#define sqlTemplateDropVectorView             "DROP VIEW %s"
 
 /* Templates to materialize views */
-#define sqlTemplateMaterializeView      "INSERT INTO %s SELECT * \
-                                         FROM %s ORDER BY vIndex"
+#define sqlTemplateMaterializeVectorView      "INSERT INTO %s SELECT * \
+                                               FROM %s ORDER BY vIndex"
 
 
 /* Functions to create views */
@@ -63,18 +67,18 @@ int internalCreateNewVectorView(MYSQL * sqlConn, rdbVector * viewVector,
 
 
 /* Functions to handle view references */
-int createViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
+int createVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
 			 rdbVector * leftInput, rdbVector * rightInput);
 
-int getViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
-		      rdbVector ** leftInput, rdbVector ** rightInput);
+int getVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
+	rdbVector ** leftInput, rdbVector ** rightInput, int alloc);
 
-int getViewRefCount(MYSQL * sqlConn, rdbVector * vectorInfo, int * count);
+int getVectorViewRefCount(MYSQL * sqlConn, rdbVector * vectorInfo, int * count);
 
-int updateViewReferences(MYSQL * sqlConn, rdbVector * viewVector, 
-			 rdbVector * newVector);
+int updateVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector, 
+			       rdbVector * newVector);
 
-int removeViewReferences(MYSQL * sqlConn, rdbVector * viewVector);
+int removeVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector);
 
 
 /* Functions to delete vector tables */
@@ -82,22 +86,26 @@ int dropVectorView(MYSQL * sqlConn, rdbVector * vectorInfo);
 
 
 /* Functions for naming tables */
-int buildUniqueViewName(MYSQL * sqlConn, char ** newViewName);
+int buildUniqueVectorViewName(MYSQL * sqlConn, char ** newViewName);
 
 
 /* Functions to materialize views */
-int materializeIntegerView (MYSQL * sqlConn, rdbVector * viewVector);
+int ensureVectorMaterialization(MYSQL * sqlConn, rdbVector * vectorInfo);
 
-int materializeDoubleView  (MYSQL * sqlConn, rdbVector * viewVector);
+int materializeVectorView(MYSQL * sqlConn, rdbVector * viewVector);
 
-int materializeStringView  (MYSQL * sqlConn, rdbVector * viewVector);
+int materializeIntegerVectorView (MYSQL * sqlConn, rdbVector * viewVector);
 
-int materializeComplexView (MYSQL * sqlConn, rdbVector * viewVector);
+int materializeDoubleVectorView  (MYSQL * sqlConn, rdbVector * viewVector);
 
-int materializeLogicView (MYSQL * sqlConn, rdbVector * viewVector);
+int materializeStringVectorView  (MYSQL * sqlConn, rdbVector * viewVector);
 
-int internalMaterializeView(MYSQL * sqlConn, rdbVector * viewVector, 
-			    rdbVector * newVector);
+int materializeComplexVectorView (MYSQL * sqlConn, rdbVector * viewVector);
+
+int materializeLogicVectorView (MYSQL * sqlConn, rdbVector * viewVector);
+
+int internalMaterializeVectorView(MYSQL * sqlConn, rdbVector * viewVector, 
+			          rdbVector * newVector);
 
 
 #endif
