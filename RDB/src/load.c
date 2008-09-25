@@ -19,7 +19,7 @@ SEXP load_dbvector(SEXP mid)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	loadRDBVector(sqlconn, &vec, id);
+	loadRDBVector(sqlconn, &vec, id, 0);
 	vec->sxp_spare = 0;
 	/*vec->tableName = calloc(MAX_TABLE_NAME, sizeof(char));*/
 	/*strcpy(vec->tableName, sName);*/

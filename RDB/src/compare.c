@@ -47,7 +47,7 @@ SEXP compare_dbvector_numeric(SEXP x, SEXP y, SEXP op)
 	SEXP rptr;
 	PROTECT(rptr = R_MakeExternalPtr(ptr, R_NilValue, R_NilValue));
 	R_do_slot_assign(ans, install("ext"), rptr);
-	R_RegisterCFinalizerEx(rptr, rdbvectorFinalizer, TRUE);
+	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 
 	UNPROTECT(4);
 	return ans;

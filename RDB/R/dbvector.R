@@ -9,8 +9,10 @@
 	#}
 
 # generic methods
-	setClass("dbvector", representation(size="numeric",type="character",varname="character",tablename="character",metadataid="numeric",info="raw"))
+	setClass("dbvector", representation(size="numeric",type="character",tablename="character",info="raw"))
+	setClass("dbmatrix", representation(size="numeric",type="character",tablename="character",info="raw"))
 	setMethod("show", signature("dbvector"), show.dbvector)
+	setMethod("show", signature("dbmatrix"), show.dbmatrix)
 	setMethod("+", signature(e1="dbvector",e2="dbvector"), add_dbvectors)
 	setMethod("-", signature(e1="dbvector",e2="dbvector"), subtract_dbvectors)
 	setMethod("*", signature(e1="dbvector",e2="dbvector"), multiply_dbvectors)
@@ -20,6 +22,14 @@
 	setMethod("sqrt", signature(x="dbvector"), sqrt_dbvector)
 	setMethod("^", signature(e1="dbvector",e2="numeric"), pow_dbvector)
 	setMethod("-", signature(e1="dbvector",e2="numeric"), subtract_dbvector_numeric)
+	
+	setMethod("dim", signature("dbmatrix"), function(x) {.Call("get_dim",x)})
+#setMethod("dim<-", signature("dbmatrix"), function(x,d) {
+	setMethod("%*%", signature(x="dbmatrix", y="dbmatrix"), function(x,y){
+		if (dim(x)[2]!=dim(y)[1])
+		stop("dimensions are not conformable")
+		.Call("multiply_matrices", x, y)
+		})
 
 	setMethod("max", signature(x="dbvector"), function(x,na.rm=FALSE){
 		.Call("max_dbvector", x, na.rm)	
@@ -37,6 +47,12 @@
 	setMethod("[", signature(x="dbvector"), function(x,i,j,...,drop=T){
 		# for vectors only take the first
 		.Call("get_by_index", x, i)})
+
+	setMethod("[", signature(x="dbmatrix"), function(x,i,j,...,drop=T){
+		# for matrix only take the first two
+			if(missing(i)||missing(j))
+			stop("must provide two indexes")
+		.Call("get_matrix_by_index", x, i, j)})
 
 	setReplaceMethod("[", "dbvector", function(x,i,j,...,value){
 		nas <- is.na(value)
@@ -81,6 +97,12 @@ math_dbvector <- function(x) {
 		)
 }
 
+matrix.db <- function(nrows, ncols, from, to, by=1) {
+#if (missing(nrows)||missing(ncols)||missing(from)||missing(to))
+#		stop("arguments misssing")
+	.Call("dbmatrix_from_seq", nrows, ncols, from, to, by)
+}
+
 seq.db <- function(from=1, to=1, by=1) {
 	if (missing(to) && missing(by)) {
 		# copy the regular vector to a dbvector
@@ -119,6 +141,9 @@ show.dbvector <- function(object) {
 	.Call("show_dbvector", object)
 }
 
+show.dbmatrix <- function(object) {
+	.Call("show_dbmatrix", object)
+}
 add_dbvectors <- function(e1,e2) {
 	.Call("add_dbvectors", e1, e2)
 }

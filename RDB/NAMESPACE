@@ -1,4 +1,4 @@
 useDynLib(dbvector_wrapper)
 
 # methods for new dbvector go here
-export(seq.db,complex.db, logical.db, "length.dbvector", "mean.dbvector", "sort.dbvector", load.db, persist)
+export(seq.db, matrix.db, complex.db, logical.db, "length.dbvector", "mean.dbvector", "sort.dbvector", load.db, persist)

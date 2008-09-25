@@ -69,7 +69,7 @@ SEXP dbvector_copy(SEXP from)
 	SEXP rptr;
 	PROTECT(rptr = R_MakeExternalPtr(ptr, R_NilValue, R_NilValue));
 	R_do_slot_assign(ans, install("ext"), rptr);
-	R_RegisterCFinalizerEx(rptr, rdbvectorFinalizer, TRUE);
+	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 
 	UNPROTECT(4);
 	return ans;
@@ -121,7 +121,7 @@ SEXP logical_db(SEXP len)
 	SEXP rptr;
 	PROTECT(rptr = R_MakeExternalPtr(ptr, R_NilValue, R_NilValue));
 	R_do_slot_assign(ans, install("ext"), rptr);
-	R_RegisterCFinalizerEx(rptr, rdbvectorFinalizer, TRUE);
+	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 
 	UNPROTECT(4+nprotect);
 	return ans;
@@ -191,7 +191,7 @@ SEXP dbcomplex(SEXP len, SEXP x, SEXP y, SEXP type)
 	SEXP rptr;
 	PROTECT(rptr = R_MakeExternalPtr(ptr, R_NilValue, R_NilValue));
 	R_do_slot_assign(ans, install("ext"), rptr);
-	R_RegisterCFinalizerEx(rptr, rdbvectorFinalizer, TRUE);
+	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 
 	UNPROTECT(4+nprotect);
 	return ans;
@@ -281,7 +281,7 @@ Rprintf("type %d\n",TYPEOF(ret));
 	*ptr= *vec;
 	PROTECT(rptr = R_MakeExternalPtr(ptr, R_NilValue, R_NilValue));
 	R_do_slot_assign(ret, install("ext"), rptr);
-	R_RegisterCFinalizerEx(rptr, rdbvectorFinalizer, TRUE);
+	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 	
 	UNPROTECT(4);
 	return ret;

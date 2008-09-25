@@ -29,7 +29,7 @@ SEXP duplicateOrConvert(SEXP orig, int (*func)(MYSQL*,rdbVector*,rdbVector*), MY
 		*ptr = *info;
 		SEXP rptr;
 		R_do_slot_assign(x, install("ext"), (rptr=R_MakeExternalPtr(ptr, R_NilValue, R_NilValue)));
-		R_RegisterCFinalizerEx(rptr, rdbvectorFinalizer, TRUE);
+		R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 		
 		origInfo->sxp_spare--;
 		UNPROTECT(2);

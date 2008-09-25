@@ -74,7 +74,7 @@ SEXP math_dbvector(SEXP x, SEXP op)
 	*ptr = *vec;
 	PROTECT(rptr = R_MakeExternalPtr(ptr, R_NilValue, R_NilValue));
 	R_do_slot_assign(ans, install("ext"), rptr);
-	R_RegisterCFinalizerEx(rptr, rdbvectorFinalizer, TRUE);
+	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 
 	UNPROTECT(4);
 	return ans;

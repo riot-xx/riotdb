@@ -1,6 +1,31 @@
 #include "dbvector.h"
 
 
+SEXP get_dim(SEXP x)
+{
+	SEXP dim;
+	rdbMatrix *info = getMatrixInfo(x);
+	PROTECT(dim = allocVector(INTSXP, 2));
+	INTEGER(dim)[0] = info->numRows;
+	INTEGER(dim)[1] = info->numCols;
+	UNPROTECT(1);
+	return dim;
+}
+
+SEXP show_dbmatrix(SEXP x)
+{
+	static char* types[26] = {0,0,0,0,0,0,0,0,0,0,"logical",0,0,"integer","real","complex"};
+	rdbMatrix *info = getMatrixInfo(x);
+
+	/*Rprintf("named %d\n",NAMED(x));*/
+	Rprintf("Type: %s\n", types[info->sxp_type]);
+	Rprintf("Size: [%d,%d]\n", info->numRows, info->numCols);
+	Rprintf("Table Name: %s\n", info->tableName);
+	Rprintf("Shared by %d\n",info->sxp_spare);
+	Rprintf("isView %d\n",info->isView);
+	return R_NilValue;
+}
+
 SEXP show_dbvector(SEXP x)
 {
 	static char* types[26] = {0,0,0,0,0,0,0,0,0,0,"logical",0,0,"integer","real","complex"};
@@ -18,7 +43,6 @@ SEXP show_dbvector(SEXP x)
 */
 	return R_NilValue;
 }
-
 
 /* Access elements from a dbvector.
    index: could be a normal vector or dbvector
@@ -115,7 +139,7 @@ SEXP get_by_index(SEXP dbvector, SEXP index)
 		rdbVector *ptr = malloc(sizeof(rdbVector));
 		*ptr = *vec;
 		PROTECT(rptr = R_MakeExternalPtr(ptr, R_NilValue, R_NilValue));
-		R_RegisterCFinalizerEx(rptr, rdbvectorFinalizer, TRUE);
+		R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 		R_do_slot_assign(ans, install("ext"), rptr);
 		UNPROTECT(4);
 		mysql_close(sqlconn);
@@ -185,6 +209,69 @@ SEXP length_dbvector(SEXP x)
 	rdbVector *info = getInfo(x);
 	PROTECT(ans = allocVector(INTSXP,1));
 	INTEGER(ans)[0] = info->size;
+	UNPROTECT(1);
+	return ans;
+}
+
+SEXP get_matrix_by_index(SEXP dbmatrix, SEXP index1, SEXP index2)
+{
+	unsigned int len;
+	rdbMatrix *info;
+	SEXP ans = R_NilValue;
+	unsigned int row, col;
+	char flags[1];
+	int i, len1, len2;
+	int onedim = 0;
+
+	info = getMatrixInfo(dbmatrix);
+
+	MYSQL *sqlconn = NULL;
+	int success = connectToLocalDB(&sqlconn);
+	if(!success || sqlconn == NULL)
+	{
+		error("cannot connect to local db %s\n", mysql_error(sqlconn));
+		return ans;
+	}
+
+	len1 = length(index1);
+	len2 = length(index2);
+	if (len1!=1 || len2!=1) {
+		error("only single element extraction is supported now");
+	}
+	if (isInteger(index1))
+		row = INTEGER(index1)[0];
+	else
+		row = (unsigned int)REAL(index1)[0];
+	if (isInteger(index2))
+		col = INTEGER(index2)[0];
+	else
+		col = (unsigned int)REAL(index2)[0];
+	
+	switch (info->sxp_type)
+	{
+		case LGLSXP:
+			break;
+
+		case INTSXP:
+			/*PROTECT(ans = allocVector(INTSXP,len));
+			for (i=0; i<len; i++)
+				INTEGER(ans)[i]= NA_INTEGER;	
+			getSparseIntElements(sqlconn, info, indices, len, INTEGER(ans), flags);
+			*/
+			break;
+
+		case REALSXP:
+			PROTECT(ans = allocVector(REALSXP, 1));
+			REAL(ans)[0]= NA_REAL;	
+			getDoubleMatrixElement(sqlconn, info, row, col, REAL(ans), flags);
+			break;
+
+		case CPLXSXP:
+			break;
+
+		default:
+			break;
+	}
 	UNPROTECT(1);
 	return ans;
 }

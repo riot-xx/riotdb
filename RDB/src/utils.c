@@ -1,4 +1,5 @@
 #include "dbvector.h"
+#include "utils.h"
 
 int IS_DBVECTOR(SEXP x)
 {
@@ -12,13 +13,41 @@ rdbVector *getInfo(SEXP x)
 	return info;
 }
 
+rdbMatrix *getMatrixInfo(SEXP x)
+{
+	rdbMatrix *info = (rdbMatrix*)RAW(R_do_slot(x,install("info")));
+	info->tableName = CHAR(STRING_ELT(R_do_slot(x,install("tablename")),0));
+	return info;
+}
+
 int getType(SEXP x)
 {
 	rdbVector *vec = getInfo(x);
 	return vec->sxp_type;
 }
 
-void rdbvectorFinalizer(SEXP p)
+void rdbMatrixFinalizer(SEXP p)
+{
+	Rprintf("finalizing matrix...\n");
+	rdbMatrix * info = R_ExternalPtrAddr(p);
+	MYSQL *sqlconn = NULL;
+	int success = connectToLocalDB(&sqlconn);
+
+	if(!success || sqlconn == NULL)
+	{
+		error("cannot connect to local db\n");
+		return ;
+	}
+	/* deleteRDBVector will decrement the counter for this invocation of finalizer*/
+	if (deleteRDBMatrix(sqlconn, info))
+	{
+		free(info->tableName);
+		free(info);
+	}
+	mysql_close(sqlconn);
+}
+
+void rdbVectorFinalizer(SEXP p)
 {
 	Rprintf("finalizing...\n");
 	rdbVector * info = R_ExternalPtrAddr(p);

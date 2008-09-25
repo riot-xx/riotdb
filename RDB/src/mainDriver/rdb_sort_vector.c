@@ -6,7 +6,7 @@
 
 int sortVector(MYSQL *conn, rdbVector *aInfo, rdbVector *bInfo, int desc)
 {
-	if(!buildUniqueTableName(conn, &(bInfo->tableName)))
+	if(!buildUniqueVectorTableName(conn, &(bInfo->tableName)))
 		return 0;
 
 	bInfo->sxp_type = aInfo->sxp_type;
@@ -37,7 +37,7 @@ int sortVector(MYSQL *conn, rdbVector *aInfo, rdbVector *bInfo, int desc)
 		/*mysql_affected_rows(conn);*/
 		if (success)
 			return 0;
-		success = insertMetadataInfo(conn, bInfo);
+		success = insertVectorMetadataInfo(conn, bInfo);
 		return success;
 		break;
 	}
