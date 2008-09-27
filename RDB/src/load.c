@@ -124,7 +124,7 @@ SEXP persist_dbmatrix(SEXP x)
         return ans;
 }
 	
-void materialize_dbmatrix(SEXP x)
+SEXP materialize_dbmatrix(SEXP x)
 {
 
 	MYSQL *sqlconn = NULL;
@@ -140,4 +140,10 @@ void materialize_dbmatrix(SEXP x)
 	materializeMatrixView(sqlconn, info);
 
 	mysql_close(sqlconn);
+
+	/* copy info to the finalizer structure */
+	rdbMatrix *temp = (rdbMatrix*)R_ExternalPtrAddr(R_do_slot(x,install("ext")));
+	
+	*temp = *info;
+	return R_NilValue;
 }  

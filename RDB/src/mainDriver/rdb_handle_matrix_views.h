@@ -17,7 +17,7 @@
 
 /* Templates to materialize views */
 #define sqlTemplateMaterializeMatrixView "INSERT INTO %s SELECT * \
-                                          FROM %s ORDER BY mCol, mRow"
+FROM %s"
 
 /* Templates to handle view references located in rdb_handle_vector_views.h */
 
