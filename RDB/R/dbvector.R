@@ -162,18 +162,33 @@ print("sort entered")
 .Call("dbvector_sort", x, decreasing)
 }
 
-load.db <- function(name) {
+load.dbvector <- function(name) {
 	if (missing(name) || mode(name)!='numeric')
 		stop("table metadata ID must be provided")
-
 	.Call("load_dbvector", as.integer(name))
 }
+
+load.dbmatrix <- function(name) {
+	if (missing(name) || mode(name)!='numeric')
+		stop("table metadata ID must be provided")
+	.Call("load_dbmatrix", as.integer(name))
+}
 persist <- function(x) {
-	.Call("persist",x)
+	if (class(x)=="dbvector")
+	.Call("persist_dbvector",x)
+	else if (class(x)=="dbmatrix")
+	.Call("persist_dbmatrix",x)
 }
 
 subtract_dbvector_numeric <- function(e1,e2) {
 if (length(e2) ==1)
 	.Call("subtract_dbvector_numeric", e1, e2)
 else stop("second argument must be of length 1")
+}
+
+materialize <- function(x) {
+    if (class(x)=="dbvector")
+        .Call("materialize_dbvector", x)
+    else if(class(x)=="dbmatrix")
+        .Call("materialize_dbmatrix", x)
 }
