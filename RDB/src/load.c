@@ -147,3 +147,28 @@ SEXP materialize_dbmatrix(SEXP x)
 	*temp = *info;
 	return R_NilValue;
 }  
+
+
+SEXP materialize_dbvector(SEXP x)
+{
+
+	MYSQL *sqlconn = NULL;
+	int success = connectToLocalDB(&sqlconn);
+
+	if(!success || sqlconn == NULL)
+	{
+		error("cannot connect to local db\n");
+		return R_NilValue;
+	}
+
+	rdbVector *info = getInfo(x);
+	materializeVectorView(sqlconn, info);
+
+	mysql_close(sqlconn);
+
+	/* copy info to the finalizer structure */
+	rdbVector *temp = (rdbVector*)R_ExternalPtrAddr(R_do_slot(x,install("ext")));
+	
+	*temp = *info;
+	return R_NilValue;
+}  
