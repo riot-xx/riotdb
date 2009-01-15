@@ -1,4 +1,9 @@
-#include "dbvector.h"
+/**************************************************************************** 
+Utility functions.
+Author: Yi Zhang
+Date: Sep 8, 2008
+****************************************************************************/ 
+#include "riotdb.h"
 #include "utils.h"
 
 int IS_DBVECTOR(SEXP x)

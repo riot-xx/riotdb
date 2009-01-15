@@ -1,4 +1,9 @@
-#include "dbvector.h"
+/**************************************************************************** 
+Comparison operations of dbvectors.
+Author: Yi Zhang
+Date: Sep 8, 2008
+****************************************************************************/ 
+#include "riotdb.h"
 
 SEXP compare_dbvector_numeric(SEXP x, SEXP y, SEXP op)
 {

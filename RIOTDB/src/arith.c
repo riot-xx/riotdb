@@ -1,4 +1,9 @@
-#include "dbvector.h"
+/**************************************************************************** 
+Basic arithmetic operations.
+Author: Yi Zhang
+Date: Sep 8, 2008
+****************************************************************************/ 
+#include "riotdb.h"
 
 /**
 The returned result of all the following aritchmetic operations is

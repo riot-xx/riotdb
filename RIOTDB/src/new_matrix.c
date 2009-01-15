@@ -1,4 +1,9 @@
-#include "dbvector.h"
+/**************************************************************************** 
+Functions for creating dbmatrices.
+Author: Yi Zhang
+Date: Sep 8, 2008
+****************************************************************************/ 
+#include "riotdb.h"
 
 SEXP dbmatrix_from_seq(SEXP rows, SEXP cols, SEXP begin, SEXP end, SEXP by)
 {

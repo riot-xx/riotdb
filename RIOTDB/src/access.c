@@ -1,4 +1,10 @@
-#include "dbvector.h"
+/**************************************************************************** 
+Functions that access information from dbvectors and dbmatrices
+Author: Yi Zhang
+Date: Sep 8, 2008
+****************************************************************************/ 
+
+#include "riotdb.h"
 
 
 SEXP get_dim(SEXP x)

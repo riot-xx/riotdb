@@ -1,4 +1,9 @@
-#include "dbvector.h"
+/**************************************************************************** 
+Functions for sorting dbvectors.
+Author: Yi Zhang
+Date: Sep 8, 2008
+****************************************************************************/ 
+#include "riotdb.h"
 
 SEXP dbvector_sort(SEXP from, SEXP desc)
 {

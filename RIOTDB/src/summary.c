@@ -1,4 +1,9 @@
-#include "dbvector.h"
+/**************************************************************************** 
+Functions for calculating summaries of dbvectors.
+Author: Yi Zhang
+Date: Sep 8, 2008
+****************************************************************************/ 
+#include "riotdb.h"
 
 SEXP max_dbvector(SEXP x, SEXP narm)
 {

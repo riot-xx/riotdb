@@ -1,3 +1,6 @@
+-- editted by Yi Zhang: use myisam engine instead of myisam,
+-- because we don't need transaction support
+
 --- Table cleanup ---
 DROP TABLE IF EXISTS Metadata;
 DROP TABLE IF EXISTS DB_Sources;
@@ -14,7 +17,7 @@ CREATE TABLE DB_Sources (
     next_vec_index  INT(10),
     PRIMARY KEY  (db_source_id),
     index (db_source_id)
-) engine=innodb;
+) engine=myisam;
 
 
 CREATE TABLE Metadata (
@@ -38,7 +41,7 @@ CREATE TABLE Metadata (
 ---    FOREIGN KEY     (db_source_id) REFERENCES DB_Sources ON DELETE CASCADE,
     INDEX           (metadata_id)
 ---    index (db_source_id)
-) engine=innodb;
+) engine=myisam;
 
 
 CREATE TABLE View_Reference (
@@ -47,7 +50,7 @@ CREATE TABLE View_Reference (
     table2_id       INT(6) UNSIGNED,
     PRIMARY KEY     (view_id),
     index           (view_id)
-) engine=innodb;
+) engine=myisam;
 
 
 --- Create Triggers ---

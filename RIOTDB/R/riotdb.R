@@ -1,12 +1,10 @@
+# R functions exposed by the package and callable by the user
+# Author: Yi Zhang
+# Date: Sep 8, 2008
+
+# setting up hooks when loading the package
 .onLoad = function(libname, pkgname) {
 	print("===== RDB loaded ===== ")
-# check for any dbvector in .GlobalEnv
-# construct proper ext ptr for rdbVector info structure
-	#for(i in ls(.GlobalEnv)) {
-		#if(class(get(i))=="dbvector") {
-			#.Call("initInfo", get(i))
-		#}
-	#}
 
 # generic methods
 	setClass("dbvector", representation(size="numeric",type="character",tablename="character",info="raw"))

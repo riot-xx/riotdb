@@ -1,4 +1,9 @@
-#include "dbvector.h"
+/**************************************************************************** 
+Functions for creating dbvectors.
+Author: Yi Zhang
+Date: Sep 8, 2008
+****************************************************************************/ 
+#include "riotdb.h"
 
 SEXP dbvector_copy(SEXP from)
 {

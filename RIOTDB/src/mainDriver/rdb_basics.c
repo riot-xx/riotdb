@@ -5,6 +5,13 @@
  *
  * Author: Herodotos Herodotou
  * Date:   Sep 17, 2008
+ * 
+ * Revision 1 :
+ * By Yi Zhang
+ * Date:   Jan 4, 2009
+ * The sxp_spare field is used for reference counting, and should be 
+ * initialized to 0.
+ * 
  ****************************************************************************/
 
 #include <stdio.h>

@@ -1,3 +1,7 @@
+# Specifies the dynamic library to be loaded and functions to be exported
+# Author: Yi Zhang
+# Date: Sep 8, 2008
+
 useDynLib(riotdb)
 
 # methods for new dbvector go here

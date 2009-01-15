@@ -1,4 +1,9 @@
-#include "dbvector.h"
+/**************************************************************************** 
+Functions for loading dbvectors and dbmatrices.
+Author: Yi Zhang
+Date: Sep 8, 2008
+****************************************************************************/ 
+#include "riotdb.h"
 
 SEXP load_dbvector(SEXP mid)
 {
