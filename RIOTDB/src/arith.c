@@ -48,7 +48,7 @@ SEXP add_dbvectors(SEXP x, SEXP y)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 	R_do_slot_assign(ans, install("ext"), rptr);
 	UNPROTECT(4);
-	Free(vec->tableName);
+	/*Free(vec->tableName);*/
 	return ans;
 }
 

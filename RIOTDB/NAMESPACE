@@ -1,4 +1,4 @@
-useDynLib(dbvector_wrapper)
+useDynLib(riotdb)
 
 # methods for new dbvector go here
 export(seq.db, matrix.db, complex.db, logical.db, "length.dbvector", "mean.dbvector", "sort.dbvector", load.dbvector, load.dbmatrix, persist, materialize)

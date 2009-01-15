@@ -276,7 +276,10 @@ int dropVectorView(MYSQL * sqlConn, rdbVector * vectorInfo)
 
   int success = mysql_query(sqlConn, strDropViewSQL);
   if( success != 0 )
+  {
+	  Rprintf("%s\n",mysql_error(sqlConn));
      return 0;
+  }
 
   /* Delete corresponding metadata info */
   success = deleteMetadataInfo(sqlConn, vectorInfo->metadataID);

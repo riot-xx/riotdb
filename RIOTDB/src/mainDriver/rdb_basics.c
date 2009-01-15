@@ -66,7 +66,7 @@ void initRDBVector(rdbVector ** vectorInfo, int isView, int alloc)
   (*vectorInfo)->sxp_mark   = 0;
   (*vectorInfo)->sxp_debug  = 0;
   (*vectorInfo)->sxp_trace  = 0;
-  (*vectorInfo)->sxp_spare  = 1;
+  (*vectorInfo)->sxp_spare  = 0;
   (*vectorInfo)->sxp_gcgen  = 0;
   (*vectorInfo)->sxp_gccls  = 0;
 
@@ -259,7 +259,7 @@ void initRDBMatrix(rdbMatrix ** matrixInfo, int isView, int alloc)
   (*matrixInfo)->sxp_mark   = 0;
   (*matrixInfo)->sxp_debug  = 0;
   (*matrixInfo)->sxp_trace  = 0;
-  (*matrixInfo)->sxp_spare  = 2;
+  (*matrixInfo)->sxp_spare  = 0;
   (*matrixInfo)->sxp_gcgen  = 0;
   (*matrixInfo)->sxp_gccls  = 0;
 

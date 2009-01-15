@@ -220,7 +220,6 @@ SEXP dbvector_from_seq(SEXP begin, SEXP end, SEXP by)
 	PROTECT(ret = R_do_new_object(R_getClassDef("dbvector")));
 	SET_NAMED(ret, 0);
 
-Rprintf("type %d\n",TYPEOF(ret));
 	useInt = (((int)rbegin) == rbegin);
 	useInt &= (rbegin >= INT_MIN && rbegin <= INT_MAX && ((int)rby)==rby && rend >= INT_MIN && rend <= INT_MAX);
 

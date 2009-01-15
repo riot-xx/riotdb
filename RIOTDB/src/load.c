@@ -21,8 +21,6 @@ SEXP load_dbvector(SEXP mid)
 	rdbVector *vec = (rdbVector*)RAW(info);
 	loadRDBVector(sqlconn, &vec, id, 0);
 	vec->sxp_spare = 0;
-	/*vec->tableName = calloc(MAX_TABLE_NAME, sizeof(char));*/
-	/*strcpy(vec->tableName, sName);*/
 	
 	mysql_close(sqlconn);
 
@@ -83,6 +81,9 @@ SEXP load_dbmatrix(SEXP mid)
 	return ans;
 }
 
+/* TODO: should sxp_spare be updated to 1 when persisting?
+should sxp_spare be part of the condition when loading?
+*/
 SEXP persist_dbvector(SEXP x)
 {
 	SEXP extptr;

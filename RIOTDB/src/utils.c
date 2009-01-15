@@ -28,7 +28,7 @@ int getType(SEXP x)
 
 void rdbMatrixFinalizer(SEXP p)
 {
-	Rprintf("finalizing matrix...\n");
+	Rprintf("Finalizing %p\n",p);
 	rdbMatrix * info = R_ExternalPtrAddr(p);
 	MYSQL *sqlconn = NULL;
 	int success = connectToLocalDB(&sqlconn);
@@ -49,7 +49,7 @@ void rdbMatrixFinalizer(SEXP p)
 
 void rdbVectorFinalizer(SEXP p)
 {
-	Rprintf("finalizing...\n");
+	Rprintf("Finalizing %p\n", p);
 	rdbVector * info = R_ExternalPtrAddr(p);
 	MYSQL *sqlconn = NULL;
 	int success = connectToLocalDB(&sqlconn);
