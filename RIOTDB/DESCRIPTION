@@ -1,4 +1,4 @@
-Package: RDB
+Package: RIOTDB
 Version: 0.1
 Date: 2008-03-20
 Title: RIOT-DB: R with I/O Transparency (with a database backend) 

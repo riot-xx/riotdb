@@ -137,9 +137,9 @@ int TestIntegerInsertions(MYSQL* sqlConn, int testInsert,
       return 0;
     }
     if( byte == 1)
-       printf("Got element (2, 3): %d\n", value);
+       printf("Got element (row, col)=(2, 3): %d\n", value);
     else
-       printf("Got element (2, 3): NA\n");
+       printf("Got element (row, col)=(2, 3): NA\n");
 
 
     if( !printIntegerRDBMatrix(sqlConn, matrixInfo) )
@@ -181,7 +181,7 @@ int TestIntegerInsertions(MYSQL* sqlConn, int testInsert,
     printf("Integer Table:\t%ld\t%s\n", matrixInfo->metadataID, 
 	   matrixInfo->tableName);
 
-    if( !loadIntoMatrixTable(sqlConn, matrixInfo, "dataDir/matrixInt.txt") )
+    if( !loadIntoMatrixTable(sqlConn, matrixInfo, "testData/matrixInt.txt") )
     {
       printf("ERROR Load Ints: %s\n", mysql_error(sqlConn));
       return 0;
@@ -228,9 +228,9 @@ int TestDoubleInsertions(MYSQL* sqlConn, int testInsert,
       return 0;
     }
     if( byte == 1)
-       printf("Got element (2, 3): %lf\n", value);
+       printf("Got element (row, col)=(2, 3): %lf\n", value);
     else
-       printf("Got element (2, 3): NA\n");
+       printf("Got element (row, col)=(2, 3): NA\n");
 
     if( !printDoubleRDBMatrix(sqlConn, matrixInfo) )
       return 0;
@@ -248,7 +248,8 @@ int TestDoubleInsertions(MYSQL* sqlConn, int testInsert,
 
     printf("Insert sequence into double table %s\n", matrixInfo->tableName);
     int nRows = 4, nCols = 5;
-    if( !insertSeqDoubleMatrixTable(sqlConn, matrixInfo, 1, 1.8, 0.2, nRows, nCols))
+    if( !insertSeqDoubleMatrixTable(sqlConn, matrixInfo, 1, 1.8, 0.2, 
+                                    nRows, nCols))
     {
       printf("ERROR Insert Seq Double Table: %s\n", mysql_error(sqlConn));
       return 0;
@@ -270,7 +271,7 @@ int TestDoubleInsertions(MYSQL* sqlConn, int testInsert,
   
     printf("Load data into Double Table: %s\n", matrixInfo->tableName);
 
-    if( !loadIntoMatrixTable(sqlConn, matrixInfo, "dataDir/matrixDouble.txt") )
+    if( !loadIntoMatrixTable(sqlConn, matrixInfo, "testData/matrixDouble.txt") )
     {
       printf("ERROR Load Doubles: %s\n", mysql_error(sqlConn));
       return 0;
@@ -424,7 +425,7 @@ int printIntegerRDBMatrix(MYSQL* sqlConn, rdbMatrix * matrixInfo)
 {
     int numRows = matrixInfo->numRows;
     int numCols = matrixInfo->numCols;
-    int i, j, k, size = numRows * numCols;
+    int i, row, col, index, size = numRows * numCols;
     int values[size];
     char byteArray[size];
     for( i = 0 ; i < size ; i++ )
@@ -438,16 +439,17 @@ int printIntegerRDBMatrix(MYSQL* sqlConn, rdbMatrix * matrixInfo)
 
     printf("Printing Integer Matrix: %s (ID: %ld) with dimensions %dx%d\n", 
 	   matrixInfo->tableName, matrixInfo->metadataID, numRows, numCols);
+    printf("       Col      Row      Value\n");
 
-    for( i = 0 ; i < numRows ; i++ )
+    for( col = 0 ; col < numCols ; col++ )
     {
-    	for( j = 0 ; j < numCols ; j++ )
+    	for( row = 0 ; row < numRows ; row++ )
     	{
-	    k = j + i * numCols;
-      	    if( byteArray[k] == 1 )
-	       printf("\t%d\t%d\t%d\n", i+1, j+1, values[k]);
+	    index = row + col * numRows;
+      	    if( byteArray[index] == 1 )
+	       printf("\t%d\t%d\t%d\n", col+1, row+1, values[index]);
             else
-	       printf("\t%d\t%d\tNA\n", i+1, j+1);
+	       printf("\t%d\t%d\tNA\n", col+1, row+1);
 	}
     }
 
@@ -458,7 +460,7 @@ int printDoubleRDBMatrix(MYSQL* sqlConn, rdbMatrix * matrixInfo)
 {
     int numRows = matrixInfo->numRows;
     int numCols = matrixInfo->numCols;
-    int i, j, k, size = numRows * numCols;
+    int i, row, col, index, size = numRows * numCols;
     double values[size];
     char byteArray[size];
     for( i = 0 ; i < size ; i++ )
@@ -472,16 +474,17 @@ int printDoubleRDBMatrix(MYSQL* sqlConn, rdbMatrix * matrixInfo)
 
     printf("Printing Double Matrix: %s (ID: %ld) with dimensions %dx%d\n", 
 	   matrixInfo->tableName, matrixInfo->metadataID, numRows, numCols);
+    printf("       Col      Row      Value\n");
 
-    for( i = 0 ; i < numRows ; i++ )
+    for( col = 0 ; col < numCols ; col++ )
     {
-    	for( j = 0 ; j < numCols ; j++ )
+    	for( row = 0 ; row < numRows ; row++ )
     	{
-	    k = j + i * numCols;
-      	    if( byteArray[k] == 1 )
-	       printf("\t%d\t%d\t%lf\n", i+1, j+1, values[k]);
+	    index = row + col * numRows;
+      	    if( byteArray[index] == 1 )
+	       printf("\t%d\t%d\t%lf\n", col+1, row+1, values[index]);
             else
-	       printf("\t%d\t%d\tNA\n", i+1, j+1);
+	       printf("\t%d\t%d\tNA\n", col+1, row+1);
 	}
     }
 

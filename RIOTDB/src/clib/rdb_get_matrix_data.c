@@ -117,9 +117,9 @@ int getAllIntMatrixElements(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   {
     if(sqlRow[2] != NULL)
     {
-      row = atoi(sqlRow[0])-1;
-      col = atoi(sqlRow[1])-1;
-      index = col + row * matrixInfo->numCols;
+      col = atoi(sqlRow[0])-1;
+      row = atoi(sqlRow[1])-1;
+      index = row + col * matrixInfo->numRows;
       values[index] = atoi(sqlRow[2]);
       byteArray[index] = 1;
     }
@@ -148,9 +148,9 @@ int getAllDoubleMatrixElements(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   {
     if(sqlRow[2] != NULL)
     {
-      row = atoi(sqlRow[0])-1;
-      col = atoi(sqlRow[1])-1;
-      index = col + row * matrixInfo->numCols;
+      col = atoi(sqlRow[0])-1;
+      row = atoi(sqlRow[1])-1;
+      index = row + col * matrixInfo->numRows;
       values[index] = strtod(sqlRow[2], NULL);
       byteArray[index] = 1;
     }

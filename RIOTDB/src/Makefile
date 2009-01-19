@@ -5,7 +5,7 @@
 
 R_HOME=/usr/local/lib/R
 MYSQL_DIR=/usr/mysql
-LIB_DIR=mainDriver
+LIB_DIR=clib
 BIN=riotdb
 CC=gcc
 CFLAGS=-std=gnu99 -g -Wall -I$(MYSQL_DIR)/include/mysql -I$(R_HOME)/include

@@ -1,29 +1,14 @@
-Project: R with I/O Transparency (RIOT) Library
+Project: R with I/O Transparency (RIOTDB) Library
+         With MySQL at the backend
 Author:  Herodotos Herodotou
 
-Description: This library allows the RIOT prototype package to interface
+Description: This library allows the RIOTDB prototype package to interface
              with the msql database.
 
 General Files:
 
 - config.h
 	Contains the database location and credentials.
-
-- testVector.c
-	Contains regression tests for the vector functions.
-
-- testMatrix.c
-	Contains regression tests for the matrix functions.
-
-- testDelete.c
-	Deletes all tables from the database
-
-- Makefile
-	Contains commands for compiling the source code and running tests
-	Commands: 
-		"make regression" - performs all regression tests
-		"make reset" - deletes all tables and resets the database
-		"make clean" - deletes all unnecessary files
 
 Library files:
 

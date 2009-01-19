@@ -11,16 +11,16 @@
 
 /* Templates to create matrix tables */
 #define sqlTemplateCreateIntMatrix  "CREATE TABLE %s ( \
-                                     mRow INT UNSIGNED , \
                                      mCol INT UNSIGNED , \
+                                     mRow INT UNSIGNED , \
                                      mValue INT NOT NULL, \
-                                     PRIMARY KEY (mRow, mCol) )"
+                                     PRIMARY KEY (mCol, mRow) )"
 
 #define sqlTemplateCreateDoubleMatrix  "CREATE TABLE %s ( \
-                                        mRow INT UNSIGNED , \
                                         mCol INT UNSIGNED , \
+                                        mRow INT UNSIGNED , \
                                         mValue DOUBLE NOT NULL, \
-                                        PRIMARY KEY (mRow, mCol) )"
+                                        PRIMARY KEY (mCol, mRow) )"
 
 /* Templates to drop matrix tables */
 #define sqlTemplateDropMatrixTable        "DROP TABLE %s"
@@ -28,7 +28,7 @@
 
 /* Template to create a dublicate matrix tables */
 #define sqlTemplateDublicateMatrixTable  "INSERT INTO %s SELECT * \
-                                          FROM %s ORDER BY mRow, mCol"
+                                          FROM %s ORDER BY mCol, mRow"
 
 
 /* Template to handle matrix sizes */

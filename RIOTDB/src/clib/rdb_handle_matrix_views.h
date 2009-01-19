@@ -16,10 +16,8 @@
 #define sqlTemplateDropMatrixView   "DROP VIEW %s"
 
 /* Templates to materialize views */
-#define sqlTemplateMaterializeMatrixView "INSERT INTO %s SELECT * \
-FROM %s"
+#define sqlTemplateMaterializeMatrixView "INSERT INTO %s SELECT * FROM %s"
 
-/* Templates to handle view references located in rdb_handle_vector_views.h */
 
 
 /* ----------------- Functions to create views ---------------------- */

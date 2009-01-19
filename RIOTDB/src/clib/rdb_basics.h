@@ -26,16 +26,18 @@
 #define SXP_TYPE_STRING    16
 
 /* Templates to create RDBVector objects from Metadata */
-#define sqlGetAllRDBVectors    "SELECT * FROM Metadata WHERE sxp_spare = 1"
+#define sqlGetAllRDBVectors    "SELECT * FROM Metadata \
+                                WHERE table_name LIKE \"Vector%\""
 
-#define sqlGetRDBVector        "SELECT * FROM Metadata WHERE metadata_id = %ld \
-				AND sxp_spare = 1"
+#define sqlGetRDBVector        "SELECT * FROM Metadata WHERE metadata_id = %ld"
+
 
 /* Templates to create RDBMatrix objects from Metadata */
-#define sqlGetAllRDBMatrix     "SELECT * FROM Metadata WHERE sxp_spare = 2"
+#define sqlGetAllRDBMatrix     "SELECT * FROM Metadata \
+                                WHERE table_name LIKE \"Matrix%\""
 
-#define sqlGetRDBMatrix        "SELECT * FROM Metadata WHERE metadata_id = %ld \
-				AND sxp_spare = 2"
+#define sqlGetRDBMatrix        "SELECT * FROM Metadata WHERE metadata_id = %ld"
+
 
 /* Template for naming conventions */
 #define sqlTemplateVectorTableName        "VectorTable%d"

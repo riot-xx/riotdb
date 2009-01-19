@@ -64,9 +64,15 @@ int insertIntoIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 					startCol, nRows, nCols);
 
     remain -= MAX_NUM_INT_STRING;
+    index = (startRow-1) + (startCol-1)*nRows + MAX_NUM_INT_STRING;
+    startCol = 1 + index / nRows;
+    startRow = 1 + index % nRows;
+
+/*
     index = (startCol-1) + (startRow-1)*nCols + MAX_NUM_INT_STRING;
     startRow = 1 + index / nCols;
     startCol = 1 + index % nCols;
+*/
   }
 
   success *= insertPartIntMatrixTable(sqlConn, matrixInfo, values, size, 
@@ -97,9 +103,14 @@ int insertIntoDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 					startCol, nRows, nCols);
 
     remain -= MAX_NUM_DOUBLE_STRING;
+    index = (startRow-1) + (startCol-1)*nRows + MAX_NUM_DOUBLE_STRING;
+    startCol = 1 + index / nRows;
+    startRow = 1 + index % nRows;
+/*
     index = (startCol-1) + (startRow-1)*nCols + MAX_NUM_DOUBLE_STRING;
     startRow = 1 + index / nCols;
     startCol = 1 + index % nCols;
+*/
   }
 
   success *= insertPartDoubleMatrixTable(sqlConn, matrixInfo, values, size, 
@@ -132,12 +143,12 @@ int insertSeqIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   int row, col, iter = 0;
   int element = start;
   int success = 1;
-  for( row = 1 ; row <= nRows ; row++ )
+  for( col = 1 ; col <= nCols ; col++ )
   {
-     for( col = 1 ; col <= nCols ; col++ )
+     for( row = 1 ; row <= nRows ; row++ )
      {
         sprintf(strTemp, sqlTemplateInsertIntMatrixValue, 
-		row, col, element);
+		col, row, element);
         strcat(strValues, strTemp);
 
 	++iter;
@@ -194,12 +205,12 @@ int insertSeqDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   int row, col, iter = 0;
   double element = start;
   int success = 1;
-  for( row = 1 ; row <= nRows ; row++ )
+  for( col = 1 ; col <= nCols ; col++ )
   {
-     for( col = 1 ; col <= nCols ; col++ )
+     for( row = 1 ; row <= nRows ; row++ )
      {
         sprintf(strTemp, sqlTemplateInsertDoubleMatrixValue, 
-		row, col, element);
+		col, row, element);
         strcat(strValues, strTemp);
 
 	++iter;
@@ -251,17 +262,17 @@ int insertPartIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 
   /* Build string with the values of the form "(r,c,n),...,(r,c,n)" */
   int row, col, elem, iter = 0;
-  for( row = startRow ; row <= nRows && iter < numElems ; row++ )
+  for( col = startCol ; col <= nCols && iter < numElems ; col++ )
   {
-     for( col = startCol ; col <= nCols && iter < numElems ; col++ )
+     for( row = startRow ; row <= nRows && iter < numElems ; row++ )
      {
-        elem = ((col-1) + (row-1)*nCols) % size;
+        elem = ((row-1) + (col-1)*nRows) % size;
         sprintf(strTemp, sqlTemplateInsertIntMatrixValue, 
-		row, col, values[elem]);
+		col, row, values[elem]);
         strcat(strValues, strTemp);
 	++iter;
      }
-     startCol = 1;
+     startRow = 1;
   }
 
   /* Execute the sql query */
@@ -286,17 +297,17 @@ int insertPartDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 
   /* Build string with the values of the form "(r,c,n),...,(r,c,n)" */
   int row, col, elem, iter = 0;
-  for( row = startRow ; row <= nRows && iter < numElems ; row++ )
+  for( col = startCol ; col <= nCols && iter < numElems ; col++ )
   {
-     for( col = startCol ; col <= nCols && iter < numElems ; col++ )
+     for( row = startRow ; row <= nRows && iter < numElems ; row++ )
      {
-        elem = ((col-1) + (row-1)*nCols) % size;
+        elem = ((row-1) + (col-1)*nRows) % size;
         sprintf(strTemp, sqlTemplateInsertDoubleMatrixValue, 
-		row, col, values[elem]);
+		col, row, values[elem]);
         strcat(strValues, strTemp);
 	++iter;
      }
-     startCol = 1;
+     startRow = 1;
   }
 
   /* Execute the sql query */

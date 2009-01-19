@@ -12,7 +12,7 @@
 #define sqlTemplateGetSingleMatrixValue  "SELECT mValue FROM %s \
 					  WHERE mRow = %d AND mCol = %d"
 
-#define sqlTemplateGetAllMatrixValues    "SELECT * FROM %s ORDER BY mRow, mCol"
+#define sqlTemplateGetAllMatrixValues    "SELECT * FROM %s ORDER BY mCol, mRow"
 
 
 /* Functions to access matrix tables by element */

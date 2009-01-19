@@ -9,11 +9,11 @@
  ****************************************************************************/
 
 /* Templates for Matrix Multiplication */
-#define sqlTemplateMatrixMultiplication    "SELECT T1.mRow, T2.mCol, \
-SUM(T1.mValue * T2.mValue)\
-FROM %s AS T1, %s AS T2 \
-WHERE T1.mCol = T2.mRow \
-GROUP BY T1.mRow, T2.mCol"
+#define sqlTemplateMatrixMultiplication    "SELECT T2.mCol, T1.mRow, \
+						   SUM(T1.mValue * T2.mValue)\
+					    FROM %s AS T1, %s AS T2 \
+					    WHERE T1.mCol = T2.mRow \
+					    GROUP BY T1.mRow, T2.mCol"
 
 
 int performMatrixMultiplication(MYSQL * sqlConn, rdbMatrix * result, 
