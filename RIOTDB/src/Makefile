@@ -24,11 +24,12 @@ OBJ += $(patsubst %.c,%.o, $(wildcard *.c))
 all: before $(SHLIB) 
 
 before:$(OBJ)
-#	R CMD SHLIB -g $(LIBS) -o rdb.so $(OBJ) $(LIBS)
+#	R CMD SHLIB -g $(LIBS) -o riotdb.so $(OBJ) $(LIBS)
 	$(CC) -std=gnu99 -G $(LIBS) -o $(BIN).so $(OBJ) 
 
 after:
-	rm *.o
-	rm *.so
+	rm -f *.o
+	rm -f *.so
+	rm -f $(LIB_DIR)/*.o
 .c.o:
 	$(CC) $(CFLAGS) -fpic -c $< -o $@

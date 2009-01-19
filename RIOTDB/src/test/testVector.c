@@ -4,19 +4,19 @@
 
 #include "Rinternals.h"
 
-#include "rdb_basics.h"
-#include "rdb_handle_vector_tables.h"
-#include "rdb_handle_vector_views.h"
-#include "rdb_handle_metadata.h"
-#include "rdb_convert_vectors.h"
-#include "rdb_insert_vector_data.h"
-#include "rdb_get_vector_data.h"
-#include "rdb_set_vector_data.h"
-#include "rdb_binary_operators.h"
-#include "rdb_compare_vectors.h"
-#include "rdb_aggregate_functions.h"
-#include "rdb_element_functions.h"
-#include "rdb_delete_vector_data.h"
+#include "basics.h"
+#include "handle_vector_tables.h"
+#include "handle_vector_views.h"
+#include "handle_metadata.h"
+#include "convert_vectors.h"
+#include "insert_vector_data.h"
+#include "get_vector_data.h"
+#include "set_vector_data.h"
+#include "vector_binary_ops.h"
+#include "compare_vectors.h"
+#include "vector_aggregate_functions.h"
+#include "vector_element_functions.h"
+#include "delete_vector_data.h"
 
 
 

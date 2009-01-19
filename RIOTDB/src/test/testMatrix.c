@@ -4,23 +4,13 @@
 
 #include "Rinternals.h"
 
-#include "rdb_basics.h"
-#include "rdb_handle_metadata.h"
-#include "rdb_handle_matrix_tables.h"
-#include "rdb_insert_matrix_data.h"
-#include "rdb_get_matrix_data.h"
-#include "rdb_matrix_functions.h"
+#include "basics.h"
+#include "handle_metadata.h"
+#include "handle_matrix_tables.h"
+#include "insert_matrix_data.h"
+#include "get_matrix_data.h"
+#include "matrix_functions.h"
 
-/*
-#include "rdb_handle_matrix_views.h"
-#include "rdb_convert_matrixs.h"
-#include "rdb_set_matrix_data.h"
-#include "rdb_binary_operators.h"
-#include "rdb_compare_matrixs.h"
-#include "rdb_aggregate_functions.h"
-#include "rdb_element_functions.h"
-#include "rdb_delete_matrix_data.h"
-*/
 
 /* ------------------ Testing functions prototypes ------------------- */
 int TestIntegerInsertions(MYSQL* sqlConn, int testInsert, 

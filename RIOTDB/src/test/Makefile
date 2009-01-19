@@ -40,7 +40,7 @@ regression:
 regression_vector: vector delete
 	make reset
 	./testVector.out > outputVec1.temp
-	mysql rdb -umysql < $(SCRIPT_DIR)/sql_view_results.sql > outputVec2.temp
+	mysql riotdb -umysql < $(SCRIPT_DIR)/view_results_riotdb.sql > outputVec2.temp
 	diff outputVec1.temp outputMainVector.txt
 	diff outputVec2.temp outputSqlVector.txt
 
@@ -48,15 +48,15 @@ regression_vector: vector delete
 regression_matrix: matrix delete
 	make reset
 	./testMatrix.out > outputMatr1.temp
-	mysql rdb -umysql < $(SCRIPT_DIR)/sql_view_results.sql > outputMatr2.temp
+	mysql riotdb -umysql < $(SCRIPT_DIR)/view_results_riotdb.sql > outputMatr2.temp
 	diff outputMatr1.temp outputMainMatrix.txt
 	diff outputMatr2.temp outputSqlMatrix.txt
 
 # Reset the database
 reset: delete
 	./testDelete.out
-	mysql rdb -umysql < $(SCRIPT_DIR)/sql_init_riot.sql
-	mysql rdb -umysql < $(SCRIPT_DIR)/sql_view_results.sql
+	mysql riotdb -umysql < $(SCRIPT_DIR)/init_riotdb.sql
+	mysql riotdb -umysql < $(SCRIPT_DIR)/view_results_riotdb.sql
 
 # Clear all temp files, executables and core files
 clean:

@@ -6,19 +6,19 @@ Description: This serves as regression testing for the c-library of RIOTDB
 Files:
 
 - testVector.c
-	Contains regression tests for the vector functions.
+    Contains regression tests for the vector functions.
 
 - testMatrix.c
-	Contains regression tests for the matrix functions.
+    Contains regression tests for the matrix functions.
 
 - testDelete.c
-	Deletes all tables from the database
+    Deletes all tables from the database
 
 - Makefile
-	Contains commands for compiling the source code and running tests
-	Commands: 
-		"make regression" - performs all regression tests
+    Contains commands for compiling the source code and running tests
+    Commands: 
+        "make regression" - performs all regression tests
         "make regression_vector" - performs regression tests for vectors
         "make regression_matrix" - performs regression tests for matrices
-		"make reset" - deletes all tables and resets the database
-		"make clean" - deletes all unnecessary files
+        "make reset" - deletes all tables and resets the database
+        "make clean" - deletes all unnecessary files

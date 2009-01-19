@@ -4,9 +4,9 @@
 
 #include "Rinternals.h"
 
-#include "rdb_basics.h"
-#include "rdb_handle_vector_tables.h"
-#include "rdb_handle_matrix_tables.h"
+#include "basics.h"
+#include "handle_vector_tables.h"
+#include "handle_matrix_tables.h"
 
 /* --- main --- */
 int main()

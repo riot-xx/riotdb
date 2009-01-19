@@ -1,4 +1,4 @@
-Tables_in_rdb
+Tables_in_riotdb
 DB_Sources
 Metadata
 VectorTable1

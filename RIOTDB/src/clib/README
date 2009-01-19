@@ -8,78 +8,78 @@ Description: This library allows the RIOTDB prototype package to interface
 General Files:
 
 - config.h
-	Contains the database location and credentials.
+    Contains the database location and credentials.
 
 Library files:
 
-- rdb_aggregate_functions.c/h
-	Contains aggregate functions for vectors (sum, avg, max, min).
+- basics.c/h
+    Contains necessary constants, the RDBVector definition, the RDBMatrix
+    definition and functions for initializing, copying, clearing and loading
+    RDBVectors and RDBMatrices.
 
-- rdb_basics.c/h
-	Contains necessary constants, the RDBVector definition, the RDBMatrix
-	definition and functions for initializing, copying, clearing and loading
-	RDBVectors and RDBMatrices.
+- compare_vectors.c/h
+    Contains functions for vector comparisons with other vectors or values.
 
-- rdb_binary_operators.c/h
-	Contains functions for binary operators for vectors (+, -, *, /, %).
+- convert_vectors.c/h
+    CContains functions for performing data type conversions for vectors.
 
-- rdb_compare_vectors.c/h
-	Contains functions for vector comparisons with other vectors or values.
+- delete_vector_data.c/h
+    Contains functions for deleting elements from vectors (delete all, 
+    single values, range of values or sparse values).
 
-- rdb_convert_vectors.c/h
-	CContains functions for performing data type conversions for vectors.
+- get_matrix_data.c/h
+    Contains functions for accessing elements in vectors (get all, single 
+    values).
 
-- rdb_delete_vector_data.c/h
-	Contains functions for deleting elements from vectors (delete all, 
-	single values, range of values or sparse values).
+- get_vector_data.c/h
+    Contains functions for accessing elements in vectors (get all, single 
+    values, range of values, sparse values, with other dbvectors as indexes 
+    or with logic dbvectors).
 
-- rdb_element_functions.c/h
-	Contains element-wise functions for vectors (sin, cos, pow, sqrt).
+- handle_matrix_tables.c/h
+    Contains functions for managing matrix tables (create, delete, dublicate,
+    check for N/A).
 
-- rdb_get_matrix_data.c/h
-	Contains functions for accessing elements in vectors (get all, single 
-	values).
+- handle_matrix_views.c/h
+    Contains functions for handling matrix views (i.e create, drop, 
+    materialize views and keep track of view references)
 
-- rdb_get_vector_data.c/h
-	Contains functions for accessing elements in vectors (get all, single 
-	values, range of values, sparse values, with other dbvectors as indexes 
-	or with logic dbvectors).
+- handle_metadata.c/h
+    Contains functions for managing the matadata table.
 
-- rdb_handle_matrix_tables.c/h
-	Contains functions for managing matrix tables (create, delete, dublicate,
-	check for N/A).
+- handle_vector_tables.c/h
+    Contains functions for managing vector tables (create, delete, dublicate,
+    check for N/A).
 
-- rdb_handle_matrix_views.c/h
-	Contains functions for handling matrix views (i.e create, drop, 
-	materialize views and keep track of view references)
+- handle_vector_views.c/h
+    Contains functions for handling vector views (i.e create, drop, 
+    materialize views and keep track of view references)
 
-- rdb_handle_metadata.c/h
-	Contains functions for managing the matadata table.
+- insert_matrix_data.c/h
+    Contains functions for inserting data to an EMPTY matrix either explicitely 
+    or load from a file
 
-- rdb_handle_vector_tables.c/h
-	Contains functions for managing vector tables (create, delete, dublicate,
-	check for N/A).
+- insert_vector_data.c/h
+    Contains functions for inserting data to a vector either explicitely 
+    or load from a file
 
-- rdb_handle_vector_views.c/h
-	Contains functions for handling vector views (i.e create, drop, 
-	materialize views and keep track of view references)
+- matrix_function.c/h
+    Contains functions for matrices (multiplication)
 
-- rdb_insert_matrix_data.c/h
-	Contains functions for inserting data to an EMPTY matrix either explicitely 
-	or load from a file
+- set_vector_data.c/h
+    Contains functions for updating elements in an existing vector (setting a 
+    single value, range of values, sparce values, with dbvectors containing
+    indexes and logic vectors).
 
-- rdb_insert_vector_data.c/h
-	Contains functions for inserting data to a vector either explicitely 
-	or load from a file
+- sort_vector.c/h
+    Contains a method used to sort numeric vectors
 
-- rdb_matrix_function.c/h
-	Contains functions for matrices (multiplication)
+- vector_aggregate_functions.c/h
+    Contains aggregate functions for vectors (sum, avg, max, min).
 
-- rdb_set_vector_data.c/h
-	Contains functions for updating elements in an existing vector (setting a 
-	single value, range of values, sparce values, with dbvectors containing
- 	indexes and logic vectors).
+- vector_binary_ops.c/h
+    Contains functions for binary operators for vectors (+, -, *, /, %).
 
-- rdb_sort_vector.c/h
-
+- vector_element_functions.c/h
+    Contains element-wise functions for vectors (sin, cos, pow, sqrt).
 
