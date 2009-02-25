@@ -3,8 +3,20 @@
 # Date: Sep 8, 2008
 
 # setting up hooks when loading the package
+
+# patches will be made at the source level, instead of the script level
+#newAssign <- function(x, value) {
+#	if (class(value)=="dbvector"||class(value)=="dbmatrix") {
+#		.Call("incRefCounter", value)
+#		assign(deparse(substitute(x)),value,envir=parent.frame())
+#	}
+#	else
+#		assign(deparse(substitute(x)),value,envir=parent.frame())
+#}
+
 .onLoad = function(libname, pkgname) {
-	print("===== RDB loaded ===== ")
+	print("RIOTDB is a package that makes computing on large data I/O-efficient.")
+	print("It makes use of a database backend for storing and retrieving data.")
 
 # generic methods
 	setClass("dbvector", representation(size="numeric",type="character",tablename="character",info="raw"))
@@ -38,9 +50,9 @@
 	setMethod("sum", signature(x="dbvector"), function(x,na.rm=FALSE){
 		.Call("sum_dbvector", x, na.rm)	
 	})
-	#setMethod("mean", signature(x="dbvector"), function(x,trim=0,na.rm=FALSE,...){
-		#.Call("mean_dbvector", x, na.rm)	
-	#})
+#	setMethod("mean", signature(x="dbvector"), function(x,trim=0,na.rm=FALSE,...){
+#		.Call("mean_dbvector", x, na.rm)	
+#	})
 
 	setMethod("[", signature(x="dbvector"), function(x,i,j,...,drop=T){
 		# for vectors only take the first
@@ -56,7 +68,7 @@
 		nas <- is.na(value)
 		# if value contains only NA, delete instead
 		if (all(nas)) {
-			 # currently i must of of numeric type, no dbvector!
+			 # currently i must be of numeric type, no dbvector!
 			 # sort index so that deletion can be done in ranges
 			return(.Call("delete_from_dbvector", x, sort(i)))
 		}
@@ -70,14 +82,25 @@
 		 # no NA's
 		.Call("set", x, i, value)
 	})
+
+# overwrite the "<-" operator for the reference counting of db objects
+#	env <- as.environment('package:base')
+#	assign("oldAssign", base::`<-`, env)
+#	unlockBinding('<-', env)
+#	assign('<-', newAssign, envir=env)
+#	# Do NOT use lockBinding because its implementation calls '<-',
+#	# whose binding has not yet been locked!
+#	.Internal(lockBinding(as.name('<-'), env))
 }
 
 sqrt_dbvector <- function(x) {
 .Call("sqrt_dbvector", x)
 }
+
 pow_dbvector <- function(e1,e2) {
 .Call("pow_dbvector", e1, e2)
 }
+
 mean.dbvector <- function(x, na.rm=F) {
 	.Call("mean_dbvector", x, na.rm)
 }
@@ -190,3 +213,4 @@ materialize <- function(x) {
     else if(class(x)=="dbmatrix")
         .Call("materialize_dbmatrix", x)
 }
+
