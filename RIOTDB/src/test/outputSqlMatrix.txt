@@ -1,0 +1,32 @@
+Tables_in_riotdb
+DB_Sources
+MatrixTable1
+MatrixTable2
+MatrixTable3
+MatrixTable4
+MatrixTable5
+MatrixTable6
+MatrixTable7
+MatrixTable8
+MatrixTable9
+MatrixView10
+MatrixView11
+Metadata
+View_Reference
+next_vec_index
+12
+metadata_id	table_name	size	is_view	ref_counter	sxp_type
+1	MatrixTable1	3,4	0	1	13
+2	MatrixTable2	4,5	0	1	13
+3	MatrixTable3	5,3	0	1	13
+4	MatrixTable4	3,4	0	1	14
+5	MatrixTable5	4,5	0	1	14
+6	MatrixTable6	5,3	0	1	14
+7	MatrixTable7	3,4	0	3	13
+8	MatrixTable8	4,3	0	2	13
+9	MatrixTable9	4,5	0	2	14
+10	MatrixView10	3,3	1	1	13
+11	MatrixView11	3,5	1	1	14
+view_id	table1_id	table2_id
+10	7	8
+11	7	9

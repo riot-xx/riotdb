@@ -1,0 +1,48 @@
+RIOTDB: transparently bringing scalability and I/O-efficiency to
+statistical computing with R
+
+http://www.cs.duke.edu/dbgroup/Main/RIOT
+
+NOTE: This is a prototype implementation and is missing a lot of features.
+
+--------------------------
+
+To install RIOTDB on a Unix-like system, follow these instructions:
+
+ 1) Database setup. Currently RIOTDB uses MySQL as its backend. Please
+make sure you have access to a MySQL server. You can modify the
+username and password in the RIOTDB/src/clib/config.h file. The
+default username RIOTDB assumes is 'mysql' and the default password is
+empty. Use the script RIOTDB/src/scripts/init_riotdb.sql to initialize
+and populate the database:
+
+$ mysql -u mysql # log in the mysql command interface
+$ \. <path_to_the_script> # load the script
+
+If any error should occur, make sure the user account has enough privileges.
+
+2) Compile the package. Make sure you are at the top level directory
+(where this file resides), and type the following:
+
+$ R CMD INSTALL ROITDB 
+
+The RIOTDB package will be installed. If you want to have it installed
+in a customized directory, make a file ~/.Renviron with the following
+contents before installing the package:
+
+R_LIBS=<path>
+
+3) (Optional) Patch R. If you want to use an optimized version of
+RIOTDB (see the discussion at
+http://www.cs.duke.edu/dbgroup/Main/RIOT-interface), use the file
+R-RIOTDB.patch to patch the official R source and rebuild R. Any
+reasonably modern R release should work.
+
+$ cd <top level of R's source tree>
+$ patch -p1 < <path to the R-RIOTDB.patch file>
+$ ./configure # build R as usual
+$ make && make install
+
+4) Use RIOTDB. Start R and use the following statement to load RIOTDB:
+
+> library(RIOTDB)
