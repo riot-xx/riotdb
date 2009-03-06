@@ -3,18 +3,20 @@ statistical computing with R
 
 http://www.cs.duke.edu/dbgroup/Main/RIOT
 
-NOTE: This is a prototype implementation and is missing a lot of features.
+NOTE: This is only a prototype implementation for demonstrating
+research ideas.
 
 --------------------------
 
 To install RIOTDB on a Unix-like system, follow these instructions:
 
  1) Database setup. Currently RIOTDB uses MySQL as its backend. Please
-make sure you have access to a MySQL server. You can modify the
-username and password in the RIOTDB/src/clib/config.h file. The
-default username RIOTDB assumes is 'mysql' and the default password is
-empty. Use the script RIOTDB/src/scripts/init_riotdb.sql to initialize
-and populate the database:
+make sure you have access to a MySQL server. You can modify the server
+address, username, and password in the RIOTDB/src/clib/config.h file
+to match your settings. The default username RIOTDB assumes is 'mysql'
+and the default password is empty. Use the script
+RIOTDB/src/scripts/init_riotdb.sql to initialize and populate the
+database:
 
 $ mysql -u mysql # log in the mysql command interface
 $ \. <path_to_the_script> # load the script
