@@ -1,10 +1,14 @@
---- Table cleanup ---
+DROP DATABASE IF EXISTS riotdb;
+CREATE DATABASE riotdb;
+USE riotdb;
+
+-- Table cleanup ---
 DROP TABLE IF EXISTS Metadata;
 DROP TABLE IF EXISTS DB_Sources;
 DROP TABLE IF EXISTS View_Reference;
 
 
---- Table creation ---
+-- Table creation ---
 CREATE TABLE DB_Sources (
     db_source_id    INT(6) UNSIGNED AUTO_INCREMENT,
     db_driver       VARCHAR(30) NOT NULL,
@@ -35,9 +39,9 @@ CREATE TABLE Metadata (
     sxp_gcgen       SMALLINT(2) UNSIGNED DEFAULT 0,
     sxp_gccls       SMALLINT(2) UNSIGNED DEFAULT 0,
     PRIMARY KEY     (metadata_id),
----    FOREIGN KEY     (db_source_id) REFERENCES DB_Sources ON DELETE CASCADE,
+--    FOREIGN KEY     (db_source_id) REFERENCES DB_Sources ON DELETE CASCADE,
     INDEX           (metadata_id)
----    index (db_source_id)
+--    index (db_source_id)
 ) engine=myisam;
 
 
@@ -50,7 +54,7 @@ CREATE TABLE View_Reference (
 ) engine=myisam;
 
 
---- Create Triggers ---
+-- Create Triggers ---
 DELIMITER |
 CREATE TRIGGER increment_next_id AFTER INSERT ON Metadata
    FOR EACH ROW BEGIN
@@ -69,6 +73,6 @@ CREATE TRIGGER increment_ref_counter AFTER INSERT ON View_Reference
 DELIMITER ;
 
 
---- Insert Local DB info ---
+-- Insert Local DB info ---
 INSERT INTO DB_Sources VALUE(NULL,'MySQL','riotdb','mysql',NULL,1);
 
