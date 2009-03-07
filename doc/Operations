@@ -1,0 +1,56 @@
+In order to present a consistent interface to most programs written in
+R, RIOT overrides a set of operators defined in the R language. By
+doing so RIOT provides its own implementation that is I/O-efficient
+for common operations in R. In this document, we describe some of the
+important operators identified in the process of designing RIOT. Most
+of the implementations of these listed operators can be found in the
+RIOTDB/R/riotdb.R file. Also note that this is not intended to be a
+complete list, but could be expanded and amended in the future.
+
+A. Data Creation Operators.
+
+The following operators are used to create vectors/arrays. In RIOT,
+these operators are overridden to return dbvector or dbarray types
+when the result would be too large.
+
+`:`:  regular sequence generator, e.g., 1:n gives a sequence 1,2,...,n
+seq:  a richer version of `:`
+read.table, etc: for loading external data files
+load.dbvector, load.dbmatrix etc: for loading external database tables (not found in R)
+
+B. Generic Group Methods.
+
+Certain types of operators can be overridden for new data types. R
+groups these operators into three categories:
+Math     : abs, acos, log, ...
+Summary  : max, min, ...
+Ops      : +,-,*,/, ...
+
+The full list can be found in Section 5.6 in [1]. There are some other
+operators missing in these groups, such as 'sqrt'. For more
+information, consult the help topics on 'Arithmetic', 'sqrt',
+'Special', etc in R, or check the output of the getGenerics() function
+in R.
+
+C. Access Operators.
+
+Elements of vectors, matrices, arrays etc are accessed by the `[`
+operator, and modified by the subset assignment operator `[<-`.
+
+D. Special Numerical Operators for Matrices.
+
+This category includes:
+%*%   : matrix multiplication
+solve : solves the equation a %*% x = b for x
+chol,qr,... : matrix factorization methods
+
+E. Attribute Operators.
+
+length  : gets the length of a vector
+dim     : gets the dimension of a matrix/array
+dim<-   : sets the dimension of a matrix/array
+
+F. Misc Operators.
+
+print   : prints the object
+show	: displays the object
