@@ -5,7 +5,7 @@ for common operations in R. In this document, we describe some of the
 important operators identified in the process of designing RIOT. Most
 of the implementations of these listed operators can be found in the
 RIOTDB/R/riotdb.R file. Also note that this is not intended to be a
-complete list, but could be expanded and amended in the future.
+complete list, but might be expanded and amended in the future.
 
 A. Data Creation Operators.
 
@@ -15,8 +15,14 @@ when the result would be too large.
 
 `:`:  regular sequence generator, e.g., 1:n gives a sequence 1,2,...,n
 seq:  a richer version of `:`
-read.table, etc: for loading external data files
 load.dbvector, load.dbmatrix etc: for loading external database tables (not found in R)
+read.table, etc: for loading external data files
+
+RIOT-DB currently implements the first three operators. One thing to
+note about RIOT-DB's implementation is that the behavior of `:` is
+controlled by a variable .VectorThreshold (with default value
+1000). Any sequence created by `:` and with a length >=
+.VectorThreshold will be a dbvector.
 
 B. Generic Group Methods.
 
@@ -32,10 +38,16 @@ information, consult the help topics on 'Arithmetic', 'sqrt',
 'Special', etc in R, or check the output of the getGenerics() function
 in R.
 
+RIOT-DB currently implements a subset of the operators in these three
+groups.
+
 C. Access Operators.
 
 Elements of vectors, matrices, arrays etc are accessed by the `[`
 operator, and modified by the subset assignment operator `[<-`.
+
+RIOT-DB has implemented the `[` and `[<-` operators for both dbvector
+and dbmatrix types.
 
 D. Special Numerical Operators for Matrices.
 
@@ -44,13 +56,35 @@ This category includes:
 solve : solves the equation a %*% x = b for x
 chol,qr,... : matrix factorization methods
 
+Only the %*% operator is currently implemented in RIOT-DB. Note that
+most of the operators in this category are inefficient to implement
+using a relational database backend, as explained in our paper
+[2]. This is part of the reason why we are moving towards the next
+generation of RIOT.
+
 E. Attribute Operators.
 
 length  : gets the length of a vector
 dim     : gets the dimension of a matrix/array
 dim<-   : sets the dimension of a matrix/array
 
+RIOT-DB supports length() on both dbvector and dbmatrix types. It also
+implements dim() on dbmatrix.
+
 F. Misc Operators.
 
 print   : prints the object
 show	: displays the object
+
+RIOT-DB currently has print() and show() working for both dbvector and
+dbmatrix types.
+
+----
+References
+
+1. R Language Definition. http://cran.r-project.org/doc/manuals/R-lang.pdf
+
+2. Yi Zhang, Herodotos Herodotou, and Jun Yang. "RIOT: I/O-Efficient
+   Numerical Computing without SQL." In Proceedings of the 4th
+   Biennial Conference on Innovative Data Systems Research (CIDR '09),
+   Asilomar, California, USA, January 2009.
