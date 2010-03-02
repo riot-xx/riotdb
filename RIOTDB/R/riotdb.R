@@ -240,6 +240,10 @@ materialize <- function(x) {
         .Call("materialize_dbmatrix", x)
 }
 
+t.dbmatrix <- function(a) {
+  .Call("do_mat_t", a)
+}
+
 solve.dbmatrix <- function(a, b) {
   if (dim(a)[1] != dim(a)[2])
     stop("the first input to solve() must be a square dbmatrix")

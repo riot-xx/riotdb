@@ -40,5 +40,8 @@ int solveByGuassianElimination(MYSQL *sqlConn, rdbMatrix *result, rdbMatrix *A, 
 int computeDoubleMatrixInverse(MYSQL *sqlConn, rdbMatrix *result,
                                rdbMatrix *input);
 
+int computeMatrixTranspose(MYSQL *sqlConn, rdbMatrix *result,
+                           rdbMatrix *input);
+
 #endif
 

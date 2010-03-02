@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <mysql.h>
+#include <assert.h>
 #include "Rinternals.h"
 #include "basics.h"
 #include "matrix_functions.h"
@@ -196,6 +197,23 @@ int computeDoubleMatrixInverse(MYSQL *sqlConn, rdbMatrix *result,
   if (mysql_query(sqlConn, "DROP VIEW gj_invert_A") != 0)
     return FALSE;
 
+  return TRUE;
+}
+
+int computeMatrixeTranspose(MYSQL *sqlconn, rdbMatrix *result,
+                            rdbMatrix *input) {
+
+  result->sxp_type = input->sxp_type;
+  result->isView = TRUE;
+  result->numRows = input->numCols;
+  result->numCols = input->numRows;
+
+  const char *sqlTemplate =
+    "SELECT mRow AS mCol, mCol AS mRow, mValue FROM %s";
+  char sql[strlen(sqlTemplate)+strlen(input->tableName)+1];
+  sprintf(sql, sqlTemplate, input->tableName);
+  assert(createNewDoubleMatrixView(sqlconn, result, sql));
+  createMatrixViewReferences(sqlconn, result, input, input);
   return TRUE;
 }
 
