@@ -26,8 +26,7 @@ SEXP math_dbvector(SEXP x, SEXP op)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(rinfo = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(rinfo);
-	vec->tableName = malloc(MAX_TABLE_NAME*sizeof(char));
-	initRDBVector(&vec, 0, 0);
+        initRDBVector(vec);
 
 	if (strcmp(CHAR(asChar(op)), "sin") == 0)
 	{
@@ -41,7 +40,6 @@ SEXP math_dbvector(SEXP x, SEXP op)
 				performComplexSin(sqlconn, xinfo, vec);
 				break;
 			default:
-				free(vec->tableName);
 				mysql_close(sqlconn);
 				UNPROTECT(2);
 				error("wrong type");
@@ -59,7 +57,6 @@ SEXP math_dbvector(SEXP x, SEXP op)
 				performComplexCos(sqlconn, xinfo, vec);
 				break;
 			default:
-				free(vec->tableName);
 				mysql_close(sqlconn);
 				UNPROTECT(2);
 				error("wrong type");
@@ -67,7 +64,6 @@ SEXP math_dbvector(SEXP x, SEXP op)
 	}
 	else
 	{
-		free(vec->tableName);
 		mysql_close(sqlconn);
 		UNPROTECT(2);
 		error("wrong type");
@@ -85,6 +81,8 @@ SEXP math_dbvector(SEXP x, SEXP op)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 
 	UNPROTECT(4);
+        free(vec->tableName);
+
 	return ans;
 }
 		

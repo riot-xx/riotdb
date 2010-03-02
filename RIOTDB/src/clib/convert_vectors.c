@@ -62,10 +62,11 @@ int internalConvertVectors(MYSQL * sqlConn, rdbVector * fromVector,
 {
   /* Build the sql string */
   int length = strlen(sqlTemplate) + strlen(fromVector->tableName) + 1;
-  char * sqlString = (char*) malloc( length * sizeof(char*) );
+  char * sqlString = (char*) malloc( length * sizeof(char) );
   sprintf(sqlString, sqlTemplate, fromVector->tableName);
 
-  initRDBVector(&toVector, 1, 0);
+  toVector->sxp_type = type;
+  toVector->isView = TRUE;
   toVector->size = fromVector->size;
 
   /* Create the view */

@@ -130,7 +130,7 @@ int createVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
 
 
 int getVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
-	rdbVector ** leftInput, rdbVector ** rightInput, int alloc)
+                            rdbObject *leftInput, rdbObject *rightInput)
 {
   /* Build the sql string and execute the query */
   int length = strlen(sqlTemplateGetViewReferences) + MAX_INT_LENGTH + 1;
@@ -162,8 +162,8 @@ int getVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
     return 0;
 
   /* Load the rdbVectors from the Metadata table */
-  success *= loadRDBVector(sqlConn, leftInput, leftID, alloc);
-  success *= loadRDBVector(sqlConn, rightInput, rightID, alloc);
+  success *= loadRDBObject(sqlConn, leftInput, leftID);
+  success *= loadRDBObject(sqlConn, rightInput, rightID);
 
   return success;
 }
@@ -225,9 +225,10 @@ int updateVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
 int removeVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector)
 {
   /* Get the references */
-  rdbVector *leftInput, *rightInput;
+  rdbObject *leftInput = newRDBObject();
+  rdbObject *rightInput = newRDBObject();
   int success = getVectorViewReferences(sqlConn, viewVector, 
-				  &leftInput, &rightInput, 1);
+                                        leftInput, rightInput);
   if( success == 0 )
     return 0;
 
@@ -242,14 +243,14 @@ int removeVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector)
     return 0;
   
   /* Reccursively delete the references */
-  success = deleteRDBVector(sqlConn, leftInput);
+  success = deleteRDBObject(sqlConn, leftInput);
 
-  if( leftInput->metadataID != rightInput->metadataID )
-    success *= deleteRDBVector(sqlConn, rightInput);
+  if( getMetadataIDInRDBObject(leftInput) != getMetadataIDInRDBObject(rightInput) )
+    success *= deleteRDBObject(sqlConn, rightInput);
 
   /* Clean up */
-  clearRDBVector(&leftInput);
-  clearRDBVector(&rightInput);
+  clearRDBObject(&leftInput);
+  clearRDBObject(&rightInput);
 
   return success;
 }
@@ -333,8 +334,8 @@ int ensureVectorMaterialization(MYSQL * sqlConn, rdbVector * vectorInfo)
   /* Materialize all referenced views */
   for( i = 0 ; i < numRes ; i++ )
   {
-     rdbVector *viewVector;
-     int loadSuccess = loadRDBVector(sqlConn, &viewVector, viewIDs[i], 1);
+     rdbVector *viewVector = newRDBVector();
+     int loadSuccess = loadRDBVector(sqlConn, viewVector, viewIDs[i]);
       
      if( loadSuccess )
      {
@@ -373,8 +374,8 @@ int materializeVectorView(MYSQL * sqlConn, rdbVector * viewVector)
 int materializeIntegerVectorView(MYSQL * sqlConn, rdbVector * viewVector)
 {
   /* Create the new table */
-  rdbVector * newVector;
-  initRDBVector(&newVector, 0, 1);
+  rdbVector * newVector = newRDBVector();
+  newVector->isView = 0;
   if( !createNewIntVectorTable(sqlConn, newVector) ) 
      return 0;
 
@@ -389,8 +390,7 @@ int materializeIntegerVectorView(MYSQL * sqlConn, rdbVector * viewVector)
 int materializeDoubleVectorView(MYSQL * sqlConn, rdbVector * viewVector)
 {
   /* Create the new table */
-  rdbVector * newVector;
-  initRDBVector(&newVector, 0, 1);
+  rdbVector * newVector = newRDBVector();
   newVector->isView = 0;
   if( !createNewDoubleVectorTable(sqlConn, newVector) ) 
      return 0;
@@ -406,8 +406,7 @@ int materializeDoubleVectorView(MYSQL * sqlConn, rdbVector * viewVector)
 int materializeStringVectorView(MYSQL * sqlConn, rdbVector * viewVector)
 {
   /* Create the new table */
-  rdbVector * newVector;
-  initRDBVector(&newVector, 0, 1);
+  rdbVector * newVector = newRDBVector();
   newVector->isView = 0;
   if( !createNewStringVectorTable(sqlConn, newVector) ) 
      return 0;
@@ -423,8 +422,7 @@ int materializeStringVectorView(MYSQL * sqlConn, rdbVector * viewVector)
 int materializeComplexVectorView(MYSQL * sqlConn, rdbVector * viewVector)
 {
   /* Create the new table */
-  rdbVector * newVector;
-  initRDBVector(&newVector, 0, 1);
+  rdbVector * newVector = newRDBVector();
   newVector->isView = 0;
   if( !createNewComplexVectorTable(sqlConn, newVector) ) 
      return 0;
@@ -440,8 +438,8 @@ int materializeComplexVectorView(MYSQL * sqlConn, rdbVector * viewVector)
 int materializeLogicVectorView(MYSQL * sqlConn, rdbVector * viewVector)
 {
   /* Create the new table */
-  rdbVector * newVector;
-  initRDBVector(&newVector, 0, 1);
+  rdbVector * newVector = newRDBVector();
+  newVector->isView = 0;
   if( !createNewLogicVectorTable(sqlConn, newVector) ) 
      return 0;
 

@@ -3,7 +3,7 @@
 # feel free to change relevant directories
 # author: Yi Zhang 1/14/09, v1
 
-R_HOME=/usr/local/lib/R
+R_HOME=$(HOME)/work/R-2.10.1
 MYSQL_DIR=/usr/mysql
 LIB_DIR=clib
 BIN=riotdb
@@ -24,10 +24,12 @@ OBJ += $(patsubst %.c,%.o, $(wildcard *.c))
 all: before $(SHLIB) 
 
 before:$(OBJ)
-#	R CMD SHLIB -g $(LIBS) -o riotdb.so $(OBJ) $(LIBS)
-	$(CC) -std=gnu99 -G $(LIBS) -o $(BIN).so $(OBJ) 
+#	/bin/R CMD SHLIB -g $(LIBS) -o riotdb.so $(OBJ) $(LIBS)
+#	$(CC) -std=gnu99 -G $(LIBS) -o $(BIN).so $(OBJ) 
+	$(CC) -std=gnu99 -shared $(LIBS) -o $(BIN).so $^
 
 after:
+clean:
 	rm -f *.o
 	rm -f *.so
 	rm -f $(LIB_DIR)/*.o

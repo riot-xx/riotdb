@@ -15,6 +15,7 @@
 #include "clib/insert_vector_data.h"
 #include "clib/vector_binary_ops.h"
 #include "clib/get_vector_data.h"
+#include "clib/get_matrix_data.h"
 #include "clib/set_vector_data.h"
 #include "clib/compare_vectors.h"
 #include "clib/vector_aggregate_functions.h"
@@ -24,6 +25,7 @@
 #include "clib/handle_matrix_views.h"
 #include "clib/handle_matrix_tables.h"
 #include "clib/insert_matrix_data.h"
+#include "clib/matrix_functions.h"
 
 #include "utils.h"
 

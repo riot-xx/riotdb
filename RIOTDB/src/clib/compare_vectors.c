@@ -32,7 +32,8 @@ int compareWithDBVector(MYSQL * sqlConn, rdbVector * resultVector,
 	   dataVector->tableName, compareVector->tableName, size, size );
 
   /* Create the results (logic) view */
-  initRDBVector(&resultVector, 1, 0);
+  resultVector->sxp_type = SXP_TYPE_LOGIC;
+  resultVector->isView = TRUE;
   resultVector->size = dataVector->size;
   int success = createNewLogicVectorView(sqlConn, resultVector, strCompareSQL);
 
@@ -111,7 +112,8 @@ int internalCompareWithValues(MYSQL * sqlConn, rdbVector * resultVector,
 	   dataVector->tableName );
 
   /* Create the results (logic) view */
-  initRDBVector(&resultVector, 1, 0);
+  resultVector->sxp_type = SXP_TYPE_LOGIC;
+  resultVector->isView = TRUE;
   resultVector->size = dataVector->size;
   int success = createNewLogicVectorView(sqlConn, resultVector, strCompareSQL);
 

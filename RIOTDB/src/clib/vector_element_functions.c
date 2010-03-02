@@ -32,7 +32,8 @@ int performNumericPow(MYSQL * sqlConn, rdbVector * result,
   sprintf(sqlString, sqlTemplatePowFunction, exponent, input->tableName);
 
  /* Create the results (logic) view */
-  initRDBVector(&result, 1, 0);
+  result->sxp_type = SXP_TYPE_DOUBLE;
+  result->isView = TRUE;
   result->size = input->size;
   int success = 0;
   success = createNewDoubleVectorView(sqlConn, result, sqlString);
@@ -96,7 +97,8 @@ int internalPerformNumericFunction(MYSQL * sqlConn, rdbVector * dataVector,
   sprintf( strFunctionSQL, sqlTemplateUnaryFunction, function, dataVector->tableName );
 
   /* Create the results (logic) view */
-  initRDBVector(&resultVector, 1, 0);
+  resultVector->sxp_type = SXP_TYPE_DOUBLE;
+  resultVector->isView = TRUE;
   resultVector->size = dataVector->size;
   int success = createNewDoubleVectorView(sqlConn, resultVector, strFunctionSQL);
 
@@ -121,7 +123,8 @@ int internalPerformComplexTrig(MYSQL * sqlConn,rdbVector * dataVector,
   sprintf( strFunctionSQL, sqlTemplate, dataVector->tableName );
 
   /* Create the results (logic) view */
-  initRDBVector(&resultVector, 1, 0);
+  resultVector->sxp_type = SXP_TYPE_COMPLEX;
+  resultVector->isView = TRUE;
   resultVector->size = dataVector->size;
   int success = createNewComplexVectorView(sqlConn,resultVector,strFunctionSQL);
 

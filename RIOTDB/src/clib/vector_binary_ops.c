@@ -76,7 +76,7 @@ int internalHandleNumericBinOp(MYSQL * sqlConn, rdbVector * result,
   char * sqlString;
   buildNumericBinaryOpsSQL(input1, input2, sign, &sqlString);
 
-  initRDBVector(&result, 1, 0);
+  result->isView = TRUE;
   result->size = (input1->size > input2->size)? input1->size : input2->size;
   
   int success = 0;
@@ -84,10 +84,12 @@ int internalHandleNumericBinOp(MYSQL * sqlConn, rdbVector * result,
       (input2->sxp_type == SXP_TYPE_INTEGER || input2->sxp_type == SXP_TYPE_LOGIC ) &&
       !forceDouble)
   {
+     result->sxp_type = SXP_TYPE_INTEGER;
      success = createNewIntegerVectorView(sqlConn, result, sqlString);
   }
   else
   {
+     result->sxp_type = SXP_TYPE_DOUBLE;
      success = createNewDoubleVectorView(sqlConn, result, sqlString);
   }
   free(sqlString);
@@ -123,7 +125,7 @@ void buildNumericBinaryOpsSQL(rdbVector * input1, rdbVector * input2,
     int length = strlen(sqlTemplateNumericBinaryOps_NE) + strlen(TABLE_2) +
                  strlen(sign) + strlen(input1->tableName) + 
                  strlen(input2->tableName) + 2*MAX_INT_LENGTH + 1;
-    *sqlStr = (char*) malloc( length * sizeof(char*) );
+    *sqlStr = (char*) malloc( length * sizeof(char) );
     sprintf(*sqlStr, sqlTemplateNumericBinaryOps_NE, TABLE_2, sign, 
 	    input1->tableName, input2->tableName, size1, size1);
   }
@@ -132,7 +134,7 @@ void buildNumericBinaryOpsSQL(rdbVector * input1, rdbVector * input2,
     /* Input1 is equal to input2 */
     int length = strlen(sqlTemplateNumericBinaryOps_EQ) + strlen(sign) +
                  strlen(input1->tableName) + strlen(input2->tableName) + 1;
-    *sqlStr = (char*) malloc( length * sizeof(char*) );
+    *sqlStr = (char*) malloc( length * sizeof(char) );
     sprintf(*sqlStr, sqlTemplateNumericBinaryOps_EQ, sign, 
 	    input1->tableName, input2->tableName);
   }
@@ -175,13 +177,15 @@ int internalHandleComplexBinOp(MYSQL * sqlConn, rdbVector * result,
 			  rdbVector * input1, rdbVector * input2, int op)
 {
   /* Create some temporary rdbVector objects */
-  rdbVector * cInput1;
-  rdbVector * cInput2;
+  rdbVector * cInput1 = newRDBVector();
+  rdbVector * cInput2 = newRDBVector();
   if( input1->sxp_type == SXP_TYPE_INTEGER ||
       input1->sxp_type == SXP_TYPE_DOUBLE ||
       input1->sxp_type == SXP_TYPE_LOGIC )
   {
-     initRDBVector(&cInput1, input1->isView, 1);
+     cInput1->sxp_type = SXP_TYPE_COMPLEX;
+     cInput1->isView = TRUE;
+     cInput1->size = input1->size;
      if( !convertNumericToComplex(sqlConn, input1, cInput1) )
      {
        clearRDBVector(&cInput1);
@@ -190,7 +194,7 @@ int internalHandleComplexBinOp(MYSQL * sqlConn, rdbVector * result,
   }
   else if( input1->sxp_type == SXP_TYPE_COMPLEX )
   {
-     copyRDBVector(&cInput1, input1, 1);
+     copyRDBVector(cInput1, input1);
   }
   else
   {
@@ -201,7 +205,9 @@ int internalHandleComplexBinOp(MYSQL * sqlConn, rdbVector * result,
       input2->sxp_type == SXP_TYPE_DOUBLE ||
       input2->sxp_type == SXP_TYPE_LOGIC )
   {
-     initRDBVector(&cInput2, input2->isView, 1);
+     cInput2->sxp_type = SXP_TYPE_COMPLEX;
+     cInput2->isView = TRUE;
+     cInput2->size = input2->size;
      if( !convertNumericToComplex(sqlConn, input2, cInput2) )
      {
        clearRDBVector(&cInput1);
@@ -211,7 +217,7 @@ int internalHandleComplexBinOp(MYSQL * sqlConn, rdbVector * result,
   }
   else if( input2->sxp_type == SXP_TYPE_COMPLEX )
   {
-     copyRDBVector(&cInput2, input2, 1);
+     copyRDBVector(cInput2, input2);
   }
   else
   {
@@ -244,7 +250,8 @@ int internalHandleComplexBinOp(MYSQL * sqlConn, rdbVector * result,
     return 0;
   }
  
-  initRDBVector(&result, 1, 0);
+  result->sxp_type = SXP_TYPE_COMPLEX;
+  result->isView = TRUE;
   result->size = (cInput1->size > cInput2->size)? cInput1->size : cInput2->size;
 
   /* Create the view */  
@@ -285,7 +292,7 @@ void buildComplexAddSubSQL(rdbVector * input1, rdbVector * input2,
     int length = strlen(sqlTemplateComplexAddSub_NE) + strlen(TABLE_2) +
                  2*strlen(sign) + strlen(input1->tableName) + 
                  strlen(input2->tableName) + 2*MAX_INT_LENGTH + 1;
-    *sqlStr = (char*) malloc( length * sizeof(char*) );
+    *sqlStr = (char*) malloc( length * sizeof(char) );
     sprintf(*sqlStr, sqlTemplateComplexAddSub_NE, TABLE_2, sign, sign,
 	    input1->tableName, input2->tableName, size1, size1);
   }
@@ -294,7 +301,7 @@ void buildComplexAddSubSQL(rdbVector * input1, rdbVector * input2,
     /* Input1 is equal to input2 */
     int length = strlen(sqlTemplateComplexAddSub_EQ) + 2*strlen(sign) +
                  strlen(input1->tableName) + strlen(input2->tableName) + 1;
-    *sqlStr = (char*) malloc( length * sizeof(char*) );
+    *sqlStr = (char*) malloc( length * sizeof(char) );
     sprintf(*sqlStr, sqlTemplateComplexAddSub_EQ, sign, sign, 
 	    input1->tableName, input2->tableName);
   }
@@ -324,7 +331,7 @@ void buildComplexMultDivSQL(rdbVector * input1, rdbVector * input2,
     int length = strlen(sqlTemplateNE) + strlen(TABLE_2) +
                  strlen(input1->tableName) + strlen(input2->tableName) + 
                  2*MAX_INT_LENGTH + 1;
-    *sqlStr = (char*) malloc( length * sizeof(char*) );
+    *sqlStr = (char*) malloc( length * sizeof(char) );
     sprintf(*sqlStr, sqlTemplateNE, TABLE_2,
 	    input1->tableName, input2->tableName, size1, size1);
   }
@@ -333,7 +340,7 @@ void buildComplexMultDivSQL(rdbVector * input1, rdbVector * input2,
     /* Input1 is equal to input2 */
     int length = strlen(sqlTemplateEQ) +
                  strlen(input1->tableName) + strlen(input2->tableName) + 1;
-    *sqlStr = (char*) malloc( length * sizeof(char*) );
+    *sqlStr = (char*) malloc( length * sizeof(char) );
     sprintf(*sqlStr, sqlTemplateEQ, 
 	    input1->tableName, input2->tableName);
   }
@@ -358,7 +365,8 @@ int subtractDoubleFromNumericVector(MYSQL * sqlConn, rdbVector * result,
   sprintf(sqlString, sqlTemplateSimpleNumericBinary, MINUS_SIGN, y, input1->tableName);
 
   /* Create the results view */
-  initRDBVector(&result, 1, 0);
+  result->sxp_type = SXP_TYPE_DOUBLE;
+  result->isView = TRUE;
   result->size = input1->size;
   
   int success = 0;

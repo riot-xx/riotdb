@@ -81,7 +81,7 @@ SEXP get_by_index(SEXP dbvector, SEXP index)
 		PROTECT(ans=R_do_new_object(R_getClassDef("dbvector")));
 		PROTECT(rinfo = allocVector(RAWSXP, sizeof(rdbVector)));
 		rdbVector *vec = (rdbVector*)RAW(rinfo);
-		vec->tableName = calloc(MAX_TABLE_NAME, sizeof(char));
+                initRDBVector(vec);
 		rdbVector *ivec = getInfo(index);
 		len = ivec->size;
 		/* logical index */
@@ -103,7 +103,6 @@ SEXP get_by_index(SEXP dbvector, SEXP index)
 				break;
 				default:
 				mysql_close(sqlconn);
-				free(vec->tableName);
 				UNPROTECT(2);
 				error("this type of access is not supported");
 				break;
@@ -127,7 +126,6 @@ SEXP get_by_index(SEXP dbvector, SEXP index)
 				break;
 				default:
 				mysql_close(sqlconn);
-				free(vec->tableName);
 				UNPROTECT(2);
 				error("this type of access is not supported");
 				break;
@@ -135,7 +133,6 @@ SEXP get_by_index(SEXP dbvector, SEXP index)
 		}
 		else {
 			mysql_close(sqlconn);
-			free(vec->tableName);
 			UNPROTECT(2);
 			error("this type of inde type is not supported");
 		}
@@ -148,6 +145,7 @@ SEXP get_by_index(SEXP dbvector, SEXP index)
 		R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 		R_do_slot_assign(ans, install("ext"), rptr);
 		UNPROTECT(4);
+                free(vec->tableName);
 		mysql_close(sqlconn);
 		return ans;
 	}

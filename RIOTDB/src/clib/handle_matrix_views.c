@@ -12,6 +12,7 @@
 #include <mysql.h>
 #include "basics.h"
 #include "handle_vector_views.h"
+#include "handle_vector_tables.h"
 #include "handle_matrix_views.h"
 #include "handle_matrix_tables.h"
 #include "handle_metadata.h"
@@ -80,29 +81,41 @@ int buildUniqueMatrixViewName(MYSQL * sqlConn, char ** newViewName)
 
 /* -------------- Functions to manage view references -------------- */
 
-int createMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix,
-			 rdbMatrix * leftInput, rdbMatrix * rightInput)
-{
+int createReferences(MYSQL *sqlConn,
+                     unsigned long int resultMetadataID,
+                     unsigned long int input1MetadataID,
+                     unsigned long int input2MetadataID,
+                     int *input1RefCounter,
+                     int *input2RefCounter) {
   /* Build the sql string and create references */
-  int length = strlen(sqlTemplateCreateViewReferences) + 3*MAX_INT_LENGTH + 1;
-  char strCreateRefsSQL[length];
-  sprintf(strCreateRefsSQL, sqlTemplateCreateViewReferences,
-	  viewMatrix->metadataID, leftInput->metadataID, rightInput->metadataID);
-
-  int success = mysql_query(sqlConn, strCreateRefsSQL);
-  if( success != 0 )
-     return 0;
-
-  /* Increment the references */
-  leftInput->refCounter++;
-  rightInput->refCounter++;
-
-  return success;
+  char sql[strlen(sqlTemplateCreateViewReferences) + 3*MAX_INT_LENGTH + 1];
+  sprintf(sql, sqlTemplateCreateViewReferences,
+	  resultMetadataID, input1MetadataID, input2MetadataID);
+  int status = mysql_query(sqlConn, sql);
+  if (status != 0)
+    return FALSE;
+  (*input1RefCounter)++;
+  (*input2RefCounter)++;
+  return TRUE;
 }
 
+int createMatrixViewReferencesToVectors(MYSQL * sqlConn, rdbMatrix * viewMatrix,
+                                        rdbVector * leftInput, rdbVector * rightInput) {
+  return createReferences(sqlConn, viewMatrix->metadataID,
+                          leftInput->metadataID, rightInput->metadataID,
+                          &(leftInput->refCounter), &(rightInput->refCounter));
+}
+
+int createMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix,
+                               rdbMatrix * leftInput, rdbMatrix * rightInput)
+{
+  return createReferences(sqlConn, viewMatrix->metadataID,
+                          leftInput->metadataID, rightInput->metadataID,
+                          &(leftInput->refCounter), &(rightInput->refCounter));
+}
 
 int getMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix,
-	rdbMatrix ** leftInput, rdbMatrix ** rightInput, int alloc)
+	rdbObject *leftInput, rdbObject *rightInput)
 {
   /* Build the sql string and execute the query */
   int length = strlen(sqlTemplateGetViewReferences) + MAX_INT_LENGTH + 1;
@@ -133,9 +146,9 @@ int getMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix,
   if( success != 1 )
     return 0;
 
-  /* Load the rdbMatrixs from the Metadata table */
-  success *= loadRDBMatrix(sqlConn, leftInput, leftID, alloc);
-  success *= loadRDBMatrix(sqlConn, rightInput, rightID, alloc);
+  /* Load the rdbObjects from the Metadata table */
+  success *= loadRDBObject(sqlConn, leftInput, leftID);
+  success *= loadRDBObject(sqlConn, rightInput, rightID);
 
   return success;
 }
@@ -197,9 +210,10 @@ int updateMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix,
 int removeMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix)
 {
   /* Get the references */
-  rdbMatrix *leftInput, *rightInput;
+  rdbObject *leftInput = newRDBObject();
+  rdbObject *rightInput = newRDBObject();
   int success = getMatrixViewReferences(sqlConn, viewMatrix, 
-				  &leftInput, &rightInput, 1);
+                                        leftInput, rightInput);
   if( success == 0 )
     return 0;
 
@@ -214,14 +228,14 @@ int removeMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix)
     return 0;
   
   /* Reccursively delete the references */
-  success = deleteRDBMatrix(sqlConn, leftInput);
+  success = deleteRDBObject(sqlConn, leftInput);
 
-  if( leftInput->metadataID != rightInput->metadataID )
-    success *= deleteRDBMatrix(sqlConn, rightInput);
+  if( getMetadataIDInRDBObject(leftInput) != getMetadataIDInRDBObject(rightInput) )
+    success *= deleteRDBObject(sqlConn, rightInput);
 
   /* Clean up */
-  clearRDBMatrix(&leftInput);
-  clearRDBMatrix(&rightInput);
+  clearRDBObject(&leftInput);
+  clearRDBObject(&rightInput);
 
   return success;
 }
@@ -305,8 +319,8 @@ int ensureMatrixMaterialization(MYSQL * sqlConn, rdbMatrix * matrixInfo)
   /* Materialize all referenced views */
   for( i = 0 ; i < numRes ; i++ )
   {
-     rdbMatrix *viewMatrix;
-     int loadSuccess = loadRDBMatrix(sqlConn, &viewMatrix, viewIDs[i], 1);
+     rdbMatrix *viewMatrix = newRDBMatrix();
+     int loadSuccess = loadRDBMatrix(sqlConn, viewMatrix, viewIDs[i]);
       
      if( loadSuccess )
      {
@@ -336,8 +350,7 @@ int materializeMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix)
 int materializeIntegerMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix)
 {
   /* Create the new table */
-  rdbMatrix * newMatrix;
-  initRDBMatrix(&newMatrix, 0, 1);
+  rdbMatrix * newMatrix = newRDBMatrix();
   if( !createNewIntMatrixTable(sqlConn, newMatrix) ) 
      return 0;
 
@@ -352,8 +365,7 @@ int materializeIntegerMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix)
 int materializeDoubleMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix)
 {
   /* Create the new table */
-  rdbMatrix * newMatrix;
-  initRDBMatrix(&newMatrix, 0, 1);
+  rdbMatrix * newMatrix = newRDBMatrix();
   newMatrix->isView = 0;
   if( !createNewDoubleMatrixTable(sqlConn, newMatrix) ) 
      return 0;

@@ -24,7 +24,8 @@ SEXP load_dbvector(SEXP mid)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	loadRDBVector(sqlconn, &vec, id, 0);
+        initRDBVector(vec);
+	loadRDBVector(sqlconn, vec, id);
 	vec->sxp_spare = 0;
 	
 	mysql_close(sqlconn);
@@ -67,10 +68,9 @@ SEXP load_dbmatrix(SEXP mid)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbmatrix")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbMatrix)));
 	rdbMatrix *vec = (rdbMatrix*)RAW(info);
-	loadRDBMatrix(sqlconn, &vec, id, 0);
+        initRDBMatrix(vec);
+	loadRDBMatrix(sqlconn, vec, id);
 	vec->sxp_spare = 0;
-	/*vec->tableName = calloc(MAX_TABLE_NAME, sizeof(char));*/
-	/*strcpy(vec->tableName, sName);*/
 	
 	mysql_close(sqlconn);
 

@@ -12,7 +12,9 @@
 #include <mysql.h>
 #include "basics.h"
 #include "handle_vector_tables.h"
+#include "handle_matrix_tables.h"
 #include "handle_vector_views.h"
+#include "handle_matrix_views.h"
 #include "handle_metadata.h"
 #include "insert_vector_data.h"
 
@@ -104,6 +106,40 @@ int buildUniqueVectorTableName(MYSQL * sqlConn, char ** newTableName)
 
 /* ------------ Functions to delete/drop vector tables -------------- */
 
+int deleteRDBObject(MYSQL * sqlConn, rdbObject *objectInfo)
+{
+  int *refCounter = objectInfo->isVector ?
+    &(objectInfo->payload.vector.refCounter) :
+    &(objectInfo->payload.matrix.refCounter);
+  unsigned long int metadataID = getMetadataIDInRDBObject(objectInfo);
+  int isView =  objectInfo->isVector ?
+    objectInfo->payload.vector.isView :
+    objectInfo->payload.matrix.isView;
+  /* Decrement the reference counter. 
+     If it reaches zero, then we can delete */
+  if( !decrementRefCounter(sqlConn, refCounter, metadataID) )
+    return 0;
+
+  if( *refCounter <= 0 && !isView )
+  {
+     /* Delete the table */
+     if (objectInfo->isVector)
+       return dropVectorTable(sqlConn, &(objectInfo->payload.vector));
+     else
+       return dropMatrixTable(sqlConn, &(objectInfo->payload.matrix));
+  }
+  else if( *refCounter <= 0 && isView )
+  {
+     /* Delete the view */
+     if (objectInfo->isVector)
+       return dropVectorView(sqlConn, &(objectInfo->payload.vector));
+     else
+       return dropMatrixView(sqlConn, &(objectInfo->payload.matrix));
+  }
+
+  return 1;
+}
+
 int deleteRDBVector(MYSQL * sqlConn, rdbVector * vectorInfo)
 {
   /* Decrement the reference counter. 
@@ -159,7 +195,7 @@ int duplicateVectorTable(MYSQL * sqlConn, rdbVector *  originalVector,
 			 rdbVector *copyVector)
 {
   /* Create the new table */
-  copyRDBVector(&copyVector, originalVector, 0);
+  copyRDBVector(copyVector, originalVector);
   copyVector->isView = 0;
 
   int success = 0;
@@ -196,7 +232,6 @@ int checkRDBVectorForNA(MYSQL * sqlConn, rdbVector * vectorInfo,
 			rdbVector * resultVector)
 {
   /* Create a new logic table and initialize every entry to true*/
-  initRDBVector(&resultVector, 0, 0);
   if( !createNewLogicVectorTable(sqlConn, resultVector) ||
       !insertSeqLogicVectorTable(sqlConn, resultVector, '1', vectorInfo->size) )
     return 0;

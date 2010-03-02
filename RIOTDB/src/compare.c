@@ -11,8 +11,7 @@ SEXP compare_dbvector_numeric(SEXP x, SEXP y, SEXP op)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP, sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = calloc(MAX_TABLE_NAME, sizeof(char));
-	initRDBVector(&vec, 0, 0);
+        initRDBVector(vec);
 
 	MYSQL *sqlconn = NULL;
 	int success = connectToLocalDB(&sqlconn);
@@ -35,7 +34,6 @@ SEXP compare_dbvector_numeric(SEXP x, SEXP y, SEXP op)
 			break;
 		default:
 			mysql_close(sqlconn);
-			free(vec->tableName);
 			UNPROTECT(2);
 			error("wrong type for comparison");
 	}
@@ -55,6 +53,7 @@ SEXP compare_dbvector_numeric(SEXP x, SEXP y, SEXP op)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 
 	UNPROTECT(4);
+        free(vec->tableName);
 	return ans;
 
 

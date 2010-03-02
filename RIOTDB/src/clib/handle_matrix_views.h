@@ -32,11 +32,14 @@ int internalCreateNewMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix,
 
 
 /* --------------- Functions to handle view references --------------- */
+int createMatrixViewReferencesToVectors(MYSQL * sqlConn, rdbMatrix * viewMatrix,
+                                        rdbVector * leftInput, rdbVector * rightInput);
+
 int createMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix,
-	rdbMatrix * leftInput, rdbMatrix * rightInput);
+                               rdbMatrix * leftInput, rdbMatrix * rightInput);
 
 int getMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix,
-	rdbMatrix ** leftInput, rdbMatrix ** rightInput, int alloc);
+	rdbObject * leftInput, rdbObject * rightInput);
 
 int getMatrixViewRefCount(MYSQL * sqlConn, rdbMatrix * matrixInfo, int * count);
 
