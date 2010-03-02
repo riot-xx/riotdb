@@ -3,8 +3,8 @@
 # feel free to change relevant directories
 # author: Yi Zhang 1/14/09, v1
 
-R_HOME=/usr/local/lib/R
-MYSQL_DIR=/usr/mysql
+R_HOME=/home/home4/junyang/R/lib64/R
+MYSQL_DIR=/home/home4/junyang/mysql
 LIB_DIR=clib
 BIN=riotdb
 CC=gcc
@@ -24,8 +24,9 @@ OBJ += $(patsubst %.c,%.o, $(wildcard *.c))
 all: before $(SHLIB) 
 
 before:$(OBJ)
-#	R CMD SHLIB -g $(LIBS) -o riotdb.so $(OBJ) $(LIBS)
-	$(CC) -std=gnu99 -G $(LIBS) -o $(BIN).so $(OBJ) 
+	/home/home4/junyang/R/bin/R CMD SHLIB -g $(LIBS) -o riotdb.so $(OBJ) $(LIBS)
+#	$(CC) -std=gnu99 -G $(LIBS) -o $(BIN).so $(OBJ) 
+#	$(CC) -std=gnu99 -g $(LIBS) -o $(BIN).so $(OBJ) 
 
 after:
 	rm -f *.o

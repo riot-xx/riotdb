@@ -23,8 +23,7 @@ SEXP dbvector_copy(SEXP from)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	initRDBVector(&vec, 0, 0);
-	vec->tableName = malloc(MAX_TABLE_NAME*sizeof(char));
+        initRDBVector(vec);
 
 	int len = length(from);
 
@@ -77,6 +76,7 @@ SEXP dbvector_copy(SEXP from)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 
 	UNPROTECT(4);
+        free(vec->tableName);
 	return ans;
 }
 
@@ -107,8 +107,7 @@ SEXP logical_db(SEXP len)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	initRDBVector(&vec, 0, 0);
-	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
+        initRDBVector(vec);
 
 	createNewLogicVectorTable(sqlconn, vec);
 	insertSeqLogicVectorTable(sqlconn, vec, 0, length);
@@ -129,6 +128,8 @@ SEXP logical_db(SEXP len)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 
 	UNPROTECT(4+nprotect);
+        free(vec->tableName);
+
 	return ans;
 }
 /* create a new complex type dbvector
@@ -155,8 +156,7 @@ SEXP dbcomplex(SEXP len, SEXP x, SEXP y, SEXP type)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	initRDBVector(&vec, 0, 0);
-	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
+        initRDBVector(vec);
 
 	int k = asInteger(type);
 	double *real, *imaginary;
@@ -199,6 +199,7 @@ SEXP dbcomplex(SEXP len, SEXP x, SEXP y, SEXP type)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 
 	UNPROTECT(4+nprotect);
+        free(vec->tableName);
 	return ans;
 }
 
@@ -239,8 +240,7 @@ SEXP dbvector_from_seq(SEXP begin, SEXP end, SEXP by)
 
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	initRDBVector(&vec, 0, 0);
-	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
+        initRDBVector(vec);
 
 
 	if (useInt)
@@ -288,6 +288,7 @@ SEXP dbvector_from_seq(SEXP begin, SEXP end, SEXP by)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 	
 	UNPROTECT(4);
+        free(vec->tableName);
 	return ret;
 }
 

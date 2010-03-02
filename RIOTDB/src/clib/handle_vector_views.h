@@ -68,10 +68,10 @@ int internalCreateNewVectorView(MYSQL * sqlConn, rdbVector * viewVector,
 
 /* Functions to handle view references */
 int createVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
-			 rdbVector * leftInput, rdbVector * rightInput);
+                               rdbVector * leftInput, rdbVector * rightInput);
 
 int getVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
-	rdbVector ** leftInput, rdbVector ** rightInput, int alloc);
+                            rdbObject *leftInput, rdbObject *rightInput);
 
 int getVectorViewRefCount(MYSQL * sqlConn, rdbVector * vectorInfo, int * count);
 

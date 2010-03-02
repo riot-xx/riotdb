@@ -768,7 +768,8 @@ int getIntElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 			     dataVector, indexVector);
 
   /* Create the results view */
-  initRDBVector(&resultVector, 1, 0);
+  resultVector->sxp_type = SXP_TYPE_INTEGER;
+  resultVector->isView = TRUE;
   resultVector->size = indexVector->size;
   int success = createNewIntegerVectorView(sqlConn, resultVector, strGetElems);
 
@@ -797,7 +798,8 @@ int getDoubleElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 			     dataVector, indexVector);
 
   /* Create the results view */
-  initRDBVector(&resultVector, 1, 0);
+  resultVector->sxp_type = SXP_TYPE_DOUBLE;
+  resultVector->isView = TRUE;
   resultVector->size = indexVector->size;
   int success = createNewDoubleVectorView(sqlConn, resultVector, strGetElems);
 
@@ -826,7 +828,8 @@ int getStringElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 			     dataVector, indexVector);
 
   /* Create the results view */
-  initRDBVector(&resultVector, 1, 0);
+  resultVector->sxp_type = SXP_TYPE_STRING;
+  resultVector->isView = TRUE;
   resultVector->size = indexVector->size;
   int success = createNewStringVectorView(sqlConn, resultVector, strGetElems);
 
@@ -855,7 +858,8 @@ int getComplexElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 			     dataVector, indexVector);
 
   /* Create the results view */
-  initRDBVector(&resultVector, 1, 0);
+  resultVector->sxp_type = SXP_TYPE_COMPLEX;
+  resultVector->isView = TRUE;
   resultVector->size = indexVector->size;
   int success = createNewComplexVectorView(sqlConn, resultVector, strGetElems);
 
@@ -884,7 +888,8 @@ int getLogicElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 			     dataVector, indexVector);
 
   /* Create the results view */
-  initRDBVector(&resultVector, 1, 0);
+  resultVector->sxp_type = SXP_TYPE_LOGIC;
+  resultVector->isView = TRUE;
   resultVector->size = indexVector->size;
   int success = createNewLogicVectorView(sqlConn, resultVector, strGetElems);
 
@@ -970,8 +975,9 @@ int internalGetElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
 
   /* Create a view to hold the intermediate results */
   char * strResults;
-  rdbVector * tempView;
-  initRDBVector(&tempView, 1, 1);
+  rdbVector * tempView = newRDBVector();
+  tempView->sxp_type = dataVector->sxp_type;
+  tempView->isView = TRUE;
   tempView->size = dataVector->size;
   buildGetElemWithLogicSQL(&strResults, sqlTemplateTemp, dataVector, logicVector);
 
@@ -1005,7 +1011,9 @@ int internalGetElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
 
   /* Create a view to hold the final results */
   char * strFinal;
-  initRDBVector(&resultVector, 1, 0);
+  resultVector->sxp_type = dataVector->sxp_type;
+  resultVector->isView = TRUE;
+  resultVector->size = dataVector->size;
   buildTranformResultsSQL(&strFinal, sqlTemplateFinal, tempView, logicVector);
 
   success = 0;

@@ -5,4 +5,4 @@
 useDynLib(riotdb)
 
 # methods for new dbvector go here
-export(seq.db, matrix.db, complex.db, logical.db, "length.dbvector", "mean.dbvector", "sort.dbvector", load.dbvector, load.dbmatrix, persist, materialize)
+export(seq.db, matrix.db, matrix.db.vector, complex.db, logical.db, length.dbvector, mean.dbvector, sort.dbvector, load.dbvector, load.dbmatrix, persist, materialize, t.dbmatrix, solve.dbmatrix, print.db)

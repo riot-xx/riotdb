@@ -84,6 +84,8 @@ int buildUniqueVectorTableName(MYSQL * sqlConn, char ** newTableName);
 
 
 /* Functions to Delete an RDBVector i.e. decrement refCounter or drop */
+int deleteRDBObject(MYSQL * sqlConn, rdbObject *objectInfo);
+
 int deleteRDBVector(MYSQL * sqlConn, rdbVector * vectorInfo);
 
 int dropVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo);

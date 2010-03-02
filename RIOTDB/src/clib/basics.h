@@ -31,6 +31,8 @@
 
 #define sqlGetRDBVector        "SELECT * FROM Metadata WHERE metadata_id = %ld"
 
+#define sqlGetRDBObject        "SELECT * FROM Metadata WHERE metadata_id = %ld"
+
 
 /* Templates to create RDBMatrix objects from Metadata */
 #define sqlGetAllRDBMatrix     "SELECT * FROM Metadata \
@@ -44,7 +46,6 @@
 #define sqlTemplateVectorViewName         "VectorView%d"
 #define sqlTemplateMatrixTableName        "MatrixTable%d"
 #define sqlTemplateMatrixViewName         "MatrixView%d"
-
 
 /* RDBVector Internal Structure */
 typedef struct structRDBVector
@@ -93,39 +94,44 @@ typedef struct structRDBMatrix
 
 } rdbMatrix;
 
+typedef struct structRDBObject {
+  unsigned short int isVector;
+  union unionRDBVectorOrMatrix {
+    rdbVector vector;
+    rdbMatrix matrix;
+  } payload;
+} rdbObject;
+
 /* Function Prototypes */
 int connectToLocalDB(MYSQL ** sqlConn);
 
+/* Functions to handle generic RDBObjects */
+rdbObject *newRDBObject();
+void initRDBObject(rdbObject *info);
+void copyRDBObjectFromVector(rdbObject *info, rdbVector *vector);
+void copyRDBObjectFromMatrix(rdbObject *info, rdbMatrix *matrix);
+unsigned long int getMetadataIDInRDBObject(rdbObject *info);
+void clearRDBObject(rdbObject **info);
+void initRDBObjectFromSQLRow(rdbObject *info, MYSQL_ROW sqlRow);
+int loadRDBObject(MYSQL * sqlConn, rdbObject *info, unsigned long int metadataID);
 
 /* Functions to handle RDBVector objects */
-void initRDBVector(rdbVector ** vectorInfo, int isView, int alloc);
-
-void copyRDBVector(rdbVector ** copyVector, rdbVector * originalVector,
-		   int alloc);
-
+rdbVector *newRDBVector();
+void initRDBVector(rdbVector *vectorInfo);
+void copyRDBVector(rdbVector *copyVector, rdbVector *originalVector);
 void clearRDBVector(rdbVector ** vectorInfo);
-
-int loadRDBVector(MYSQL * sqlConn, rdbVector ** vectorInfo,
-		  unsigned long int metadataID, int alloc);
-
-int loadAllRDBVectors(MYSQL * sqlConn, rdbVector *** arrayVectorInfoObjects,
-		      unsigned long int * numObjects);
-
+void initRDBVectorFromSQLRow(rdbVector *info, MYSQL_ROW sqlRow);
+int loadRDBVector(MYSQL * sqlConn, rdbVector *vectorInfo, unsigned long int metadataID);
+int loadAllRDBVectors(MYSQL * sqlConn, rdbVector *** arrayVectorInfoObjects, unsigned long int * numObjects);
 
 /* Functions to handle RDBMatrix objects */
-void initRDBMatrix(rdbMatrix ** matrixInfo, int isView, int alloc);
-
-void copyRDBMatrix(rdbMatrix ** copyMatrix, rdbMatrix * originalMatrix,
-		   int alloc);
-
+rdbMatrix *newRDBMatrix();
+void initRDBMatrix(rdbMatrix *matrixInfo);
+void copyRDBMatrix(rdbMatrix *copyMatrix, rdbMatrix *originalMatrix);
 void clearRDBMatrix(rdbMatrix ** matrixInfo);
-
-int loadRDBMatrix(MYSQL * sqlConn, rdbMatrix ** matrixInfo,
-		  unsigned long int metadataID, int alloc);
-
-int loadAllRDBMatrices(MYSQL * sqlConn, rdbMatrix *** arrayMatrixInfoObjects,
-		       unsigned long int * numObjects);
-
+void initRDBMatrixFromSQLRow(rdbMatrix *info, MYSQL_ROW sqlRow);
+int loadRDBMatrix(MYSQL * sqlConn, rdbMatrix * matrixInfo, unsigned long int metadataID);
+int loadAllRDBMatrices(MYSQL * sqlConn, rdbMatrix *** arrayMatrixInfoObjects, unsigned long int * numObjects);
 void getRDBMatrixDimensions(char * strSize, int * numRows, int * numCols);
 
 #endif

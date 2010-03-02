@@ -194,7 +194,6 @@ SEXP mean_dbvector(SEXP x, SEXP narm)
 	}
 	else
 	{
-		int imax;
 		double rmax;
 		Rcomplex cmax;
 		switch(info->sxp_type)

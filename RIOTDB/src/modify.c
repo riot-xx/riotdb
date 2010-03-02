@@ -19,7 +19,7 @@ SEXP duplicateOrConvert(SEXP orig, int (*func)(MYSQL*,rdbVector*,rdbVector*), MY
 		Rprintf("new address %p \n",x);
 		SEXP s = R_do_slot(x,install("info"));
 		info = (rdbVector*)RAW(s);
-		info->tableName = calloc(MAX_TABLE_NAME, sizeof(char));
+                initRDBVector(info);
 		info->sxp_spare = 0;
 		func(sqlconn, origInfo, info);
 		Rprintf("duplicated into table %s\n",info->tableName);
@@ -27,7 +27,7 @@ SEXP duplicateOrConvert(SEXP orig, int (*func)(MYSQL*,rdbVector*,rdbVector*), MY
 		/* set tablename slot */
 		PROTECT(tname = ScalarString(mkChar(info->tableName)));
 		R_do_slot_assign(x, install("tablename"), tname);
-
+		free(info->tableName);
 
 		/* register finalizer for the new duplicate */
 		rdbVector *ptr = malloc(sizeof(rdbVector));
@@ -297,7 +297,6 @@ SEXP set(SEXP x, SEXP index, SEXP value)
 		case 1315: /* int, cplx */
 			x = duplicateOrConvert(x,convertNumericToComplex, sqlconn, 1);
 			info = getInfo(x);
-			Rprintf("new table name %s\n",info->tableName);
 			setSparseComplexElements(sqlconn, info, _index, len, COMPLEX(value), length(value));
 			break;
 		case 1413:

@@ -5,6 +5,53 @@ Date: Sep 8, 2008
 ****************************************************************************/ 
 #include "riotdb.h"
 
+SEXP dbmatrix_from_dbvector(SEXP from, SEXP nrows, SEXP ncols, SEXP byrow) {
+  rdbVector *infoFrom = getInfo(from);
+  if (infoFrom->sxp_type != SXP_TYPE_INTEGER &&
+      infoFrom->sxp_type != SXP_TYPE_DOUBLE &&
+      infoFrom->sxp_type != SXP_TYPE_LOGIC) {
+    error("you can only convert from an integer, double, or logic dbvector");
+    return R_NilValue;
+  }
+
+  MYSQL *sqlconn = NULL;
+  int success = connectToLocalDB(&sqlconn);
+  if (!success || sqlconn == NULL) {
+    error("cannot connect to local db %s\n", mysql_error(sqlconn));
+    return R_NilValue;
+  }
+
+  rdbMatrix *infoRet;
+  SEXP retSEXP, infoRetSEXP, tableNameSEXP;
+  PROTECT(retSEXP = R_do_new_object(R_getClassDef("dbmatrix")));
+  PROTECT(infoRetSEXP = allocVector(RAWSXP, sizeof(rdbMatrix)));
+  infoRet = (rdbMatrix*) RAW(infoRetSEXP);
+  initRDBMatrix(infoRet);
+
+  if (!restructureMatrixFromVector(sqlconn, infoRet, infoFrom, asInteger(nrows), asInteger(ncols), asInteger(byrow)))
+      return FALSE;
+
+  mysql_close(sqlconn);
+
+  PROTECT(tableNameSEXP = allocVector(STRSXP, 1));
+  SET_STRING_ELT(tableNameSEXP, 0, mkChar(infoRet->tableName));
+  R_do_slot_assign(retSEXP, install("tablename"), tableNameSEXP);
+  R_do_slot_assign(retSEXP, install("info"), infoRetSEXP);
+
+  /* Register finalizer: */
+  SEXP ptrSEXP;
+  rdbMatrix *ptr = malloc(sizeof(rdbMatrix));
+  *ptr = *infoRet;
+  PROTECT(ptrSEXP = R_MakeExternalPtr(ptr, R_NilValue, R_NilValue));
+  R_RegisterCFinalizerEx(ptrSEXP, rdbMatrixFinalizer, TRUE);
+  R_do_slot_assign(retSEXP, install("ext"), ptrSEXP);
+
+  UNPROTECT(4);
+  free(infoRet->tableName);
+
+  return retSEXP;
+}
+
 SEXP dbmatrix_from_seq(SEXP rows, SEXP cols, SEXP begin, SEXP end, SEXP by)
 {
 	SEXP ret,tablename,info;
@@ -45,9 +92,7 @@ SEXP dbmatrix_from_seq(SEXP rows, SEXP cols, SEXP begin, SEXP end, SEXP by)
 
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbMatrix)));
 	rdbMatrix *vec = (rdbMatrix*)RAW(info);
-	initRDBMatrix(&vec, 0, 0);
-	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
-
+        initRDBMatrix(vec);
 
 	/*if (useInt)
 	{
@@ -84,6 +129,7 @@ SEXP dbmatrix_from_seq(SEXP rows, SEXP cols, SEXP begin, SEXP end, SEXP by)
 	R_RegisterCFinalizerEx(rptr, rdbMatrixFinalizer, TRUE);
 	
 	UNPROTECT(4);
+        free(vec->tableName);
 	return ret;
 }
 

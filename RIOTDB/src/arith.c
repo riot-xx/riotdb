@@ -18,8 +18,8 @@ SEXP add_dbvectors(SEXP x, SEXP y)
 	SEXP ans = R_NilValue;
 	SEXP info,tablename;
 
-	xinfo = getInfo(x);/*(rdbVector*) RAW(R_do_slot(x, install("info")));*/
-	yinfo = getInfo(y);/*(rdbVector*) RAW(R_do_slot(y, install("info")));*/
+	xinfo = getInfo(x);
+	yinfo = getInfo(y);
 
 	MYSQL *sqlconn = NULL;
 	int success = connectToLocalDB(&sqlconn);
@@ -33,7 +33,7 @@ SEXP add_dbvectors(SEXP x, SEXP y)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
+        initRDBVector(vec);
 	
 	if (IS_DBCOMPLEX(x) || IS_DBCOMPLEX(y))
 		addComplexVectors(sqlconn, vec, xinfo, yinfo);
@@ -53,7 +53,7 @@ SEXP add_dbvectors(SEXP x, SEXP y)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 	R_do_slot_assign(ans, install("ext"), rptr);
 	UNPROTECT(4);
-	/*Free(vec->tableName);*/
+        free(vec->tableName);
 	return ans;
 }
 
@@ -63,8 +63,8 @@ SEXP subtract_dbvectors(SEXP x, SEXP y)
 	SEXP ans = R_NilValue;
 	SEXP info,tablename;
 
-	xinfo = getInfo(x);/*(rdbVector*) RAW(R_do_slot(x, install("info")));*/
-	yinfo = getInfo(y);/*(rdbVector*) RAW(R_do_slot(y, install("info")));*/
+	xinfo = getInfo(x);
+	yinfo = getInfo(y);
 
 	MYSQL *sqlconn = NULL;
 	int success = connectToLocalDB(&sqlconn);
@@ -78,7 +78,7 @@ SEXP subtract_dbvectors(SEXP x, SEXP y)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = Calloc(MAX_TABLE_NAME,char);
+        initRDBVector(vec);
 	
 	if (IS_DBCOMPLEX(x) || IS_DBCOMPLEX(y))
 		subtractComplexVectors(sqlconn, vec, xinfo, yinfo);
@@ -98,7 +98,7 @@ SEXP subtract_dbvectors(SEXP x, SEXP y)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 	R_do_slot_assign(ans, install("ext"), rptr);
 	UNPROTECT(4);
-	Free(vec->tableName);
+	free(vec->tableName);
 	return ans;
 }
 
@@ -108,8 +108,8 @@ SEXP multiply_dbvectors(SEXP x, SEXP y)
 	SEXP ans = R_NilValue;
 	SEXP info,tablename;
 
-	xinfo = getInfo(x);/*(rdbVector*) RAW(R_do_slot(x, install("info")));*/
-	yinfo = getInfo(y);/*(rdbVector*) RAW(R_do_slot(y, install("info")));*/
+	xinfo = getInfo(x);
+	yinfo = getInfo(y);
 
 	MYSQL *sqlconn = NULL;
 	int success = connectToLocalDB(&sqlconn);
@@ -123,7 +123,7 @@ SEXP multiply_dbvectors(SEXP x, SEXP y)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = Calloc(MAX_TABLE_NAME,char);
+        initRDBVector(vec);
 	
 	if (IS_DBCOMPLEX(x) || IS_DBCOMPLEX(y))
 		multiplyComplexVectors(sqlconn, vec, xinfo, yinfo);
@@ -143,7 +143,7 @@ SEXP multiply_dbvectors(SEXP x, SEXP y)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 	R_do_slot_assign(ans, install("ext"), rptr);
 	UNPROTECT(4);
-	Free(vec->tableName);
+	free(vec->tableName);
 	return ans;
 }
 SEXP divide_dbvectors(SEXP x, SEXP y)
@@ -152,8 +152,8 @@ SEXP divide_dbvectors(SEXP x, SEXP y)
 	SEXP ans = R_NilValue;
 	SEXP info,tablename;
 
-	xinfo = getInfo(x);/*(rdbVector*) RAW(R_do_slot(x, install("info")));*/
-	yinfo = getInfo(y);/*(rdbVector*) RAW(R_do_slot(y, install("info")));*/
+	xinfo = getInfo(x);
+	yinfo = getInfo(y);
 
 	MYSQL *sqlconn = NULL;
 	int success = connectToLocalDB(&sqlconn);
@@ -167,7 +167,7 @@ SEXP divide_dbvectors(SEXP x, SEXP y)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = Calloc(MAX_TABLE_NAME,char);
+        initRDBVector(vec);
 	
 	if (IS_DBCOMPLEX(x) || IS_DBCOMPLEX(y))
 		divideComplexVectors(sqlconn, vec, xinfo, yinfo);
@@ -187,17 +187,17 @@ SEXP divide_dbvectors(SEXP x, SEXP y)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 	R_do_slot_assign(ans, install("ext"), rptr);
 	UNPROTECT(4);
-	Free(vec->tableName);
+	free(vec->tableName);
 	return ans;
 }
 
 SEXP sqrt_dbvector(SEXP x)
 {
-	rdbVector *xinfo, *yinfo;
+	rdbVector *xinfo;
 	SEXP ans = R_NilValue;
 	SEXP info,tablename;
 
-	xinfo = getInfo(x);/*(rdbVector*) RAW(R_do_slot(x, install("info")));*/
+	xinfo = getInfo(x);
 
 	MYSQL *sqlconn = NULL;
 	int success = connectToLocalDB(&sqlconn);
@@ -211,7 +211,7 @@ SEXP sqrt_dbvector(SEXP x)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
+        initRDBVector(vec);
 	
 	if (IS_DBCOMPLEX(x) )
 		;
@@ -231,17 +231,18 @@ SEXP sqrt_dbvector(SEXP x)
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 	R_do_slot_assign(ans, install("ext"), rptr);
 	UNPROTECT(4);
+        free(vec->tableName);
 	return ans;
 }
 
 SEXP pow_dbvector(SEXP x, SEXP e)
 {
-	rdbVector *xinfo, *yinfo;
+	rdbVector *xinfo;
 	SEXP ans = R_NilValue;
 	SEXP info,tablename;
 double exponent = asReal(e);
 
-	xinfo = getInfo(x);/*(rdbVector*) RAW(R_do_slot(x, install("info")));*/
+	xinfo = getInfo(x);
 
 	MYSQL *sqlconn = NULL;
 	int success = connectToLocalDB(&sqlconn);
@@ -255,7 +256,7 @@ double exponent = asReal(e);
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
+        initRDBVector(vec);
 	
 	performNumericPow(sqlconn, vec, xinfo, exponent);
 	mysql_close(sqlconn);
@@ -272,6 +273,7 @@ double exponent = asReal(e);
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 	R_do_slot_assign(ans, install("ext"), rptr);
 	UNPROTECT(4);
+        free(vec->tableName);
 	return ans;
 }
 SEXP subtract_dbvector_numeric(SEXP x, SEXP e)
@@ -281,7 +283,7 @@ SEXP subtract_dbvector_numeric(SEXP x, SEXP e)
 	SEXP info,tablename;
 double y= asReal(e);
 
-	xinfo = getInfo(x);/*(rdbVector*) RAW(R_do_slot(x, install("info")));*/
+	xinfo = getInfo(x);
 
 	MYSQL *sqlconn = NULL;
 	int success = connectToLocalDB(&sqlconn);
@@ -295,7 +297,7 @@ double y= asReal(e);
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
-	vec->tableName = calloc(MAX_TABLE_NAME,sizeof(char));
+        initRDBVector(vec);
 	
 	subtractDoubleFromNumericVector(sqlconn, vec, xinfo, y);
 	mysql_close(sqlconn);
@@ -312,6 +314,7 @@ double y= asReal(e);
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
 	R_do_slot_assign(ans, install("ext"), rptr);
 	UNPROTECT(4);
+        free(vec->tableName);
 	return ans;
 }
 
@@ -323,8 +326,8 @@ SEXP multiply_matrices(SEXP x, SEXP y)
 	SEXP ans = R_NilValue;
 	SEXP info,tablename;
 
-	xinfo = getMatrixInfo(x);/*(rdbVector*) RAW(R_do_slot(x, install("info")));*/
-	yinfo = getMatrixInfo(y);/*(rdbVector*) RAW(R_do_slot(y, install("info")));*/
+	xinfo = getMatrixInfo(x);
+	yinfo = getMatrixInfo(y);
 
 	MYSQL *sqlconn = NULL;
 	int success = connectToLocalDB(&sqlconn);
@@ -338,7 +341,7 @@ SEXP multiply_matrices(SEXP x, SEXP y)
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbmatrix")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbMatrix)));
 	rdbMatrix *vec = (rdbMatrix*)RAW(info);
-	vec->tableName = Calloc(MAX_TABLE_NAME,char);
+        initRDBMatrix(vec);
 
 	performMatrixMultiplication(sqlconn, vec, xinfo, yinfo);
 	mysql_close(sqlconn);
@@ -355,7 +358,7 @@ SEXP multiply_matrices(SEXP x, SEXP y)
 	R_RegisterCFinalizerEx(rptr, rdbMatrixFinalizer, TRUE);
 	R_do_slot_assign(ans, install("ext"), rptr);
 	UNPROTECT(4);
-	Free(vec->tableName);
+	free(vec->tableName);
 	return ans;
 }
 

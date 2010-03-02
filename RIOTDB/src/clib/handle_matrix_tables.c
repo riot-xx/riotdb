@@ -133,7 +133,7 @@ int duplicateMatrixTable(MYSQL * sqlConn, rdbMatrix *  originalMatrix,
 			 rdbMatrix *copyMatrix)
 {
   /* Create the new table */
-  copyRDBMatrix(&copyMatrix, originalMatrix, 0);
+  copyRDBMatrix(copyMatrix, originalMatrix);
   copyMatrix->isView = 0;
 
   int success = 0;

@@ -130,9 +130,25 @@ math_dbvector <- function(x) {
 }
 
 matrix.db <- function(nrows, ncols, from, to, by=1) {
-#if (missing(nrows)||missing(ncols)||missing(from)||missing(to))
-#		stop("arguments misssing")
-	.Call("dbmatrix_from_seq", nrows, ncols, from, to, by)
+  .Call("dbmatrix_from_seq", nrows, ncols, from, to, by)
+}
+
+matrix.db.vector <- function(from, nrows, ncols, byrow=FALSE) {
+  if (class(from) != "dbvector")
+    stop("the first input must be a dbvector")
+  if (missing(nrows) && missing(ncols)) {
+    nrows <- length(from)
+    ncols <- 1
+  } else if (missing(nrows)) {
+    nrows <- length(from)/ncols
+  } else if (missing(ncols)) {
+    ncols <- length(from)/nrows
+  }
+  nrows <- as.integer(nrows)
+  ncols <- as.integer(ncols)
+  if (nrows*ncols != length(from))
+    stop("dimension mismatch")
+  .Call("dbmatrix_from_dbvector", from, nrows, ncols, byrow);
 }
 
 seq.db <- function(from=1, to=1, by=1) {
@@ -190,8 +206,7 @@ divide_dbvectors <- function(e1,e2) {
 }
 
 sort.dbvector <- function(x, decreasing=FALSE) {
-print("sort entered")
-.Call("dbvector_sort", x, decreasing)
+  .Call("dbvector_sort", x, decreasing)
 }
 
 load.dbvector <- function(name) {
@@ -213,9 +228,9 @@ persist <- function(x) {
 }
 
 subtract_dbvector_numeric <- function(e1,e2) {
-if (length(e2) ==1)
-	.Call("subtract_dbvector_numeric", e1, e2)
-else stop("second argument must be of length 1")
+  if (length(e2) ==1)
+    .Call("subtract_dbvector_numeric", e1, e2)
+  else stop("second argument must be of length 1")
 }
 
 materialize <- function(x) {
@@ -225,3 +240,27 @@ materialize <- function(x) {
         .Call("materialize_dbmatrix", x)
 }
 
+t.dbmatrix <- function(a) {
+  .Call("do_mat_t", a)
+}
+
+solve.dbmatrix <- function(a, b) {
+  if (dim(a)[1] != dim(a)[2])
+    stop("the first input to solve() must be a square dbmatrix")
+  if (missing(b)) {
+    # Compute the inverse of a:
+    .Call("do_mat_inv", a)
+  } else {
+    if (class(b) != "dbmatrix" || dim(a)[1] != dim(b)[1] || dim(b)[2] != 1)
+      stop("the second input to solve(), if specified, must be a single-column dbmatrix with the same number of rows as the first input")
+    .Call("do_mat_sol", a, b)
+  }
+}
+
+print.db <- function(x, byrow=FALSE) {
+  if (class(x) == "dbvector") {
+    .Call("print_dbvector", x)
+  } else if (class(x) == "dbmatrix") {
+    .Call("print_dbmatrix", x, byrow)
+  }
+}

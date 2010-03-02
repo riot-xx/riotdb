@@ -26,7 +26,7 @@ If any error should occur, make sure the user account has enough privileges.
 2) Compile the package. Make sure you are at the top level directory
 (where this file resides), and type the following:
 
-$ R CMD INSTALL ROITDB 
+$ R CMD INSTALL RIOTDB 
 
 The RIOTDB package will be installed. If you want to have it installed
 in a customized directory, make a file ~/.Renviron with the following
