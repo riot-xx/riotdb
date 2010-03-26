@@ -3,19 +3,22 @@
 # feel free to change relevant directories
 # author: Yi Zhang 1/14/09, v1
 
-R_HOME=/home/home4/junyang/R/lib64/R
-MYSQL_DIR=/home/home4/junyang/mysql
+R_HOME=/usr/local/lib/R
+R_BIN=/usr/local/bin/R
+MYSQL_INC=/usr/include/mysql
+MYSQL_LIB=/usr/lib/mysql
 LIB_DIR=clib
 BIN=riotdb
 CC=gcc
-CFLAGS=-std=gnu99 -g -Wall -I$(MYSQL_DIR)/include/mysql -I$(R_HOME)/include
+CFLAGS=-std=gnu99 -g -Wall -I$(MYSQL_INC) -I$(R_HOME)/include
 PKG_CFLAGS=$(CFLAGS)
 
 PLATFORM=$(shell uname -s)
 ifeq ($(PLATFORM),SunOS)
-	LIBS=-L$(MYSQL_DIR)/lib/mysql -R$(MYSQL_DIR)/lib/mysql -lmysqlclient -lnsl -lm -lz
+	LIBS=-G -L$(MYSQL_LIB) -R$(MYSQL_LIB) -lmysqlclient -lnsl -lm -lz
 else
-	LIBS=-L$(MYSQL_DIR)/lib/mysql -lmysqlclient -lnsl -lm -lz
+# Hopefully this will work for all others like Linux, BSD, ...
+	LIBS=-shared -L$(MYSQL_LIB) -lmysqlclient -lnsl -lm -lz
 endif
 
 OBJ := $(patsubst %.c,%.o, $(wildcard $(LIB_DIR)/*.c)) 
@@ -24,9 +27,7 @@ OBJ += $(patsubst %.c,%.o, $(wildcard *.c))
 all: before $(SHLIB) 
 
 before:$(OBJ)
-	/home/home4/junyang/R/bin/R CMD SHLIB -g $(LIBS) -o riotdb.so $(OBJ) $(LIBS)
-#	$(CC) -std=gnu99 -G $(LIBS) -o $(BIN).so $(OBJ) 
-#	$(CC) -std=gnu99 -g $(LIBS) -o $(BIN).so $(OBJ) 
+	$(R_BIN) CMD SHLIB -g $(LIBS) -o $(BIN).so $(OBJ)
 
 after:
 clean:

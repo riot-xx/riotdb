@@ -10,41 +10,59 @@ research ideas.
 
 To install RIOTDB on a Unix-like system, follow these instructions:
 
- 1) Database setup. Currently RIOTDB uses MySQL as its backend. Please
-make sure you have access to a MySQL server. You can modify the server
-address, username, and password in the RIOTDB/src/clib/config.h file
-to match your settings. The default username RIOTDB assumes is 'mysql'
-and the default password is empty. Use the script
-RIOTDB/src/scripts/init_riotdb.sql to initialize and populate the
-database:
+1) Extract the downloaded package and cd to the top level directory of
+   the package (where this file resides). Paths in the following are
+   relative to this directory.
 
-$ mysql -u mysql # log in the mysql command interface
-$ \. <path_to_the_script> # load the script
+2) Setting up a databse. Currently RIOTDB uses MySQL as its
+   backend. Please make sure you have access to a MySQL server. You
+   can modify the server address, username, and password in the
+   RIOTDB/src/clib/config.h file to match your settings. The default
+   username RIOTDB assumes is 'mysql' and the default password is
+   empty.
 
-If any error should occur, make sure the user account has enough privileges.
+3) Make sure your mysql user has the following privileges: CREATE,
+   CREATE VIEW, DELETE, DROP, FILE, INDEX, SELECT, SUPER, TRIGGER,
+   UPDATE. A simpler way to do this is:
 
-2) Compile the package. Make sure you are at the top level directory
-(where this file resides), and type the following:
+   $ mysql -u root # log in as root
+   # replace 'mysql' and 'localhost' with the real server host and user name
+   $ grant all privileges on *.* to 'mysql'@'localhost'
+   $ grant super on *.* to 'mysql'@'localhost'
 
-$ R CMD INSTALL RIOTDB 
+4) Next use the script RIOTDB/src/scripts/init_riotdb.sql to
+   initialize and populate the database:
 
-The RIOTDB package will be installed. If you want to have it installed
-in a customized directory, make a file ~/.Renviron with the following
-contents before installing the package:
+   $ mysql -u mysql
+   $ \. <path_to_the_script>
 
-R_LIBS=<path>
+   If any error should occur, go back to Step 3 and make sure the user
+   has enough privileges.
 
-3) (Optional) Patch R. If you want to use an optimized version of
-RIOTDB (see the discussion at
-http://www.cs.duke.edu/dbgroup/Main/RIOT-interface), use the file
-R-RIOTDB.patch to patch the official R source and rebuild R. Any
-reasonably modern R release should work.
+5) Check the RIOTDB/src/Makefile file to make sure the directories for
+   MySQL include and library files match with your settings.
 
-$ cd <top level of R's source tree>
-$ patch -p1 < <path to the R-RIOTDB.patch file>
-$ ./configure # build R as usual
-$ make && make install
+6) Compile the package with
 
-4) Use RIOTDB. Start R and use the following statement to load RIOTDB:
+   $ R CMD INSTALL ROITDB
 
-> library(RIOTDB)
+   The RIOTDB package will be installed. If you want to have it
+   installed in a customized directory, make a file $HOME$/.Renviron
+   with the following contents before installing the package:
+
+   R_LIBS=<path>
+
+7) (Optional) Patch R. If you want to use an optimized version of
+   RIOTDB (see the discussion at
+   http://www.cs.duke.edu/dbgroup/Main/RIOT-interface), use the file
+   R-RIOTDB.patch to patch the official R source and rebuild R. Any
+   reasonably modern R release should work.
+
+   $ cd <top level of R's source tree>
+   $ patch -p1 < <path to the R-RIOTDB.patch file>
+   $ ./configure # build R as usual
+   $ make && make install
+
+8) Use RIOTDB. Start R and use the following statement to load RIOTDB:
+
+   > library(RIOTDB)

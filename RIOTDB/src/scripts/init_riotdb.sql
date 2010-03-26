@@ -1,7 +1,7 @@
 DROP DATABASE IF EXISTS riotdb;
 CREATE DATABASE riotdb;
 USE riotdb;
--- USE dbgroup;
+
 -- Table cleanup --
 DROP TABLE IF EXISTS Metadata;
 DROP TABLE IF EXISTS DB_Sources;
