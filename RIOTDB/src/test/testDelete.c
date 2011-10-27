@@ -39,7 +39,7 @@ int main()
   int i;
   for( i = 0 ; i < numTables ; i++ )
   {
-     printf("\t%ld\t%s", 
+     printf("\t%ld\t%s",
 	    arrayVectorInfoObjects[i]->metadataID,
 	    arrayVectorInfoObjects[i]->tableName);
 
@@ -73,7 +73,7 @@ int main()
   printf("\nNumber of matrix tables: %ld\n", numMatrixTables);
   for( i = 0 ; i < numMatrixTables ; i++ )
   {
-     printf("\t%ld\t%s", 
+     printf("\t%ld\t%s",
 	    arrayMatrixInfoObjects[i]->metadataID,
 	    arrayMatrixInfoObjects[i]->tableName);
 

@@ -14,7 +14,7 @@
 
 
 /* --------- Functions to compare with values from a DBVector ---------- */
-int compareWithDBVector(MYSQL * sqlConn, rdbVector * resultVector, 
+int compareWithDBVector(MYSQL * sqlConn, rdbVector * resultVector,
 			rdbVector * dataVector, rdbVector * compareVector,
 			char * comparisonOp)
 {
@@ -24,11 +24,11 @@ int compareWithDBVector(MYSQL * sqlConn, rdbVector * resultVector,
 
   /* Build the sql string */
   int size = compareVector->size;
-  int length = strlen(sqlTemplateCompareWDBVector) + 
+  int length = strlen(sqlTemplateCompareWDBVector) +
                strlen(dataVector->tableName) + strlen(compareVector->tableName) +
                strlen(comparisonOp) + 4*MAX_INT_LENGTH + 1;
   char strCompareSQL[length];
-  sprintf( strCompareSQL, sqlTemplateCompareWDBVector, size, size, comparisonOp, 
+  sprintf( strCompareSQL, sqlTemplateCompareWDBVector, size, size, comparisonOp,
 	   dataVector->tableName, compareVector->tableName, size, size );
 
   /* Create the results (logic) view */
@@ -46,7 +46,7 @@ int compareWithDBVector(MYSQL * sqlConn, rdbVector * resultVector,
 }
 
 
-int compareWithIntegerValues(MYSQL * sqlConn, rdbVector * resultVector, 
+int compareWithIntegerValues(MYSQL * sqlConn, rdbVector * resultVector,
 			     rdbVector * dataVector, int compareValues[],
 			     int size, char * comparisonOp)
 {
@@ -56,7 +56,7 @@ int compareWithIntegerValues(MYSQL * sqlConn, rdbVector * resultVector,
   char* strComparison;
   buildIntegerComparisonString(&strComparison,compareValues,size,comparisonOp);
 
-  int success = internalCompareWithValues(sqlConn, resultVector, dataVector, 
+  int success = internalCompareWithValues(sqlConn, resultVector, dataVector,
 					  strComparison);
 
   free(strComparison);
@@ -64,7 +64,7 @@ int compareWithIntegerValues(MYSQL * sqlConn, rdbVector * resultVector,
   return success;
 }
 
-int compareWithDoubleValues(MYSQL * sqlConn, rdbVector * resultVector, 
+int compareWithDoubleValues(MYSQL * sqlConn, rdbVector * resultVector,
 			    rdbVector * dataVector, double compareValues[],
 			    int size, char * comparisonOp)
 {
@@ -74,7 +74,7 @@ int compareWithDoubleValues(MYSQL * sqlConn, rdbVector * resultVector,
   char* strComparison;
   buildDoubleComparisonString(&strComparison,compareValues,size,comparisonOp);
 
-  int success = internalCompareWithValues(sqlConn, resultVector, dataVector, 
+  int success = internalCompareWithValues(sqlConn, resultVector, dataVector,
 					  strComparison);
 
   free(strComparison);
@@ -82,7 +82,7 @@ int compareWithDoubleValues(MYSQL * sqlConn, rdbVector * resultVector,
   return success;
 }
 
-int compareWithStringValues(MYSQL * sqlConn, rdbVector * resultVector, 
+int compareWithStringValues(MYSQL * sqlConn, rdbVector * resultVector,
 			    rdbVector * dataVector, char * compareValues[],
 			    int size, char * comparisonOp)
 {
@@ -92,7 +92,7 @@ int compareWithStringValues(MYSQL * sqlConn, rdbVector * resultVector,
   char* strComparison;
   buildStringComparisonString(&strComparison,compareValues,size,comparisonOp);
 
-  int success = internalCompareWithValues(sqlConn, resultVector, dataVector, 
+  int success = internalCompareWithValues(sqlConn, resultVector, dataVector,
 					  strComparison);
 
   free(strComparison);
@@ -101,14 +101,14 @@ int compareWithStringValues(MYSQL * sqlConn, rdbVector * resultVector,
 }
 
 
-int internalCompareWithValues(MYSQL * sqlConn, rdbVector * resultVector, 
+int internalCompareWithValues(MYSQL * sqlConn, rdbVector * resultVector,
 			      rdbVector * dataVector, char * strComparison)
 {
   /* Build the sql string */
-  int length = strlen(sqlTemplateCompareWithValues) + 
+  int length = strlen(sqlTemplateCompareWithValues) +
                strlen(strComparison) + strlen(dataVector->tableName) + 1;
   char strCompareSQL[length];
-  sprintf( strCompareSQL, sqlTemplateCompareWithValues, strComparison, 
+  sprintf( strCompareSQL, sqlTemplateCompareWithValues, strComparison,
 	   dataVector->tableName );
 
   /* Create the results (logic) view */

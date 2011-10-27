@@ -130,7 +130,7 @@ int solveByGuassianElimination(MYSQL *sqlConn, rdbMatrix *result, rdbMatrix *A, 
   return TRUE;
 }
 
-int computeDoubleMatrixInverse(MYSQL *sqlConn, rdbMatrix *result, 
+int computeDoubleMatrixInverse(MYSQL *sqlConn, rdbMatrix *result,
                                rdbMatrix *input) {
 
   /* Sanity checks: */
@@ -217,7 +217,7 @@ int computeMatrixeTranspose(MYSQL *sqlconn, rdbMatrix *result,
   return TRUE;
 }
 
-int performMatrixMultiplication(MYSQL * sqlConn, rdbMatrix * result, 
+int performMatrixMultiplication(MYSQL * sqlConn, rdbMatrix * result,
 		                rdbMatrix * input1, rdbMatrix * input2)
 {
   /* Both inputs must either be integers or doubles */
@@ -234,7 +234,7 @@ int performMatrixMultiplication(MYSQL * sqlConn, rdbMatrix * result,
     return 0;
 
   /* Build the sql string */
-  int length = strlen(sqlTemplateMatrixMultiplication) + 
+  int length = strlen(sqlTemplateMatrixMultiplication) +
                strlen(input1->tableName) + strlen(input2->tableName) + 1;
   char * sqlMultiply = (char*) malloc( length * sizeof(char) );
   sprintf(sqlMultiply, sqlTemplateMatrixMultiplication,
@@ -244,9 +244,9 @@ int performMatrixMultiplication(MYSQL * sqlConn, rdbMatrix * result,
   result->isView = TRUE;
   result->numRows = input1->numRows;
   result->numCols = input2->numCols;
-  
+
   int success = 0;
-  if( input1->sxp_type == SXP_TYPE_INTEGER && 
+  if( input1->sxp_type == SXP_TYPE_INTEGER &&
       input2->sxp_type == SXP_TYPE_INTEGER )
   {
      result->sxp_type = SXP_TYPE_INTEGER;

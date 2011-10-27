@@ -1,8 +1,8 @@
-/**************************************************************************** 
+/****************************************************************************
 Functions for creating dbvectors.
 Author: Yi Zhang
 Date: Sep 8, 2008
-****************************************************************************/ 
+****************************************************************************/
 #include "riotdb.h"
 
 SEXP dbvector_copy(SEXP from)
@@ -59,7 +59,7 @@ SEXP dbvector_copy(SEXP from)
 		error("cannot initialize a dbvector from the given type");
 		break;
 	}
-	
+
 	mysql_close(sqlconn);
 
 	SEXP tablename;
@@ -257,7 +257,7 @@ SEXP dbvector_from_seq(SEXP begin, SEXP end, SEXP by)
 			return info;
 		}
 	}
-	else 
+	else
 	{
 		if (!createNewDoubleVectorTable(sqlconn, vec))
 		{
@@ -269,7 +269,7 @@ SEXP dbvector_from_seq(SEXP begin, SEXP end, SEXP by)
 			error("cannot insert into double table: %s\n", mysql_error(sqlconn));
 			return info;
 		}
-	}	
+	}
 
 	mysql_close(sqlconn);
 
@@ -277,7 +277,7 @@ SEXP dbvector_from_seq(SEXP begin, SEXP end, SEXP by)
 	SET_STRING_ELT(tablename, 0, mkChar(vec->tableName));
 	R_do_slot_assign(ret, install("tablename"), tablename);
 	R_do_slot_assign(ret, install("info"), info);
-	
+
 	vec->sxp_spare = 0;
 	/* register finalizer */
 	SEXP rptr;
@@ -286,7 +286,7 @@ SEXP dbvector_from_seq(SEXP begin, SEXP end, SEXP by)
 	PROTECT(rptr = R_MakeExternalPtr(ptr, R_NilValue, R_NilValue));
 	R_do_slot_assign(ret, install("ext"), rptr);
 	R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
-	
+
 	UNPROTECT(4);
         free(vec->tableName);
 	return ret;

@@ -45,7 +45,7 @@ Getting Sparse Integers
 	30	NA
 	12	43
 	6	27
-Getting Integers with indexes from VectorTable2 
+Getting Integers with indexes from VectorTable2
 Printing All Integer: VectorTable2 (ID: 2)
 	1	3
 	2	30
@@ -118,7 +118,7 @@ Getting Sparse Doubles
 	3	321.345000
 	5	-123.568000
 	1	4234.123324
-Getting Doubles with indexes from VectorTable12 
+Getting Doubles with indexes from VectorTable12
 Printing All Integer: VectorTable12 (ID: 12)
 	1	3
 	2	30
@@ -181,7 +181,7 @@ Getting Sparse Strings
 	1	Hello's @#$ yp<int>?
 	4	George Mason
 	3	yes`!
-Getting Strings with indexes from VectorTable20 
+Getting Strings with indexes from VectorTable20
 Printing All Integer: VectorTable20 (ID: 20)
 	1	3
 	2	30
@@ -252,7 +252,7 @@ Getting Sparse Complex
 	3	76.123450	321.234000
 	9	0.231400	4.000023
 	5	645.346000	-12.435000
-Getting Complex with indexes from VectorTable28 
+Getting Complex with indexes from VectorTable28
 Printing All Integer: VectorTable28 (ID: 28)
 	1	3
 	2	30
@@ -326,7 +326,7 @@ Getting Sparse Logic
 	30	NA
 	12	TRUE
 	6	TRUE
-Getting Logic with indexes from VectorTable36 
+Getting Logic with indexes from VectorTable36
 Printing All Integer: VectorTable36 (ID: 36)
 	1	3
 	2	30

@@ -1,8 +1,8 @@
-/**************************************************************************** 
+/****************************************************************************
 Functions that access information from dbvectors and dbmatrices
 Author: Yi Zhang
 Date: Sep 8, 2008
-****************************************************************************/ 
+****************************************************************************/
 
 #include "riotdb.h"
 
@@ -90,7 +90,7 @@ SEXP get_by_index(SEXP dbvector, SEXP index)
 			switch(info->sxp_type)
 			{
 				case INTSXP:
-				getIntElementsWithLogic(sqlconn, info, ivec, vec); 
+				getIntElementsWithLogic(sqlconn, info, ivec, vec);
 				break;
 				case LGLSXP:
 				getLogicElementsWithLogic(sqlconn, info, ivec, vec);
@@ -113,7 +113,7 @@ SEXP get_by_index(SEXP dbvector, SEXP index)
 			switch(info->sxp_type)
 			{
 				case INTSXP:
-				getIntElementsWithDBVector(sqlconn, info, ivec, vec); 
+				getIntElementsWithDBVector(sqlconn, info, ivec, vec);
 				break;
 				case LGLSXP:
 				getLogicElementsWithDBVector(sqlconn, info, ivec, vec);
@@ -164,7 +164,7 @@ SEXP get_by_index(SEXP dbvector, SEXP index)
 		{
 			indices[i] = (unsigned int)REAL(index)[i];
 		}
-	
+
 		switch (info->sxp_type)
 		{
 			case LGLSXP:
@@ -178,7 +178,7 @@ SEXP get_by_index(SEXP dbvector, SEXP index)
 			PROTECT(ans = allocVector(INTSXP,len));
 			/* initialize with NA */
 			for (i=0; i<len; i++)
-				INTEGER(ans)[i]= NA_INTEGER;	
+				INTEGER(ans)[i]= NA_INTEGER;
 			getSparseIntElements(sqlconn, info, indices, len, INTEGER(ans), flags);
 			break;
 
@@ -186,7 +186,7 @@ SEXP get_by_index(SEXP dbvector, SEXP index)
 			PROTECT(ans = allocVector(REALSXP, len));
 			/* initialize with NA */
 			for (i=0; i<len; i++)
-				REAL(ans)[i]= NA_REAL;	
+				REAL(ans)[i]= NA_REAL;
 			getSparseDoubleElements(sqlconn, info, indices, len, REAL(ans), flags);
 			break;
 
@@ -250,7 +250,7 @@ SEXP get_matrix_by_index(SEXP dbmatrix, SEXP index1, SEXP index2)
 		col = INTEGER(index2)[0];
 	else
 		col = (unsigned int)REAL(index2)[0];
-	
+
 	switch (info->sxp_type)
 	{
 		case LGLSXP:
@@ -259,14 +259,14 @@ SEXP get_matrix_by_index(SEXP dbmatrix, SEXP index1, SEXP index2)
 		case INTSXP:
 			/*PROTECT(ans = allocVector(INTSXP,len));
 			for (i=0; i<len; i++)
-				INTEGER(ans)[i]= NA_INTEGER;	
+				INTEGER(ans)[i]= NA_INTEGER;
 			getSparseIntElements(sqlconn, info, indices, len, INTEGER(ans), flags);
 			*/
 			break;
 
 		case REALSXP:
 			PROTECT(ans = allocVector(REALSXP, 1));
-			REAL(ans)[0]= NA_REAL;	
+			REAL(ans)[0]= NA_REAL;
 			getDoubleMatrixElement(sqlconn, info, row, col, REAL(ans), flags);
 			break;
 

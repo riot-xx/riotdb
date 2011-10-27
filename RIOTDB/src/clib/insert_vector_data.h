@@ -2,7 +2,7 @@
 #define _INSERT_VECTOR_DATA_H
 
 /*****************************************************************************
- * Contains functions for inserting data to a vector either explicitely 
+ * Contains functions for inserting data to a vector either explicitely
  * or load from a file
  *
  * Author: Herodotos Herodotou
@@ -36,7 +36,7 @@
 int loadIntoVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			char * filename);
 
-int loadIntoComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int loadIntoComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			       char * filename);
 
 int internalLoadIntoAnyVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
@@ -44,56 +44,56 @@ int internalLoadIntoAnyVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
 
 /* Functions to insert values into vector tables */
-int insertIntoIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertIntoIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			     int * values, int size);
 
-int insertIntoDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertIntoDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				double * values, int size);
 
-int insertIntoStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertIntoStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				char ** values, int size);
 
-int insertIntoComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertIntoComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				 double * realValues, int numReals,
 				 double *imagValues, int numImags,
 				 int desiredSize);
 
-int insertIntoLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertIntoLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			       int * values, int size);
 
 
 /* Functions to insert sequences into vector tables */
-int insertSeqIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertSeqIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			    int start, int end, int step);
 
-int insertSeqDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertSeqDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			       double start, double end, double step);
 
-int insertSeqLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertSeqLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			      int value, int repeats);
 
 /* ---------------------------------------------------- */
 /* Helper Functions to insert values into vector tables */
-int insertPartIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertPartIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			     int * values, int left, int right);
 
-int insertPartDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertPartDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				double * values, int left, int right);
 
-int insertPartStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertPartStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				char ** values, int left, int right);
 
-int insertPartComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertPartComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				 double * realValues, int numReals,
 				 double *imagValues, int numImags,
 				 int left, int right);
 
-int insertPartLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertPartLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			       int * values, int left, int right);
 
 
 /* Other Helper functions */
-int insertIntoVectorTable(MYSQL * sqlConn, char * sqlTemplate, 
+int insertIntoVectorTable(MYSQL * sqlConn, char * sqlTemplate,
 			  char * tableName, char * strValues);
 
 

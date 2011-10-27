@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Contains functions for handling matrix views (i.e create, drop, 
+ * Contains functions for handling matrix views (i.e create, drop,
  * materialize views and keep track of view references)
  *
  * Author: Herodotos Herodotou
@@ -31,11 +31,11 @@ int createNewDoubleMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix,
 			      char sqlString[])
 {
   viewMatrix->sxp_type = SXP_TYPE_DOUBLE;
-  return internalCreateNewMatrixView(sqlConn, viewMatrix, 
+  return internalCreateNewMatrixView(sqlConn, viewMatrix,
 				     sqlTemplateCreateMatrixView, sqlString);
 }
 
-int internalCreateNewMatrixView(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int internalCreateNewMatrixView(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 				char sqlTemplate[], char sqlString[])
 {
   /* Build the name of the new view */
@@ -43,7 +43,7 @@ int internalCreateNewMatrixView(MYSQL * sqlConn, rdbMatrix * matrixInfo,
     return 0;
 
   /* Build the sql string */
-  int length = strlen(sqlTemplate) + strlen(matrixInfo->tableName) + 
+  int length = strlen(sqlTemplate) + strlen(matrixInfo->tableName) +
                strlen(sqlString) + 1;
   char strCreateViewSQL[length];
   sprintf( strCreateViewSQL, sqlTemplate, matrixInfo->tableName, sqlString );
@@ -55,7 +55,7 @@ int internalCreateNewMatrixView(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 
   /* Insert info into Metadata table */
   success = insertMatrixMetadataInfo(sqlConn, matrixInfo);
- 
+
   return success;
 }
 
@@ -159,7 +159,7 @@ int getMatrixViewRefCount(MYSQL * sqlConn, rdbMatrix * matrixInfo, int * count)
   /* Build the sql string and execute the query */
   int length = strlen(sqlTemplateGetViewRefCount) + 2*MAX_INT_LENGTH + 1;
   char strGetRefsSQL[length];
-  sprintf(strGetRefsSQL, sqlTemplateGetViewRefCount, 
+  sprintf(strGetRefsSQL, sqlTemplateGetViewRefCount,
 	  matrixInfo->metadataID, matrixInfo->metadataID);
 
   int success = mysql_query(sqlConn, strGetRefsSQL);
@@ -185,13 +185,13 @@ int getMatrixViewRefCount(MYSQL * sqlConn, rdbMatrix * matrixInfo, int * count)
 }
 
 
-int updateMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix, 
+int updateMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix,
 			 rdbMatrix * newMatrix)
 {
   /* Build the sql strings */
   int length = strlen(sqlTemplateUpdateViewReferences1) + 2*MAX_INT_LENGTH + 1;
   char strUpdateRefs1SQL[length];
-  sprintf(strUpdateRefs1SQL, sqlTemplateUpdateViewReferences1, 
+  sprintf(strUpdateRefs1SQL, sqlTemplateUpdateViewReferences1,
 	  newMatrix->metadataID, viewMatrix->metadataID);
 
   length = strlen(sqlTemplateUpdateViewReferences2) + 2*MAX_INT_LENGTH + 1;
@@ -212,7 +212,7 @@ int removeMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix)
   /* Get the references */
   rdbObject *leftInput = newRDBObject();
   rdbObject *rightInput = newRDBObject();
-  int success = getMatrixViewReferences(sqlConn, viewMatrix, 
+  int success = getMatrixViewReferences(sqlConn, viewMatrix,
                                         leftInput, rightInput);
   if( success == 0 )
     return 0;
@@ -226,7 +226,7 @@ int removeMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix)
   success = mysql_query(sqlConn, strRemoveRefsSQL);
   if( success != 0 )
     return 0;
-  
+
   /* Reccursively delete the references */
   success = deleteRDBObject(sqlConn, leftInput);
 
@@ -255,7 +255,7 @@ int dropMatrixView(MYSQL * sqlConn, rdbMatrix * matrixInfo)
   }
 
   /* Build the sql string and drop the view */
-  int length = strlen(sqlTemplateDropMatrixView) + 
+  int length = strlen(sqlTemplateDropMatrixView) +
                strlen(matrixInfo->tableName) + 1;
   char strDropViewSQL[length];
   sprintf( strDropViewSQL, sqlTemplateDropMatrixView, matrixInfo->tableName );
@@ -321,7 +321,7 @@ int ensureMatrixMaterialization(MYSQL * sqlConn, rdbMatrix * matrixInfo)
   {
      rdbMatrix *viewMatrix = newRDBMatrix();
      int loadSuccess = loadRDBMatrix(sqlConn, viewMatrix, viewIDs[i]);
-      
+
      if( loadSuccess )
      {
         success = materializeMatrixView(sqlConn, viewMatrix);
@@ -351,7 +351,7 @@ int materializeIntegerMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix)
 {
   /* Create the new table */
   rdbMatrix * newMatrix = newRDBMatrix();
-  if( !createNewIntMatrixTable(sqlConn, newMatrix) ) 
+  if( !createNewIntMatrixTable(sqlConn, newMatrix) )
      return 0;
 
   int success = internalMaterializeMatrixView(sqlConn, viewMatrix, newMatrix);
@@ -367,7 +367,7 @@ int materializeDoubleMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix)
   /* Create the new table */
   rdbMatrix * newMatrix = newRDBMatrix();
   newMatrix->isView = 0;
-  if( !createNewDoubleMatrixTable(sqlConn, newMatrix) ) 
+  if( !createNewDoubleMatrixTable(sqlConn, newMatrix) )
      return 0;
 
   int success = internalMaterializeMatrixView(sqlConn, viewMatrix, newMatrix);
@@ -377,15 +377,15 @@ int materializeDoubleMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix)
   return success;
 }
 
-int internalMaterializeMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix, 
+int internalMaterializeMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix,
 			          rdbMatrix * newMatrix)
 {
   /* Build the sql string and add the data from the view */
-  int length = strlen(sqlTemplateMaterializeMatrixView) 
+  int length = strlen(sqlTemplateMaterializeMatrixView)
 		+ strlen(newMatrix->tableName)
                 + strlen(viewMatrix->tableName) + 1;
   char strMaterializeViewSQL[length];
-  sprintf( strMaterializeViewSQL, sqlTemplateMaterializeMatrixView, 
+  sprintf( strMaterializeViewSQL, sqlTemplateMaterializeMatrixView,
 	   newMatrix->tableName, viewMatrix->tableName );
 
   int success = mysql_query(sqlConn, strMaterializeViewSQL);

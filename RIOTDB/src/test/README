@@ -16,7 +16,7 @@ Files:
 
 - Makefile
     Contains commands for compiling the source code and running tests
-    Commands: 
+    Commands:
         "make regression" - performs all regression tests
         "make regression_vector" - performs regression tests for vectors
         "make regression_matrix" - performs regression tests for matrices

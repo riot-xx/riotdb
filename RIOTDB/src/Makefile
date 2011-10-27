@@ -21,10 +21,10 @@ else
 	LIBS=-shared -L$(MYSQL_LIB) -lmysqlclient -lnsl -lm -lz
 endif
 
-OBJ := $(patsubst %.c,%.o, $(wildcard $(LIB_DIR)/*.c)) 
-OBJ += $(patsubst %.c,%.o, $(wildcard *.c)) 
+OBJ := $(patsubst %.c,%.o, $(wildcard $(LIB_DIR)/*.c))
+OBJ += $(patsubst %.c,%.o, $(wildcard *.c))
 
-all: before $(SHLIB) 
+all: before $(SHLIB)
 
 before:$(OBJ)
 	$(R_BIN) CMD SHLIB -g $(LIBS) -o $(BIN).so $(OBJ)

@@ -1,8 +1,8 @@
-/**************************************************************************** 
+/****************************************************************************
 Functions for loading dbvectors and dbmatrices.
 Author: Yi Zhang
 Date: Sep 8, 2008
-****************************************************************************/ 
+****************************************************************************/
 #include "riotdb.h"
 
 SEXP load_dbvector(SEXP mid)
@@ -19,7 +19,7 @@ SEXP load_dbvector(SEXP mid)
 		error("cannot connect to local db\n");
 		return R_NilValue;
 	}
-	
+
 
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbvector")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
@@ -27,7 +27,7 @@ SEXP load_dbvector(SEXP mid)
         initRDBVector(vec);
 	loadRDBVector(sqlconn, vec, id);
 	vec->sxp_spare = 0;
-	
+
 	mysql_close(sqlconn);
 
 	SEXP tablename;
@@ -63,7 +63,7 @@ SEXP load_dbmatrix(SEXP mid)
 		error("cannot connect to local db\n");
 		return R_NilValue;
 	}
-	
+
 
 	PROTECT(ans = R_do_new_object(R_getClassDef("dbmatrix")));
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbMatrix)));
@@ -71,7 +71,7 @@ SEXP load_dbmatrix(SEXP mid)
         initRDBMatrix(vec);
 	loadRDBMatrix(sqlconn, vec, id);
 	vec->sxp_spare = 0;
-	
+
 	mysql_close(sqlconn);
 
 	SEXP tablename;
@@ -109,7 +109,7 @@ SEXP persist_dbvector(SEXP x)
 
 	return ans;
 }
-	
+
 SEXP persist_dbmatrix(SEXP x)
 {
 	SEXP extptr;
@@ -129,7 +129,7 @@ SEXP persist_dbmatrix(SEXP x)
         UNPROTECT(1);
         return ans;
 }
-	
+
 SEXP materialize_dbmatrix(SEXP x)
 {
 
@@ -149,10 +149,10 @@ SEXP materialize_dbmatrix(SEXP x)
 
 	/* copy info to the finalizer structure */
 	rdbMatrix *temp = (rdbMatrix*)R_ExternalPtrAddr(R_do_slot(x,install("ext")));
-	
+
 	*temp = *info;
 	return R_NilValue;
-}  
+}
 
 
 SEXP materialize_dbvector(SEXP x)
@@ -174,7 +174,7 @@ SEXP materialize_dbvector(SEXP x)
 
 	/* copy info to the finalizer structure */
 	rdbVector *temp = (rdbVector*)R_ExternalPtrAddr(R_do_slot(x,install("ext")));
-	
+
 	*temp = *info;
 	return R_NilValue;
-}  
+}

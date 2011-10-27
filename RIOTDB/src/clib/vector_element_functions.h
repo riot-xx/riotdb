@@ -33,10 +33,10 @@
 
 
 /* General Functions */
-int performNumericPow(MYSQL* sqlConn, rdbVector* resultVector, 
+int performNumericPow(MYSQL* sqlConn, rdbVector* resultVector,
 		      rdbVector* dataVector, double exponent);
 
-int performNumericSqrt(MYSQL* sqlConn, rdbVector* resultVector, 
+int performNumericSqrt(MYSQL* sqlConn, rdbVector* resultVector,
 		       rdbVector* dataVector);
 
 int performNumericSin(MYSQL * sqlConn, rdbVector * dataVector,

@@ -16,15 +16,15 @@
 
 
 /* Functions to access matrix tables by element */
-int getIntMatrixElement(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
-		  	unsigned int row, unsigned int col, 
+int getIntMatrixElement(MYSQL * sqlConn, rdbMatrix * matrixInfo,
+		  	unsigned int row, unsigned int col,
 			int * value, char * byte);
 
-int getDoubleMatrixElement(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
-		    	   unsigned int row, unsigned int col, 
+int getDoubleMatrixElement(MYSQL * sqlConn, rdbMatrix * matrixInfo,
+		    	   unsigned int row, unsigned int col,
 			   double * value, char * byte);
 
-int execGetMatrixElementSQLCall(MYSQL * sqlConn, char* tableName, 
+int execGetMatrixElementSQLCall(MYSQL * sqlConn, char* tableName,
 			  	unsigned int row, unsigned int col);
 
 

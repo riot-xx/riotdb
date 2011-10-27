@@ -1,8 +1,8 @@
-/**************************************************************************** 
+/****************************************************************************
 Functions for modifying elements of dbvectors.
 Author: Yi Zhang
 Date: Sep 8, 2008
-****************************************************************************/ 
+****************************************************************************/
 #include "riotdb.h"
 
 SEXP duplicateOrConvert(SEXP orig, int (*func)(MYSQL*,rdbVector*,rdbVector*), MYSQL *sqlconn, int needConvert)
@@ -35,7 +35,7 @@ SEXP duplicateOrConvert(SEXP orig, int (*func)(MYSQL*,rdbVector*,rdbVector*), MY
 		SEXP rptr;
 		R_do_slot_assign(x, install("ext"), (rptr=R_MakeExternalPtr(ptr, R_NilValue, R_NilValue)));
 		R_RegisterCFinalizerEx(rptr, rdbVectorFinalizer, TRUE);
-		
+
 		origInfo->sxp_spare--;
 		UNPROTECT(2);
 	}
@@ -187,7 +187,7 @@ SEXP set(SEXP x, SEXP index, SEXP value)
 			error("Setting elements of this type of dbvector is not supported");
 			break;
 		}
-		} 
+		}
 		else { /* int or real type index */
 		switch(settype)
 		{
@@ -283,7 +283,7 @@ SEXP set(SEXP x, SEXP index, SEXP value)
 			info = getInfo(x);
 			setSparseDoubleElements(sqlconn, info, _index, len, REAL(value), length(value));
 			break;
-			
+
 		case 1313: /* int,int*/
 			x = duplicateOrConvert(x, duplicateVectorTable, sqlconn, 0);
 			info = getInfo(x);

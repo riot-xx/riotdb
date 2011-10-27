@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Contains functions for inserting data to a matrix either explicitely 
+ * Contains functions for inserting data to a matrix either explicitely
  * or load from a file
  *
  * Author: Herodotos Herodotou
@@ -21,11 +21,11 @@ int loadIntoMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			char * filename)
 {
   /* Build the sql string */
-  int length = strlen(sqlTemplateLoadIntoMatrix) + 
-	       strlen(matrixInfo->tableName) + 
+  int length = strlen(sqlTemplateLoadIntoMatrix) +
+	       strlen(matrixInfo->tableName) +
                strlen(filename) + 1;
   char strLoadMatrix[length];
-  sprintf( strLoadMatrix, sqlTemplateLoadIntoMatrix, filename, 
+  sprintf( strLoadMatrix, sqlTemplateLoadIntoMatrix, filename,
 	   matrixInfo->tableName );
 
   /* Execute the query */
@@ -46,7 +46,7 @@ int loadIntoMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 
 /* ------- Functions to insert values into matrix tables ----------- */
 
-int insertIntoIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int insertIntoIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			     int * values, int size, int nRows, int nCols )
 {
   /* Some error checking */
@@ -59,8 +59,8 @@ int insertIntoIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   int success = 1;
   while( remain > MAX_NUM_INT_STRING )
   {
-    success *= insertPartIntMatrixTable(sqlConn, matrixInfo, values, size, 
-					MAX_NUM_INT_STRING, startRow, 
+    success *= insertPartIntMatrixTable(sqlConn, matrixInfo, values, size,
+					MAX_NUM_INT_STRING, startRow,
 					startCol, nRows, nCols);
 
     remain -= MAX_NUM_INT_STRING;
@@ -75,7 +75,7 @@ int insertIntoIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 */
   }
 
-  success *= insertPartIntMatrixTable(sqlConn, matrixInfo, values, size, 
+  success *= insertPartIntMatrixTable(sqlConn, matrixInfo, values, size,
 				remain, startRow, startCol, nRows, nCols);
 
   /* Update the size */
@@ -85,7 +85,7 @@ int insertIntoIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 }
 
 
-int insertIntoDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int insertIntoDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			     double * values, int size, int nRows, int nCols )
 {
   /* Some error checking */
@@ -98,8 +98,8 @@ int insertIntoDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   int success = 1;
   while( remain > MAX_NUM_DOUBLE_STRING )
   {
-    success *= insertPartDoubleMatrixTable(sqlConn, matrixInfo, values, size, 
-					MAX_NUM_DOUBLE_STRING, startRow, 
+    success *= insertPartDoubleMatrixTable(sqlConn, matrixInfo, values, size,
+					MAX_NUM_DOUBLE_STRING, startRow,
 					startCol, nRows, nCols);
 
     remain -= MAX_NUM_DOUBLE_STRING;
@@ -113,7 +113,7 @@ int insertIntoDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 */
   }
 
-  success *= insertPartDoubleMatrixTable(sqlConn, matrixInfo, values, size, 
+  success *= insertPartDoubleMatrixTable(sqlConn, matrixInfo, values, size,
 				 remain, startRow, startCol, nRows, nCols);
 
   /* Update the size */
@@ -124,7 +124,7 @@ int insertIntoDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 
 
 /* ------- Functions to insert sequences into matrix tables ------- */
-int insertSeqIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int insertSeqIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			    int start, int end, int step,
 			    int nRows, int nCols)
 {
@@ -147,7 +147,7 @@ int insertSeqIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   {
      for( row = 1 ; row <= nRows ; row++ )
      {
-        sprintf(strTemp, sqlTemplateInsertIntMatrixValue, 
+        sprintf(strTemp, sqlTemplateInsertIntMatrixValue,
 		col, row, element);
         strcat(strValues, strTemp);
 
@@ -160,8 +160,8 @@ int insertSeqIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 	{
 	  /* Execute the sql query */
 	  strValues[strlen(strValues) - 1] = '\0';
-	  success *= internalInsertIntoMatrixTable(sqlConn, 
-			sqlTemplateInsertIntoMatrix, 
+	  success *= internalInsertIntoMatrixTable(sqlConn,
+			sqlTemplateInsertIntoMatrix,
 			matrixInfo->tableName, strValues);
 	  iter = 0;
 	  strValues[0] = '\0';
@@ -173,7 +173,7 @@ int insertSeqIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   if( iter > 0 )
   {
      strValues[strlen(strValues) - 1] = '\0';
-     success *= internalInsertIntoMatrixTable(sqlConn, 
+     success *= internalInsertIntoMatrixTable(sqlConn,
 	sqlTemplateInsertIntoMatrix, matrixInfo->tableName, strValues);
   }
 
@@ -185,7 +185,7 @@ int insertSeqIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   return success;
 }
 
-int insertSeqDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int insertSeqDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			       double start, double end, double step,
 			       int nRows, int nCols)
 {
@@ -195,7 +195,7 @@ int insertSeqDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   }
 
   /* Initialize necessary strings */
-  int stringSize = MAX_NUM_DOUBLE_STRING * (2 * MAX_INT_LENGTH 
+  int stringSize = MAX_NUM_DOUBLE_STRING * (2 * MAX_INT_LENGTH
 					    + MAX_DOUBLE_LENGTH + 8) + 1;
   char * strValues = (char *)malloc( stringSize * sizeof(char) );
   char strTemp[2*MAX_INT_LENGTH + MAX_DOUBLE_LENGTH + 8];
@@ -209,7 +209,7 @@ int insertSeqDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   {
      for( row = 1 ; row <= nRows ; row++ )
      {
-        sprintf(strTemp, sqlTemplateInsertDoubleMatrixValue, 
+        sprintf(strTemp, sqlTemplateInsertDoubleMatrixValue,
 		col, row, element);
         strcat(strValues, strTemp);
 
@@ -222,8 +222,8 @@ int insertSeqDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 	{
 	  /* Execute the sql query */
 	  strValues[strlen(strValues) - 1] = '\0';
-	  success *= internalInsertIntoMatrixTable(sqlConn, 
-			sqlTemplateInsertIntoMatrix, 
+	  success *= internalInsertIntoMatrixTable(sqlConn,
+			sqlTemplateInsertIntoMatrix,
 			matrixInfo->tableName, strValues);
 	  iter = 0;
 	  strValues[0] = '\0';
@@ -235,7 +235,7 @@ int insertSeqDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   if( iter > 0 )
   {
      strValues[strlen(strValues) - 1] = '\0';
-     success *= internalInsertIntoMatrixTable(sqlConn, 
+     success *= internalInsertIntoMatrixTable(sqlConn,
 	sqlTemplateInsertIntoMatrix, matrixInfo->tableName, strValues);
   }
 
@@ -250,7 +250,7 @@ int insertSeqDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 
 /* ----------------------------------------------------------------- */
 /* ----- Helper Functions to insert values into matrix tables ------ */
-int insertPartIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int insertPartIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			     int * values, int size, int numElems,
 			     int startRow, int startCol, int nRows, int nCols)
 {
@@ -267,7 +267,7 @@ int insertPartIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
      for( row = startRow ; row <= nRows && iter < numElems ; row++ )
      {
         elem = ((row-1) + (col-1)*nRows) % size;
-        sprintf(strTemp, sqlTemplateInsertIntMatrixValue, 
+        sprintf(strTemp, sqlTemplateInsertIntMatrixValue,
 		col, row, values[elem]);
         strcat(strValues, strTemp);
 	++iter;
@@ -277,7 +277,7 @@ int insertPartIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 
   /* Execute the sql query */
   strValues[strlen(strValues) - 1] = '\0';
-  int success = internalInsertIntoMatrixTable(sqlConn, 
+  int success = internalInsertIntoMatrixTable(sqlConn,
 	sqlTemplateInsertIntoMatrix, matrixInfo->tableName, strValues);
 
   free(strValues);
@@ -285,7 +285,7 @@ int insertPartIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   return success;
 }
 
-int insertPartDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int insertPartDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			     double * values, int size, int numElems,
 			     int startRow, int startCol, int nRows, int nCols)
 {
@@ -302,7 +302,7 @@ int insertPartDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
      for( row = startRow ; row <= nRows && iter < numElems ; row++ )
      {
         elem = ((row-1) + (col-1)*nRows) % size;
-        sprintf(strTemp, sqlTemplateInsertDoubleMatrixValue, 
+        sprintf(strTemp, sqlTemplateInsertDoubleMatrixValue,
 		col, row, values[elem]);
         strcat(strValues, strTemp);
 	++iter;
@@ -312,7 +312,7 @@ int insertPartDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 
   /* Execute the sql query */
   strValues[strlen(strValues) - 1] = '\0';
-  int success = internalInsertIntoMatrixTable(sqlConn, 
+  int success = internalInsertIntoMatrixTable(sqlConn,
 	sqlTemplateInsertIntoMatrix, matrixInfo->tableName, strValues);
 
   free(strValues);
@@ -321,11 +321,11 @@ int insertPartDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 }
 
 
-int internalInsertIntoMatrixTable(MYSQL * sqlConn, char * sqlTemplate, 
+int internalInsertIntoMatrixTable(MYSQL * sqlConn, char * sqlTemplate,
 			  	  char * tableName, char * strValues)
 {
   /* Build the sql string */
-  int length = strlen(sqlTemplate) + strlen(tableName) + 
+  int length = strlen(sqlTemplate) + strlen(tableName) +
 	       strlen(strValues) + 1;
   char strInsertValues[length];
   sprintf( strInsertValues, sqlTemplate, tableName, strValues);

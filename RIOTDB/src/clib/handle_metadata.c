@@ -47,7 +47,7 @@ int getNextTableID(MYSQL * sqlConn, int * next)
 int renameTable(MYSQL * sqlConn, char* oldName, char* newName)
 {
   /* Create the sql string */
-  int length = strlen(sqlTemplateRenameTable) + strlen(oldName) + 
+  int length = strlen(sqlTemplateRenameTable) + strlen(oldName) +
                strlen(newName) + 1;
   char strRenameTableSQL[length];
   sprintf( strRenameTableSQL, sqlTemplateRenameTable, oldName, newName);
@@ -142,7 +142,7 @@ int setRefCounter(MYSQL * sqlConn, long int metadataID, int refCounter)
 int insertVectorMetadataInfo(MYSQL * sqlConn, rdbVector * vectorInfo)
 {
   /* Build the sql string */
-  int length = strlen(sqlTemplateInsertMetadata) + 
+  int length = strlen(sqlTemplateInsertMetadata) +
                strlen(vectorInfo->tableName) + 14*MAX_INT_LENGTH + 1;
   char strInsertMetadataInfo[length];
   char strSize[MAX_INT_LENGTH+1];
@@ -150,9 +150,9 @@ int insertVectorMetadataInfo(MYSQL * sqlConn, rdbVector * vectorInfo)
 
   sprintf( strInsertMetadataInfo, sqlTemplateInsertMetadata,
 	   vectorInfo->tableName,
-	   vectorInfo->dbSourceID, 
+	   vectorInfo->dbSourceID,
 	   strSize,
-	   vectorInfo->isView, 
+	   vectorInfo->isView,
 	   vectorInfo->refCounter,
 	   vectorInfo->sxp_type,
 	   vectorInfo->sxp_obj,
@@ -183,7 +183,7 @@ int insertVectorMetadataInfo(MYSQL * sqlConn, rdbVector * vectorInfo)
 int updateVectorMetadataInfo(MYSQL * sqlConn, rdbVector * vectorInfo)
 {
   /* Build the sql string */
-  int length = strlen(sqlTemplateUpdateMetadata) + 
+  int length = strlen(sqlTemplateUpdateMetadata) +
                strlen(vectorInfo->tableName) + 14*MAX_INT_LENGTH + 1;
   char strUpdateMetadataInfo[length];
   char strSize[MAX_INT_LENGTH+1];
@@ -191,9 +191,9 @@ int updateVectorMetadataInfo(MYSQL * sqlConn, rdbVector * vectorInfo)
 
   sprintf( strUpdateMetadataInfo, sqlTemplateUpdateMetadata,
 	   vectorInfo->tableName,
-	   vectorInfo->dbSourceID, 
+	   vectorInfo->dbSourceID,
 	   strSize,
-	   vectorInfo->isView, 
+	   vectorInfo->isView,
 	   vectorInfo->refCounter,
 	   vectorInfo->sxp_type,
 	   vectorInfo->sxp_obj,
@@ -215,7 +215,7 @@ int updateVectorMetadataInfo(MYSQL * sqlConn, rdbVector * vectorInfo)
 int insertMatrixMetadataInfo(MYSQL * sqlConn, rdbMatrix * matrixInfo)
 {
   /* Build the sql string */
-  int length = strlen(sqlTemplateInsertMetadata) + 
+  int length = strlen(sqlTemplateInsertMetadata) +
                strlen(matrixInfo->tableName) + 14*MAX_INT_LENGTH + 1;
   char strInsertMetadataInfo[length];
   char strSize[2*MAX_INT_LENGTH+2];
@@ -223,9 +223,9 @@ int insertMatrixMetadataInfo(MYSQL * sqlConn, rdbMatrix * matrixInfo)
 
   sprintf( strInsertMetadataInfo, sqlTemplateInsertMetadata,
 	   matrixInfo->tableName,
-	   matrixInfo->dbSourceID, 
+	   matrixInfo->dbSourceID,
 	   strSize,
-	   matrixInfo->isView, 
+	   matrixInfo->isView,
 	   matrixInfo->refCounter,
 	   matrixInfo->sxp_type,
 	   matrixInfo->sxp_obj,
@@ -256,7 +256,7 @@ int insertMatrixMetadataInfo(MYSQL * sqlConn, rdbMatrix * matrixInfo)
 int updateMatrixMetadataInfo(MYSQL * sqlConn, rdbMatrix * matrixInfo)
 {
   /* Build the sql string */
-  int length = strlen(sqlTemplateUpdateMetadata) + 
+  int length = strlen(sqlTemplateUpdateMetadata) +
                strlen(matrixInfo->tableName) + 14*MAX_INT_LENGTH + 1;
   char strUpdateMetadataInfo[length];
   char strSize[2*MAX_INT_LENGTH+2];
@@ -264,9 +264,9 @@ int updateMatrixMetadataInfo(MYSQL * sqlConn, rdbMatrix * matrixInfo)
 
   sprintf( strUpdateMetadataInfo, sqlTemplateUpdateMetadata,
 	   matrixInfo->tableName,
-	   matrixInfo->dbSourceID, 
+	   matrixInfo->dbSourceID,
 	   strSize,
-	   matrixInfo->isView, 
+	   matrixInfo->isView,
 	   matrixInfo->refCounter,
 	   matrixInfo->sxp_type,
 	   matrixInfo->sxp_obj,

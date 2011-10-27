@@ -24,7 +24,7 @@
 int createNewIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo)
 {
   vectorInfo->sxp_type = SXP_TYPE_INTEGER;
-  return internalCreateNewVectorTable(sqlConn, vectorInfo, 
+  return internalCreateNewVectorTable(sqlConn, vectorInfo,
 				      sqlTemplateCreateIntVector);
 }
 
@@ -32,7 +32,7 @@ int createNewIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo)
 int createNewDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo)
 {
   vectorInfo->sxp_type = SXP_TYPE_DOUBLE;
-  return internalCreateNewVectorTable(sqlConn, vectorInfo, 
+  return internalCreateNewVectorTable(sqlConn, vectorInfo,
 				      sqlTemplateCreateDoubleVector);
 }
 
@@ -40,7 +40,7 @@ int createNewDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo)
 int createNewComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo)
 {
   vectorInfo->sxp_type = SXP_TYPE_COMPLEX;
-  return internalCreateNewVectorTable(sqlConn, vectorInfo, 
+  return internalCreateNewVectorTable(sqlConn, vectorInfo,
 				      sqlTemplateCreateComplexVector);
 }
 
@@ -48,7 +48,7 @@ int createNewComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo)
 int createNewStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo)
 {
   vectorInfo->sxp_type = SXP_TYPE_STRING;
-  return internalCreateNewVectorTable(sqlConn, vectorInfo, 
+  return internalCreateNewVectorTable(sqlConn, vectorInfo,
 				      sqlTemplateCreateStringVector);
 }
 
@@ -56,12 +56,12 @@ int createNewStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo)
 int createNewLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo)
 {
   vectorInfo->sxp_type = SXP_TYPE_LOGIC;
-  return internalCreateNewVectorTable(sqlConn, vectorInfo, 
+  return internalCreateNewVectorTable(sqlConn, vectorInfo,
 				      sqlTemplateCreateLogicVector);
 }
 
 
-int internalCreateNewVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int internalCreateNewVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				 char * sqlTemplate)
 {
   /* Build the name of the new table */
@@ -115,7 +115,7 @@ int deleteRDBObject(MYSQL * sqlConn, rdbObject *objectInfo)
   int isView =  objectInfo->isVector ?
     objectInfo->payload.vector.isView :
     objectInfo->payload.matrix.isView;
-  /* Decrement the reference counter. 
+  /* Decrement the reference counter.
      If it reaches zero, then we can delete */
   if( !decrementRefCounter(sqlConn, refCounter, metadataID) )
     return 0;
@@ -142,9 +142,9 @@ int deleteRDBObject(MYSQL * sqlConn, rdbObject *objectInfo)
 
 int deleteRDBVector(MYSQL * sqlConn, rdbVector * vectorInfo)
 {
-  /* Decrement the reference counter. 
+  /* Decrement the reference counter.
      If it reaches zero, then we can delete */
-  if( !decrementRefCounter(sqlConn, &(vectorInfo->refCounter), 
+  if( !decrementRefCounter(sqlConn, &(vectorInfo->refCounter),
 			   vectorInfo->metadataID) )
     return 0;
 
@@ -174,7 +174,7 @@ int dropVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo)
   }
 
   /* Build the sql string and drop the table */
-  int length = strlen(sqlTemplateDropVectorTable) + 
+  int length = strlen(sqlTemplateDropVectorTable) +
                strlen(vectorInfo->tableName) + 1;
   char strDropTableSQL[length];
   sprintf( strDropTableSQL, sqlTemplateDropVectorTable, vectorInfo->tableName );
@@ -217,7 +217,7 @@ int duplicateVectorTable(MYSQL * sqlConn, rdbVector *  originalVector,
   int length = strlen(sqlTemplateDublicateTable) + strlen(copyVector->tableName)+
                strlen(originalVector->tableName) + 1;
   char strDublicateTableSQL[length];
-  sprintf( strDublicateTableSQL, sqlTemplateDublicateTable, 
+  sprintf( strDublicateTableSQL, sqlTemplateDublicateTable,
 	   copyVector->tableName, originalVector->tableName );
 
   success = mysql_query(sqlConn, strDublicateTableSQL);
@@ -315,9 +315,9 @@ int setLogicalVectorSize(MYSQL * sqlConn, rdbVector * vectorInfo, int newSize)
   /* Build the sql string */
   int length = strlen(sqlTemplateSetVectorCurrentSize) + 2*MAX_INT_LENGTH + 1;
   char strUpdateSize[length];
-  sprintf( strUpdateSize, sqlTemplateSetVectorCurrentSize, 
+  sprintf( strUpdateSize, sqlTemplateSetVectorCurrentSize,
 	   newSize, vectorInfo->metadataID);
- 
+
   /* Execute the query */
   int success = mysql_query(sqlConn, strUpdateSize);
 

@@ -32,7 +32,7 @@
 int restructureMatrixFromVector(MYSQL *sqlConn, rdbMatrix *result,
                                 rdbVector *input, int nrows, int ncols, int byrow);
 
-int performMatrixMultiplication(MYSQL * sqlConn, rdbMatrix * result, 
+int performMatrixMultiplication(MYSQL * sqlConn, rdbMatrix * result,
 		                rdbMatrix * input1, rdbMatrix * input2);
 
 int solveByGuassianElimination(MYSQL *sqlConn, rdbMatrix *result, rdbMatrix *A, rdbMatrix *b);
