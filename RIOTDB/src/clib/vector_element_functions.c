@@ -16,7 +16,7 @@
 
 
 /* General functions */
-int performNumericPow(MYSQL * sqlConn, rdbVector * result, 
+int performNumericPow(MYSQL * sqlConn, rdbVector * result,
 		      rdbVector * input, double exponent)
 {
   /* Both inputs must either be integers or doubles or logic */
@@ -26,7 +26,7 @@ int performNumericPow(MYSQL * sqlConn, rdbVector * result,
     return 0;
 
   /* Build the sql string */
-  int length = strlen(sqlTemplatePowFunction) + strlen(input->tableName) + 
+  int length = strlen(sqlTemplatePowFunction) + strlen(input->tableName) +
 	       MAX_DOUBLE_LENGTH + 1;
   char* sqlString = malloc(length * sizeof(char));
   sprintf(sqlString, sqlTemplatePowFunction, exponent, input->tableName);
@@ -47,7 +47,7 @@ int performNumericPow(MYSQL * sqlConn, rdbVector * result,
   return success;
 }
 
-int performNumericSqrt(MYSQL * sqlConn, rdbVector * resultVector, 
+int performNumericSqrt(MYSQL * sqlConn, rdbVector * resultVector,
 		       rdbVector * dataVector)
 {
   return internalPerformNumericFunction(sqlConn, dataVector, resultVector, SQRT_OP);

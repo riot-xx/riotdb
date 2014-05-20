@@ -1,4 +1,4 @@
-#ifndef _SORT_VECTOR_H 
+#ifndef _SORT_VECTOR_H
 #define _SORT_VECTOR_H
 
 #include "basics.h"

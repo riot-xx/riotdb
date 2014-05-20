@@ -50,7 +50,7 @@
   setMethod("sum", signature(x="dbvector"), function(x,na.rm=FALSE){
     .Call("sum_dbvector", x, na.rm)
   })
-  
+
   setClass("dbmatrix", representation(size="numeric",type="character",tablename="character",info="raw"))
   setMethod("show", signature("dbmatrix"), show.dbmatrix)
   setMethod("dim", signature("dbmatrix"), function(x) {

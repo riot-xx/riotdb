@@ -43,7 +43,7 @@ int createNewIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo);
 
 int createNewDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo);
 
-int internalCreateNewMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int internalCreateNewMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 				 char * sqlTemplate);
 
 
@@ -63,10 +63,10 @@ int duplicateMatrixTable(MYSQL * sqlConn, rdbMatrix * orignalMatrix,
 
 
 /* Function to handle table sizes */
-int getLogicalMatrixSize(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int getLogicalMatrixSize(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			 int * numRows, int * numCols);
 
-int setLogicalMatrixSize(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int setLogicalMatrixSize(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			 int newNumRows, int newNumCols);
 
 int updateLogicalMatrixSize(MYSQL * sqlConn, rdbMatrix * matrixInfo);

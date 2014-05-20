@@ -1,11 +1,11 @@
-/**************************************************************************** 
+/****************************************************************************
 Math functions: sin,cos,tan,acos,asin,atan,exp,log,abs,sign,sqrt,floor,ceiling,
 trunc,round,signif,cosh,sinh,tanh,acosh,asinh,atanh,lgamma,gamma,gammaCody,
 digamma,trigamma,cumsum,cumprod,cummax,cummin.
 
 Author: Yi Zhang
 Date: Sep 8, 2008
-****************************************************************************/ 
+****************************************************************************/
 #include "riotdb.h"
 
 SEXP math_dbvector(SEXP x, SEXP op)
@@ -85,5 +85,5 @@ SEXP math_dbvector(SEXP x, SEXP op)
 
 	return ans;
 }
-		
+
 

@@ -32,23 +32,23 @@
 
 
 /* Functions to perform comparisons */
-int compareWithDBVector(MYSQL * sqlConn, rdbVector * resultVector, 
+int compareWithDBVector(MYSQL * sqlConn, rdbVector * resultVector,
 			rdbVector * dataVector, rdbVector * compareVector,
 			char * comparisonOp);
 
-int compareWithIntegerValues(MYSQL * sqlConn, rdbVector * resultVector, 
+int compareWithIntegerValues(MYSQL * sqlConn, rdbVector * resultVector,
 			     rdbVector * dataVector, int compareValues[],
 			     int size, char * comparisonOp);
 
-int compareWithDoubleValues(MYSQL * sqlConn, rdbVector * resultVector, 
+int compareWithDoubleValues(MYSQL * sqlConn, rdbVector * resultVector,
 			    rdbVector * dataVector, double compareValues[],
 			    int size, char * comparisonOp);
 
-int compareWithStringValues(MYSQL * sqlConn, rdbVector * resultVector, 
+int compareWithStringValues(MYSQL * sqlConn, rdbVector * resultVector,
 			    rdbVector * dataVector, char * compareValues[],
 			    int size, char * comparisonOp);
 
-int internalCompareWithValues(MYSQL * sqlConn, rdbVector * resultVector, 
+int internalCompareWithValues(MYSQL * sqlConn, rdbVector * resultVector,
 			      rdbVector * dataVector, char * strCompareSQL);
 
 

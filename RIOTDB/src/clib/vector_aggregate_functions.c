@@ -21,7 +21,7 @@ int getIntegerVectorSum(MYSQL * sqlConn, rdbVector * dataVector, int * sum)
   {
      return internalGetIntegerResult(sqlConn, sum);
   }
-  
+
   return 0;
 }
 
@@ -32,7 +32,7 @@ int getDoubleVectorSum (MYSQL * sqlConn, rdbVector * dataVector, double * sum)
   {
      return internalGetDoubleResult(sqlConn, sum);
   }
-  
+
   return 0;
 }
 
@@ -43,7 +43,7 @@ int getComplexVectorSum(MYSQL * sqlConn, rdbVector * dataVector, Rcomplex * sum)
   {
      return internalGetComplexResult(sqlConn, sum);
   }
-  
+
   return 0;
 }
 
@@ -55,7 +55,7 @@ int getIntegerVectorAvg(MYSQL * sqlConn, rdbVector * dataVector, double * avg)
   {
      return internalGetDoubleResult(sqlConn, avg);
   }
-  
+
   return 0;
 }
 
@@ -66,7 +66,7 @@ int getDoubleVectorAvg (MYSQL * sqlConn, rdbVector * dataVector, double * avg)
   {
      return internalGetDoubleResult(sqlConn, avg);
   }
-  
+
   return 0;
 }
 
@@ -76,7 +76,7 @@ int getComplexVectorAvg(MYSQL * sqlConn, rdbVector * dataVector, Rcomplex * avg)
   {
      return internalGetComplexResult(sqlConn, avg);
   }
-  
+
   return 0;
 }
 
@@ -88,7 +88,7 @@ int getIntegerVectorMax(MYSQL * sqlConn, rdbVector * dataVector, int * max)
   {
      return internalGetIntegerResult(sqlConn, max);
   }
-  
+
   return 0;
 }
 
@@ -98,7 +98,7 @@ int getDoubleVectorMax (MYSQL * sqlConn, rdbVector * dataVector, double * max)
   {
      return internalGetDoubleResult(sqlConn, max);
   }
-  
+
   return 0;
 }
 
@@ -108,7 +108,7 @@ int getStringVectorMax (MYSQL * sqlConn, rdbVector * dataVector, char ** max)
   {
      return internalGetStringResult(sqlConn, max);
   }
-  
+
   return 0;
 }
 
@@ -120,7 +120,7 @@ int getIntegerVectorMin(MYSQL * sqlConn, rdbVector * dataVector, int * min)
   {
      return internalGetIntegerResult(sqlConn, min);
   }
-  
+
   return 0;
 }
 
@@ -130,7 +130,7 @@ int getDoubleVectorMin (MYSQL * sqlConn, rdbVector * dataVector, double * min)
   {
      return internalGetDoubleResult(sqlConn, min);
   }
-  
+
   return 0;
 }
 
@@ -140,7 +140,7 @@ int getStringVectorMin (MYSQL * sqlConn, rdbVector * dataVector, char ** min)
   {
      return internalGetStringResult(sqlConn, min);
   }
-  
+
   return 0;
 }
 

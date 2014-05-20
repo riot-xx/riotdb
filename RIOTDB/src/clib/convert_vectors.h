@@ -17,22 +17,22 @@
 
 
 /* Functions for data type convertions */
-int convertNumericToComplex(MYSQL * sqlConn, rdbVector * numericVector, 
+int convertNumericToComplex(MYSQL * sqlConn, rdbVector * numericVector,
 			    rdbVector * complexVector);
 
-int convertDoubleToInteger(MYSQL * sqlConn, rdbVector * doubleVector, 
+int convertDoubleToInteger(MYSQL * sqlConn, rdbVector * doubleVector,
 			   rdbVector * integerVector);
 
-int convertIntegerToDouble(MYSQL * sqlConn, rdbVector * integerVector, 
+int convertIntegerToDouble(MYSQL * sqlConn, rdbVector * integerVector,
 			   rdbVector * doubleVector);
 
-int convertLogicToInteger(MYSQL * sqlConn, rdbVector * logicVector, 
+int convertLogicToInteger(MYSQL * sqlConn, rdbVector * logicVector,
 			  rdbVector * integerVector);
 
-int convertLogicToDouble(MYSQL * sqlConn, rdbVector * logicVector, 
+int convertLogicToDouble(MYSQL * sqlConn, rdbVector * logicVector,
 			 rdbVector * doubleVector);
 
-int internalConvertVectors(MYSQL * sqlConn, rdbVector * fromVector, 
+int internalConvertVectors(MYSQL * sqlConn, rdbVector * fromVector,
 			   rdbVector * toVector, char * sqlTemplate, int type);
 
 

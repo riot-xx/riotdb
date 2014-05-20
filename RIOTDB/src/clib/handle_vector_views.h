@@ -2,7 +2,7 @@
 #define _HANDLE_VECTOR_VIEWS_H
 
 /*****************************************************************************
- * Contains functions for handling vector views (i.e create, drop, 
+ * Contains functions for handling vector views (i.e create, drop,
  * materialize views and keep track of view references)
  *
  * Author: Herodotos Herodotou
@@ -75,7 +75,7 @@ int getVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
 
 int getVectorViewRefCount(MYSQL * sqlConn, rdbVector * vectorInfo, int * count);
 
-int updateVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector, 
+int updateVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
 			       rdbVector * newVector);
 
 int removeVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector);
@@ -104,7 +104,7 @@ int materializeComplexVectorView (MYSQL * sqlConn, rdbVector * viewVector);
 
 int materializeLogicVectorView (MYSQL * sqlConn, rdbVector * viewVector);
 
-int internalMaterializeVectorView(MYSQL * sqlConn, rdbVector * viewVector, 
+int internalMaterializeVectorView(MYSQL * sqlConn, rdbVector * viewVector,
 			          rdbVector * newVector);
 
 

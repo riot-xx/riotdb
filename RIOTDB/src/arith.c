@@ -1,8 +1,8 @@
-/**************************************************************************** 
+/****************************************************************************
 Basic arithmetic operations.
 Author: Yi Zhang
 Date: Sep 8, 2008
-****************************************************************************/ 
+****************************************************************************/
 #include "riotdb.h"
 
 /**
@@ -34,7 +34,7 @@ SEXP add_dbvectors(SEXP x, SEXP y)
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
         initRDBVector(vec);
-	
+
 	if (IS_DBCOMPLEX(x) || IS_DBCOMPLEX(y))
 		addComplexVectors(sqlconn, vec, xinfo, yinfo);
 	else
@@ -79,7 +79,7 @@ SEXP subtract_dbvectors(SEXP x, SEXP y)
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
         initRDBVector(vec);
-	
+
 	if (IS_DBCOMPLEX(x) || IS_DBCOMPLEX(y))
 		subtractComplexVectors(sqlconn, vec, xinfo, yinfo);
 	else
@@ -124,7 +124,7 @@ SEXP multiply_dbvectors(SEXP x, SEXP y)
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
         initRDBVector(vec);
-	
+
 	if (IS_DBCOMPLEX(x) || IS_DBCOMPLEX(y))
 		multiplyComplexVectors(sqlconn, vec, xinfo, yinfo);
 	else
@@ -168,7 +168,7 @@ SEXP divide_dbvectors(SEXP x, SEXP y)
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
         initRDBVector(vec);
-	
+
 	if (IS_DBCOMPLEX(x) || IS_DBCOMPLEX(y))
 		divideComplexVectors(sqlconn, vec, xinfo, yinfo);
 	else
@@ -212,7 +212,7 @@ SEXP sqrt_dbvector(SEXP x)
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
         initRDBVector(vec);
-	
+
 	if (IS_DBCOMPLEX(x) )
 		;
 	else
@@ -257,7 +257,7 @@ double exponent = asReal(e);
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
         initRDBVector(vec);
-	
+
 	performNumericPow(sqlconn, vec, xinfo, exponent);
 	mysql_close(sqlconn);
 
@@ -298,7 +298,7 @@ double y= asReal(e);
 	PROTECT(info = allocVector(RAWSXP,sizeof(rdbVector)));
 	rdbVector *vec = (rdbVector*)RAW(info);
         initRDBVector(vec);
-	
+
 	subtractDoubleFromNumericVector(sqlconn, vec, xinfo, y);
 	mysql_close(sqlconn);
 

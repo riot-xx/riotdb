@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Contains functions for deleting elements from vectors (delete all, 
+ * Contains functions for deleting elements from vectors (delete all,
  * single values, range of values or sparse values)
  *
  * Author: Herodotos Herodotou
@@ -20,7 +20,7 @@
 int deleteAllElements(MYSQL * sqlConn, rdbVector * vectorInfo)
 {
    /* Build the sql string */
-   int length = strlen(sqlTemplateDeleteAllValues) + 
+   int length = strlen(sqlTemplateDeleteAllValues) +
                 strlen(vectorInfo->tableName) + 1;
    char strDeleteSQL[length];
    sprintf( strDeleteSQL, sqlTemplateDeleteAllValues, vectorInfo->tableName);
@@ -36,14 +36,14 @@ int deleteAllElements(MYSQL * sqlConn, rdbVector * vectorInfo)
 }
 
 
-int deleteSingleElement(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int deleteSingleElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 			unsigned int index)
 {
    /* Build the sql string */
-   int length = strlen(sqlTemplateDeleteSingleValue) + 
+   int length = strlen(sqlTemplateDeleteSingleValue) +
                 strlen(vectorInfo->tableName) + MAX_INT_LENGTH + 1;
    char strDeleteSQL[length];
-   sprintf( strDeleteSQL, sqlTemplateDeleteSingleValue, 
+   sprintf( strDeleteSQL, sqlTemplateDeleteSingleValue,
 	    vectorInfo->tableName, index );
 
    /* Execute the query */
@@ -58,14 +58,14 @@ int deleteSingleElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int deleteRangeElements(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int deleteRangeElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 		        unsigned int greaterThan,  unsigned int lessThan)
 {
    /* Build the sql string */
-   int length = strlen(sqlTemplateDeleteRangeValues) + 
+   int length = strlen(sqlTemplateDeleteRangeValues) +
                 strlen(vectorInfo->tableName) + 2*MAX_INT_LENGTH + 1;
    char strDeleteSQL[length];
-   sprintf( strDeleteSQL, sqlTemplateDeleteRangeValues, 
+   sprintf( strDeleteSQL, sqlTemplateDeleteRangeValues,
 	    vectorInfo->tableName, greaterThan, lessThan);
 
    /* Execute the query */
@@ -102,15 +102,15 @@ int deleteSparseElements(MYSQL * sqlConn, rdbVector * vectorInfo,
      sprintf(temp, sqlTemplateSparseVIndexOR, indexes[i]);
      strcat(strIndexes, temp);
   }
-  
+
   sprintf(temp, sqlTemplateSparseVIndex, indexes[i]);
   strcat(strIndexes, temp);
 
   /* Build the sql string */
-  int length = strlen(sqlTemplateDeleteSparseValues) + 
+  int length = strlen(sqlTemplateDeleteSparseValues) +
                strlen(vectorInfo->tableName) + strlen(strIndexes) + 1;
   char strDeleteSQL[length];
-  sprintf( strDeleteSQL, sqlTemplateDeleteSparseValues, 
+  sprintf( strDeleteSQL, sqlTemplateDeleteSparseValues,
 	   vectorInfo->tableName, strIndexes);
   free(strIndexes);
 
@@ -120,7 +120,7 @@ int deleteSparseElements(MYSQL * sqlConn, rdbVector * vectorInfo,
     return 0;
 
   int newSize;
-  if( getLogicalVectorSize(sqlConn, vectorInfo, &newSize) && 
+  if( getLogicalVectorSize(sqlConn, vectorInfo, &newSize) &&
       newSize != vectorInfo->size )
        setLogicalVectorSize(sqlConn, vectorInfo, newSize);
 

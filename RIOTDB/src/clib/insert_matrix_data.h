@@ -2,7 +2,7 @@
 #define _INSERT_MATRIX_DATA_H
 
 /*****************************************************************************
- * Contains functions for inserting data to a matrix either explicitely 
+ * Contains functions for inserting data to a matrix either explicitely
  * or load from a file
  *
  * Author: Herodotos Herodotou
@@ -29,34 +29,34 @@ int loadIntoMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 
 
 /* Functions to insert values into matrix tables */
-int insertIntoIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int insertIntoIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			     int * values, int size, int nRows, int nCols);
 
-int insertIntoDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int insertIntoDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			     double * values, int size, int nRows, int nCols);
 
 
 /* Functions to insert sequences into matrix tables */
-int insertSeqIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
-			    int start, int end, int step, 
+int insertSeqIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
+			    int start, int end, int step,
 			    int nRows, int nCols);
 
-int insertSeqDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
-			    double start, double end, double step, 
+int insertSeqDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
+			    double start, double end, double step,
 			    int nRows, int nCols);
 
 /* ---------------------------------------------------- */
 /* Helper Functions to insert values into matrix tables */
-int insertPartIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int insertPartIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			     int * values, int size, int numElems,
 			     int startRow, int startCol, int nRows, int nCols);
 
-int insertPartDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int insertPartDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			     double * values, int size, int numElems,
 			     int startRow, int startCol, int nRows, int nCols);
 
 /* Other Helper functions */
-int internalInsertIntoMatrixTable(MYSQL * sqlConn, char * sqlTemplate, 
+int internalInsertIntoMatrixTable(MYSQL * sqlConn, char * sqlTemplate,
 				  char * tableName, char * strValues);
 
 

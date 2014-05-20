@@ -14,8 +14,8 @@
 
 /* --------- Functions to access matrix tables by element -------------- */
 
-int getIntMatrixElement(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
-		  	unsigned int row, unsigned int col, 
+int getIntMatrixElement(MYSQL * sqlConn, rdbMatrix * matrixInfo,
+		  	unsigned int row, unsigned int col,
 			int * value, char * byte)
 {
   /* Execute the query to get element */
@@ -45,8 +45,8 @@ int getIntMatrixElement(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 }
 
 
-int getDoubleMatrixElement(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
-		  	   unsigned int row, unsigned int col, 
+int getDoubleMatrixElement(MYSQL * sqlConn, rdbMatrix * matrixInfo,
+		  	   unsigned int row, unsigned int col,
 			   double * value, char * byte)
 {
   /* Execute the query to get element */
@@ -76,11 +76,11 @@ int getDoubleMatrixElement(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 }
 
 
-int execGetMatrixElementSQLCall(MYSQL * sqlConn, char* tableName, 
+int execGetMatrixElementSQLCall(MYSQL * sqlConn, char* tableName,
 			  	unsigned int row, unsigned int col)
 {
   /* Build the sql string */
-  int length = strlen(sqlTemplateGetSingleMatrixValue) + strlen(tableName) + 
+  int length = strlen(sqlTemplateGetSingleMatrixValue) + strlen(tableName) +
                2*MAX_INT_LENGTH + 1;
   char strGetElem[length];
   sprintf( strGetElem, sqlTemplateGetSingleMatrixValue, tableName, row, col );

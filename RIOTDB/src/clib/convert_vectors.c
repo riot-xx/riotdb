@@ -16,48 +16,48 @@
 
 /* ------------- Functions for data type convertions ------------------ */
 
-int convertNumericToComplex(MYSQL * sqlConn, rdbVector * numericVector, 
+int convertNumericToComplex(MYSQL * sqlConn, rdbVector * numericVector,
 			    rdbVector * complexVector)
 {
-  return internalConvertVectors(sqlConn, numericVector, complexVector, 
+  return internalConvertVectors(sqlConn, numericVector, complexVector,
 				sqlTemplateNumericToComplex, SXP_TYPE_COMPLEX);
 }
 
 
-int convertDoubleToInteger(MYSQL * sqlConn, rdbVector * doubleVector, 
+int convertDoubleToInteger(MYSQL * sqlConn, rdbVector * doubleVector,
 			   rdbVector * integerVector)
 {
-  return internalConvertVectors(sqlConn, doubleVector, integerVector, 
+  return internalConvertVectors(sqlConn, doubleVector, integerVector,
 				 sqlTemplateDoubleToInteger, SXP_TYPE_INTEGER);
 }
 
 
-int convertIntegerToDouble(MYSQL * sqlConn, rdbVector * integerVector, 
+int convertIntegerToDouble(MYSQL * sqlConn, rdbVector * integerVector,
 			   rdbVector * doubleVector)
 {
-  return internalConvertVectors(sqlConn, integerVector, doubleVector, 
+  return internalConvertVectors(sqlConn, integerVector, doubleVector,
 				sqlTemplateGenericConvert, SXP_TYPE_DOUBLE);
 }
 
 
-int convertLogicToInteger(MYSQL * sqlConn, rdbVector * logicVector, 
+int convertLogicToInteger(MYSQL * sqlConn, rdbVector * logicVector,
 			  rdbVector * integerVector)
 {
-  return internalConvertVectors(sqlConn, logicVector, integerVector, 
+  return internalConvertVectors(sqlConn, logicVector, integerVector,
 				 sqlTemplateGenericConvert, SXP_TYPE_INTEGER);
 }
 
 
-int convertLogicToDouble(MYSQL * sqlConn, rdbVector * logicVector, 
+int convertLogicToDouble(MYSQL * sqlConn, rdbVector * logicVector,
 			 rdbVector * doubleVector)
 {
-  return internalConvertVectors(sqlConn, logicVector, doubleVector, 
+  return internalConvertVectors(sqlConn, logicVector, doubleVector,
 				sqlTemplateGenericConvert, SXP_TYPE_DOUBLE);
 }
 
 /* ---------- Internal Functions for data type convertions ---------------- */
 
-int internalConvertVectors(MYSQL * sqlConn, rdbVector * fromVector, 
+int internalConvertVectors(MYSQL * sqlConn, rdbVector * fromVector,
 			   rdbVector * toVector, char * sqlTemplate, int type)
 {
   /* Build the sql string */

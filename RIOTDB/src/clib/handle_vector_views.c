@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Contains functions for handling vector views (i.e create, drop, 
+ * Contains functions for handling vector views (i.e create, drop,
  * materialize views and keep track of view references)
  *
  * Author: Herodotos Herodotou
@@ -30,7 +30,7 @@ int createNewDoubleVectorView(MYSQL * sqlConn, rdbVector * viewVector,
 			      char sqlString[])
 {
   viewVector->sxp_type = SXP_TYPE_DOUBLE;
-  return internalCreateNewVectorView(sqlConn, viewVector, 
+  return internalCreateNewVectorView(sqlConn, viewVector,
 				     sqlTemplateCreateVectorView, sqlString);
 }
 
@@ -39,7 +39,7 @@ int createNewStringVectorView(MYSQL * sqlConn, rdbVector * viewVector,
 			      char sqlString[])
 {
   viewVector->sxp_type = SXP_TYPE_STRING;
-  return internalCreateNewVectorView(sqlConn, viewVector, 
+  return internalCreateNewVectorView(sqlConn, viewVector,
 				     sqlTemplateCreateVectorView, sqlString);
 }
 
@@ -62,7 +62,7 @@ int createNewLogicVectorView(MYSQL * sqlConn, rdbVector * viewVector,
 }
 
 
-int internalCreateNewVectorView(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int internalCreateNewVectorView(MYSQL * sqlConn, rdbVector * vectorInfo,
 				char sqlTemplate[], char sqlString[])
 {
   /* Build the name of the new view */
@@ -70,7 +70,7 @@ int internalCreateNewVectorView(MYSQL * sqlConn, rdbVector * vectorInfo,
     return 0;
 
   /* Build the sql string */
-  int length = strlen(sqlTemplate) + strlen(vectorInfo->tableName) + 
+  int length = strlen(sqlTemplate) + strlen(vectorInfo->tableName) +
                strlen(sqlString) + 1;
   char strCreateViewSQL[length];
   sprintf( strCreateViewSQL, sqlTemplate, vectorInfo->tableName, sqlString );
@@ -82,7 +82,7 @@ int internalCreateNewVectorView(MYSQL * sqlConn, rdbVector * vectorInfo,
 
   /* Insert info into Metadata table */
   success = insertVectorMetadataInfo(sqlConn, vectorInfo);
- 
+
   return success;
 }
 
@@ -174,7 +174,7 @@ int getVectorViewRefCount(MYSQL * sqlConn, rdbVector * vectorInfo, int * count)
   /* Build the sql string and execute the query */
   int length = strlen(sqlTemplateGetViewRefCount) + 2*MAX_INT_LENGTH + 1;
   char strGetRefsSQL[length];
-  sprintf(strGetRefsSQL, sqlTemplateGetViewRefCount, 
+  sprintf(strGetRefsSQL, sqlTemplateGetViewRefCount,
 	  vectorInfo->metadataID, vectorInfo->metadataID);
 
   int success = mysql_query(sqlConn, strGetRefsSQL);
@@ -200,13 +200,13 @@ int getVectorViewRefCount(MYSQL * sqlConn, rdbVector * vectorInfo, int * count)
 }
 
 
-int updateVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector, 
+int updateVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector,
 			       rdbVector * newVector)
 {
   /* Build the sql strings */
   int length = strlen(sqlTemplateUpdateViewReferences1) + 2*MAX_INT_LENGTH + 1;
   char strUpdateRefs1SQL[length];
-  sprintf(strUpdateRefs1SQL, sqlTemplateUpdateViewReferences1, 
+  sprintf(strUpdateRefs1SQL, sqlTemplateUpdateViewReferences1,
 	  newVector->metadataID, viewVector->metadataID);
 
   length = strlen(sqlTemplateUpdateViewReferences2) + 2*MAX_INT_LENGTH + 1;
@@ -227,7 +227,7 @@ int removeVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector)
   /* Get the references */
   rdbObject *leftInput = newRDBObject();
   rdbObject *rightInput = newRDBObject();
-  int success = getVectorViewReferences(sqlConn, viewVector, 
+  int success = getVectorViewReferences(sqlConn, viewVector,
                                         leftInput, rightInput);
   if( success == 0 )
     return 0;
@@ -241,7 +241,7 @@ int removeVectorViewReferences(MYSQL * sqlConn, rdbVector * viewVector)
   success = mysql_query(sqlConn, strRemoveRefsSQL);
   if( success != 0 )
     return 0;
-  
+
   /* Reccursively delete the references */
   success = deleteRDBObject(sqlConn, leftInput);
 
@@ -270,7 +270,7 @@ int dropVectorView(MYSQL * sqlConn, rdbVector * vectorInfo)
   }
 
   /* Build the sql string and drop the view */
-  int length = strlen(sqlTemplateDropVectorView) + 
+  int length = strlen(sqlTemplateDropVectorView) +
                strlen(vectorInfo->tableName) + 1;
   char strDropViewSQL[length];
   sprintf( strDropViewSQL, sqlTemplateDropVectorView, vectorInfo->tableName );
@@ -336,7 +336,7 @@ int ensureVectorMaterialization(MYSQL * sqlConn, rdbVector * vectorInfo)
   {
      rdbVector *viewVector = newRDBVector();
      int loadSuccess = loadRDBVector(sqlConn, viewVector, viewIDs[i]);
-      
+
      if( loadSuccess )
      {
         success = materializeVectorView(sqlConn, viewVector);
@@ -376,7 +376,7 @@ int materializeIntegerVectorView(MYSQL * sqlConn, rdbVector * viewVector)
   /* Create the new table */
   rdbVector * newVector = newRDBVector();
   newVector->isView = 0;
-  if( !createNewIntVectorTable(sqlConn, newVector) ) 
+  if( !createNewIntVectorTable(sqlConn, newVector) )
      return 0;
 
   int success = internalMaterializeVectorView(sqlConn, viewVector, newVector);
@@ -392,7 +392,7 @@ int materializeDoubleVectorView(MYSQL * sqlConn, rdbVector * viewVector)
   /* Create the new table */
   rdbVector * newVector = newRDBVector();
   newVector->isView = 0;
-  if( !createNewDoubleVectorTable(sqlConn, newVector) ) 
+  if( !createNewDoubleVectorTable(sqlConn, newVector) )
      return 0;
 
   int success = internalMaterializeVectorView(sqlConn, viewVector, newVector);
@@ -408,7 +408,7 @@ int materializeStringVectorView(MYSQL * sqlConn, rdbVector * viewVector)
   /* Create the new table */
   rdbVector * newVector = newRDBVector();
   newVector->isView = 0;
-  if( !createNewStringVectorTable(sqlConn, newVector) ) 
+  if( !createNewStringVectorTable(sqlConn, newVector) )
      return 0;
 
   int success = internalMaterializeVectorView(sqlConn, viewVector, newVector);
@@ -424,7 +424,7 @@ int materializeComplexVectorView(MYSQL * sqlConn, rdbVector * viewVector)
   /* Create the new table */
   rdbVector * newVector = newRDBVector();
   newVector->isView = 0;
-  if( !createNewComplexVectorTable(sqlConn, newVector) ) 
+  if( !createNewComplexVectorTable(sqlConn, newVector) )
      return 0;
 
   int success = internalMaterializeVectorView(sqlConn, viewVector, newVector);
@@ -440,7 +440,7 @@ int materializeLogicVectorView(MYSQL * sqlConn, rdbVector * viewVector)
   /* Create the new table */
   rdbVector * newVector = newRDBVector();
   newVector->isView = 0;
-  if( !createNewLogicVectorTable(sqlConn, newVector) ) 
+  if( !createNewLogicVectorTable(sqlConn, newVector) )
      return 0;
 
   int success = internalMaterializeVectorView(sqlConn, viewVector, newVector);
@@ -451,15 +451,15 @@ int materializeLogicVectorView(MYSQL * sqlConn, rdbVector * viewVector)
 }
 
 
-int internalMaterializeVectorView(MYSQL * sqlConn, rdbVector * viewVector, 
+int internalMaterializeVectorView(MYSQL * sqlConn, rdbVector * viewVector,
 			    rdbVector * newVector)
 {
   /* Build the sql string and add the data from the view */
-  int length = strlen(sqlTemplateMaterializeVectorView) + 
+  int length = strlen(sqlTemplateMaterializeVectorView) +
 	       strlen(newVector->tableName) +
                strlen(viewVector->tableName) + 1;
   char strMaterializeViewSQL[length];
-  sprintf( strMaterializeViewSQL, sqlTemplateMaterializeVectorView, 
+  sprintf( strMaterializeViewSQL, sqlTemplateMaterializeVectorView,
 	   newVector->tableName, viewVector->tableName );
 
   int success = mysql_query(sqlConn, strMaterializeViewSQL);

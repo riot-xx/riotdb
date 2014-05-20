@@ -75,7 +75,7 @@ int createNewStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo);
 
 int createNewLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo);
 
-int internalCreateNewVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int internalCreateNewVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				 char * sqlTemplate);
 
 

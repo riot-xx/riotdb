@@ -20,7 +20,7 @@
 int createNewIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo)
 {
   matrixInfo->sxp_type = SXP_TYPE_INTEGER;
-  return internalCreateNewMatrixTable(sqlConn, matrixInfo, 
+  return internalCreateNewMatrixTable(sqlConn, matrixInfo,
 				      sqlTemplateCreateIntMatrix);
 }
 
@@ -28,12 +28,12 @@ int createNewIntMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo)
 int createNewDoubleMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo)
 {
   matrixInfo->sxp_type = SXP_TYPE_DOUBLE;
-  return internalCreateNewMatrixTable(sqlConn, matrixInfo, 
+  return internalCreateNewMatrixTable(sqlConn, matrixInfo,
 				      sqlTemplateCreateDoubleMatrix);
 }
 
 
-int internalCreateNewMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo, 
+int internalCreateNewMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 				 char * sqlTemplate)
 {
   /* Build the name of the new table */
@@ -80,9 +80,9 @@ int buildUniqueMatrixTableName(MYSQL * sqlConn, char ** newTableName)
 
 int deleteRDBMatrix(MYSQL * sqlConn, rdbMatrix * matrixInfo)
 {
-  /* Decrement the reference counter. 
+  /* Decrement the reference counter.
      If it reaches zero, then we can delete */
-  if( !decrementRefCounter(sqlConn, &(matrixInfo->refCounter), 
+  if( !decrementRefCounter(sqlConn, &(matrixInfo->refCounter),
 			   matrixInfo->metadataID) )
     return 0;
 
@@ -112,7 +112,7 @@ int dropMatrixTable(MYSQL * sqlConn, rdbMatrix * matrixInfo)
   }
 
   /* Build the sql string and drop the table */
-  int length = strlen(sqlTemplateDropMatrixTable) + 
+  int length = strlen(sqlTemplateDropMatrixTable) +
                strlen(matrixInfo->tableName) + 1;
   char strDropTableSQL[length];
   sprintf( strDropTableSQL, sqlTemplateDropMatrixTable, matrixInfo->tableName );
@@ -149,7 +149,7 @@ int duplicateMatrixTable(MYSQL * sqlConn, rdbMatrix *  originalMatrix,
   int length = strlen(sqlTemplateDublicateMatrixTable) + strlen(copyMatrix->tableName)+
                strlen(originalMatrix->tableName) + 1;
   char strDublicateTableSQL[length];
-  sprintf( strDublicateTableSQL, sqlTemplateDublicateMatrixTable, 
+  sprintf( strDublicateTableSQL, sqlTemplateDublicateMatrixTable,
 	   copyMatrix->tableName, originalMatrix->tableName );
 
   success = mysql_query(sqlConn, strDublicateTableSQL);
@@ -163,7 +163,7 @@ int getLogicalMatrixSize(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 			 int * numRows, int * numCols)
 {
   /* Build the sql string and execute the query */
-  int length = strlen(sqlTemplateGetLogicalMatrixSize) + 
+  int length = strlen(sqlTemplateGetLogicalMatrixSize) +
 	       strlen(matrixInfo->tableName) + 1;
   char strGetSizeSQL[length];
   sprintf( strGetSizeSQL, sqlTemplateGetLogicalMatrixSize,
@@ -205,9 +205,9 @@ int setLogicalMatrixSize(MYSQL * sqlConn, rdbMatrix * matrixInfo,
   char strUpdateSize[length];
   char strSize[2*MAX_INT_LENGTH + 2];
   sprintf( strSize, "%d,%d", newNumRows, newNumCols );
-  sprintf( strUpdateSize, sqlTemplateSetCurrentMatrixSize, 
+  sprintf( strUpdateSize, sqlTemplateSetCurrentMatrixSize,
 	   strSize, matrixInfo->metadataID);
- 
+
   /* Execute the query */
   int success = mysql_query(sqlConn, strUpdateSize);
 
@@ -222,11 +222,11 @@ int setLogicalMatrixSize(MYSQL * sqlConn, rdbMatrix * matrixInfo,
 int updateLogicalMatrixSize(MYSQL * sqlConn, rdbMatrix * matrixInfo)
 {
    int newNumRows, newNumCols;
-   int success = getLogicalMatrixSize(sqlConn, matrixInfo, 
+   int success = getLogicalMatrixSize(sqlConn, matrixInfo,
 				      &newNumRows, &newNumCols);
 
    if( success )
-	success = setLogicalMatrixSize(sqlConn, matrixInfo, 
+	success = setLogicalMatrixSize(sqlConn, matrixInfo,
 				       newNumRows, newNumCols);
 
    return success;

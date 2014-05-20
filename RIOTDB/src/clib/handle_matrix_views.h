@@ -2,7 +2,7 @@
 #define _HANDLE_MATRIX_VIEWS_H
 
 /*****************************************************************************
- * Contains functions for handling matrix views (i.e create, drop, 
+ * Contains functions for handling matrix views (i.e create, drop,
  * materialize views and keep track of view references)
  *
  * Author: Herodotos Herodotou
@@ -43,7 +43,7 @@ int getMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix,
 
 int getMatrixViewRefCount(MYSQL * sqlConn, rdbMatrix * matrixInfo, int * count);
 
-int updateMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix, 
+int updateMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix,
 			       rdbMatrix * newMatrix);
 
 int removeMatrixViewReferences(MYSQL * sqlConn, rdbMatrix * viewMatrix);
@@ -66,7 +66,7 @@ int materializeIntegerMatrixView (MYSQL * sqlConn, rdbMatrix * viewMatrix);
 
 int materializeDoubleMatrixView  (MYSQL * sqlConn, rdbMatrix * viewMatrix);
 
-int internalMaterializeMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix, 
+int internalMaterializeMatrixView(MYSQL * sqlConn, rdbMatrix * viewMatrix,
 			          rdbMatrix * newMatrix);
 
 

@@ -1,8 +1,8 @@
-/**************************************************************************** 
+/****************************************************************************
 Functions for creating dbmatrices.
 Author: Yi Zhang
 Date: Sep 8, 2008
-****************************************************************************/ 
+****************************************************************************/
 #include "riotdb.h"
 
 SEXP dbmatrix_from_dbvector(SEXP from, SEXP nrows, SEXP ncols, SEXP byrow) {
@@ -71,7 +71,7 @@ SEXP dbmatrix_from_seq(SEXP rows, SEXP cols, SEXP begin, SEXP end, SEXP by)
 	}
 	else
 		rby = asReal(by);
-	
+
 	nRows = asInteger(rows);
 	nCols = asInteger(cols);
 
@@ -109,7 +109,7 @@ SEXP dbmatrix_from_seq(SEXP rows, SEXP cols, SEXP begin, SEXP end, SEXP by)
 			error("cannot insert into double table: %s\n", mysql_error(sqlconn));
 			return info;
 		}
-	}	
+	}
 
 	mysql_close(sqlconn);
 
@@ -118,7 +118,7 @@ SEXP dbmatrix_from_seq(SEXP rows, SEXP cols, SEXP begin, SEXP end, SEXP by)
 	R_do_slot_assign(ret, install("tablename"), tablename);
 	R_do_slot_assign(ret, install("info"), info);
 
-	
+
 	vec->sxp_spare = 0;
 	/* register finalizer */
 	SEXP rptr;
@@ -127,7 +127,7 @@ SEXP dbmatrix_from_seq(SEXP rows, SEXP cols, SEXP begin, SEXP end, SEXP by)
 	PROTECT(rptr = R_MakeExternalPtr(ptr, R_NilValue, R_NilValue));
 	R_do_slot_assign(ret, install("ext"), rptr);
 	R_RegisterCFinalizerEx(rptr, rdbMatrixFinalizer, TRUE);
-	
+
 	UNPROTECT(4);
         free(vec->tableName);
 	return ret;

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Contains functions for inserting data to a vector either explicitely 
+ * Contains functions for inserting data to a vector either explicitely
  * or load from a file
  *
  * Author: Herodotos Herodotou
@@ -37,7 +37,7 @@ int internalLoadIntoAnyVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				   char * sqlTemplate, char * filename)
 {
   /* Build the sql string */
-  int length = strlen(sqlTemplate) + strlen(vectorInfo->tableName) + 
+  int length = strlen(sqlTemplate) + strlen(vectorInfo->tableName) +
                strlen(filename) + 1;
   char strLoadVector[length];
   sprintf( strLoadVector, sqlTemplate, filename, vectorInfo->tableName );
@@ -60,7 +60,7 @@ int internalLoadIntoAnyVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
 /* ------- Functions to insert values into vector tables ----------- */
 
-int insertIntoIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertIntoIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			     int * values, int size )
 {
   /* Some error checking */
@@ -92,7 +92,7 @@ int insertIntoIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int insertIntoDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertIntoDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				double * values, int size )
 {
   /* Some error checking */
@@ -107,7 +107,7 @@ int insertIntoDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
   {
     left = iter * MAX_NUM_DOUBLES;
     right = left + MAX_NUM_DOUBLES;
-    success *= insertPartDoubleVectorTable(sqlConn, vectorInfo, 
+    success *= insertPartDoubleVectorTable(sqlConn, vectorInfo,
 					   values, left, right);
     remain -= MAX_NUM_DOUBLES;
     iter++;
@@ -115,7 +115,7 @@ int insertIntoDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
   left = iter * MAX_NUM_DOUBLES;
   right = left + remain;
-  success *= insertPartDoubleVectorTable(sqlConn, vectorInfo, 
+  success *= insertPartDoubleVectorTable(sqlConn, vectorInfo,
 					 values, left, right);
 
   /* Update the size */
@@ -126,7 +126,7 @@ int insertIntoDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int insertIntoStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertIntoStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				char ** values, int size )
 {
   /* Some error checking */
@@ -141,7 +141,7 @@ int insertIntoStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
   {
     left = iter * MAX_NUM_STRINGS;
     right = left + MAX_NUM_STRINGS;
-    success *= insertPartStringVectorTable(sqlConn, vectorInfo, 
+    success *= insertPartStringVectorTable(sqlConn, vectorInfo,
 					   values, left, right);
     remain -= MAX_NUM_STRINGS;
     iter++;
@@ -160,7 +160,7 @@ int insertIntoStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int insertIntoComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertIntoComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				 double * realValues, int numReals,
 				 double *imagValues, int numImags,
 				 int desiredSize)
@@ -177,7 +177,7 @@ int insertIntoComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
   {
     left = iter * MAX_NUM_COMPLEX;
     right = left + MAX_NUM_COMPLEX;
-    success *= insertPartComplexVectorTable(sqlConn, vectorInfo, 
+    success *= insertPartComplexVectorTable(sqlConn, vectorInfo,
 					    realValues, numReals,
 					    imagValues, numImags,
 					    left, right);
@@ -187,7 +187,7 @@ int insertIntoComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
   left = iter * MAX_NUM_COMPLEX;
   right = left + remain;
-  success *= insertPartComplexVectorTable(sqlConn, vectorInfo, 
+  success *= insertPartComplexVectorTable(sqlConn, vectorInfo,
 					  realValues, numReals,
 					  imagValues, numImags,
 					  left, right);
@@ -200,7 +200,7 @@ int insertIntoComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int insertIntoLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertIntoLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			       int * values, int size )
 {
   /* Some error checking */
@@ -234,7 +234,7 @@ int insertIntoLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
 
 /* ------- Functions to insert sequences into vector tables ------- */
-int insertSeqIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertSeqIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			    int start, int end, int step)
 {
   if( step == 0 || (start < end && step < 0) || (start > end && step > 0) )
@@ -265,7 +265,7 @@ int insertSeqIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
        current += step;
        counter++;
     }
-  
+
     sprintf(strTemp, "(%d)", current);
     strcat(strValues, strTemp);
     current += step;
@@ -286,7 +286,7 @@ int insertSeqIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int insertSeqDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertSeqDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			       double start, double end, double step)
 {
   if( step == 0 || (start < end && step < 0) || (start > end && step > 0) )
@@ -318,7 +318,7 @@ int insertSeqDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
        current += step;
        counter++;
     }
-  
+
     sprintf(strTemp, "(%lf)", current);
     strcat(strValues, strTemp);
     current += step;
@@ -339,7 +339,7 @@ int insertSeqDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int insertSeqLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertSeqLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			      int value, int repeats)
 {
   /* Initialize necessary strings */
@@ -364,7 +364,7 @@ int insertSeqLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
        innerCounter++;
        remaining--;
     }
-  
+
     sprintf(strTemp, "(%c)", ch);
     strcat(strValues, strTemp);
     remaining--;
@@ -387,7 +387,7 @@ int insertSeqLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
 /* ----------------------------------------------------------------- */
 /* ----- Helper Functions to insert values into vector tables ------ */
-int insertPartIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertPartIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			     int * values, int left, int right)
 {
   /* Initialize necessary strings */
@@ -403,7 +403,7 @@ int insertPartIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
      sprintf(value, "(%d),", values[i]);
      strcat(strValues, value);
   }
-  
+
   sprintf(value, "(%d)", values[i]);
   strcat(strValues, value);
 
@@ -417,7 +417,7 @@ int insertPartIntVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int insertPartDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertPartDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				double * values, int left, int right)
 {
   /* Initialize necessary strings */
@@ -433,7 +433,7 @@ int insertPartDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
      sprintf(value, "(%lf),", values[i]);
      strcat(strValues, value);
   }
-  
+
   sprintf(value, "(%lf)", values[i]);
   strcat(strValues, value);
 
@@ -447,7 +447,7 @@ int insertPartDoubleVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int insertPartStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertPartStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				char ** values, int left, int right)
 {
 
@@ -461,7 +461,7 @@ int insertPartStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
      bufSize = 2 * strlen(values[iVal]) + 1;
      encodedValues[i] = (char*) malloc( bufSize * sizeof(char) );
 
-     totalSize += 5 + mysql_real_escape_string(sqlConn, encodedValues[i], 
+     totalSize += 5 + mysql_real_escape_string(sqlConn, encodedValues[i],
 				     values[iVal], strlen(values[iVal]));
   }
 
@@ -477,7 +477,7 @@ int insertPartStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
      free(value);
   }
 
-  char * value = (char *)malloc( (6+strlen(encodedValues[i]))*sizeof(char) );  
+  char * value = (char *)malloc( (6+strlen(encodedValues[i]))*sizeof(char) );
   sprintf(value, "('%s')", encodedValues[i]);
   strcat(strValues, value);
   free(value);
@@ -498,7 +498,7 @@ int insertPartStringVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int insertPartComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertPartComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 				 double * realValues, int numReals,
 				 double *imagValues, int numImags,
 				 int left, int right)
@@ -516,7 +516,7 @@ int insertPartComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
      sprintf(value, "(%lf,%lf),",realValues[i%numReals],imagValues[i%numImags]);
      strcat(strValues, value);
   }
-  
+
   sprintf(value, "(%lf,%lf)", realValues[i%numReals], imagValues[i%numImags]);
   strcat(strValues, value);
 
@@ -530,7 +530,7 @@ int insertPartComplexVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int insertPartLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int insertPartLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 			       int * values, int left, int right)
 {
   /* Initialize necessary strings */
@@ -546,7 +546,7 @@ int insertPartLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
      sprintf(value, "(%c),", (values[i] == 0) ? '0' : '1');
      strcat(strValues, value);
   }
-  
+
   sprintf(value, "(%c)", (values[i] == 0) ? '0' : '1');
   strcat(strValues, value);
 
@@ -562,7 +562,7 @@ int insertPartLogicVectorTable(MYSQL * sqlConn, rdbVector * vectorInfo,
 
 /* -------------------- Other Helper functions ---------------------- */
 
-int insertIntoVectorTable(MYSQL * sqlConn, char * sqlTemplate, 
+int insertIntoVectorTable(MYSQL * sqlConn, char * sqlTemplate,
 			  char * tableName, char * strValues)
 {
   /* Build the sql string */

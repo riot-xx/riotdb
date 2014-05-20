@@ -72,58 +72,58 @@
 
 
 /* Functions to execute binary operations on ints and doubles */
-int addNumericVectors(MYSQL * sqlConn, rdbVector * result, 
+int addNumericVectors(MYSQL * sqlConn, rdbVector * result,
 		      rdbVector * input1, rdbVector * input2);
 
-int subtractNumericVectors(MYSQL * sqlConn, rdbVector * result, 
+int subtractNumericVectors(MYSQL * sqlConn, rdbVector * result,
 			   rdbVector * input1, rdbVector * input2);
 
-int multiplyNumericVectors(MYSQL * sqlConn, rdbVector * result, 
+int multiplyNumericVectors(MYSQL * sqlConn, rdbVector * result,
 			   rdbVector * input1, rdbVector * input2);
 
-int divideNumericVectors(MYSQL * sqlConn, rdbVector * result, 
+int divideNumericVectors(MYSQL * sqlConn, rdbVector * result,
 			 rdbVector * input1, rdbVector * input2);
 
-int modNumericVectors(MYSQL * sqlConn, rdbVector * result, 
+int modNumericVectors(MYSQL * sqlConn, rdbVector * result,
 		      rdbVector * input1, rdbVector * input2);
 
 
 /* Helper Functions with binary operations on ints and doubles */
-int internalHandleNumericBinOp(MYSQL * sqlConn, rdbVector * result, 
+int internalHandleNumericBinOp(MYSQL * sqlConn, rdbVector * result,
 			       rdbVector * input1, rdbVector * input2,
 			       char * sign, int forceDouble);
 
-void buildNumericBinaryOpsSQL(rdbVector * input1, rdbVector * input2, 
+void buildNumericBinaryOpsSQL(rdbVector * input1, rdbVector * input2,
 			      char * sign, char ** sqlStr);
 
 
 /* Functions to execute binary operations on complex */
-int addComplexVectors(MYSQL * sqlConn, rdbVector * result, 
+int addComplexVectors(MYSQL * sqlConn, rdbVector * result,
 		      rdbVector * input1, rdbVector * input2);
 
-int subtractComplexVectors(MYSQL * sqlConn, rdbVector * result, 
+int subtractComplexVectors(MYSQL * sqlConn, rdbVector * result,
 			   rdbVector * input1, rdbVector * input2);
 
-int multiplyComplexVectors(MYSQL * sqlConn, rdbVector * result, 
+int multiplyComplexVectors(MYSQL * sqlConn, rdbVector * result,
 			   rdbVector * input1, rdbVector * input2);
 
-int divideComplexVectors(MYSQL * sqlConn, rdbVector * result, 
+int divideComplexVectors(MYSQL * sqlConn, rdbVector * result,
 			 rdbVector * input1, rdbVector * input2);
 
 
 /* Helper Functions with binary operations on complex */
-int internalHandleComplexBinOp(MYSQL * sqlConn, rdbVector * result, 
+int internalHandleComplexBinOp(MYSQL * sqlConn, rdbVector * result,
 			       rdbVector * input1, rdbVector * input2, int op);
 
-void buildComplexAddSubSQL(rdbVector * input1, rdbVector * input2, 
+void buildComplexAddSubSQL(rdbVector * input1, rdbVector * input2,
 			   char * sign, char ** sqlStr);
 
-void buildComplexMultDivSQL(rdbVector * input1, rdbVector * input2, 
-			    char * sqlTemplateEQ, char * sqlTemplateNE, 
+void buildComplexMultDivSQL(rdbVector * input1, rdbVector * input2,
+			    char * sqlTemplateEQ, char * sqlTemplateNE,
 			    char ** sqlStr);
 
 /* Other functions */
-int subtractDoubleFromNumericVector(MYSQL * sqlConn, rdbVector * result, 
+int subtractDoubleFromNumericVector(MYSQL * sqlConn, rdbVector * result,
 				    rdbVector *input1, double y);
 
 

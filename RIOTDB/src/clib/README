@@ -24,16 +24,16 @@ Library files:
     CContains functions for performing data type conversions for vectors.
 
 - delete_vector_data.c/h
-    Contains functions for deleting elements from vectors (delete all, 
+    Contains functions for deleting elements from vectors (delete all,
     single values, range of values or sparse values).
 
 - get_matrix_data.c/h
-    Contains functions for accessing elements in vectors (get all, single 
+    Contains functions for accessing elements in vectors (get all, single
     values).
 
 - get_vector_data.c/h
-    Contains functions for accessing elements in vectors (get all, single 
-    values, range of values, sparse values, with other dbvectors as indexes 
+    Contains functions for accessing elements in vectors (get all, single
+    values, range of values, sparse values, with other dbvectors as indexes
     or with logic dbvectors).
 
 - handle_matrix_tables.c/h
@@ -41,7 +41,7 @@ Library files:
     check for N/A).
 
 - handle_matrix_views.c/h
-    Contains functions for handling matrix views (i.e create, drop, 
+    Contains functions for handling matrix views (i.e create, drop,
     materialize views and keep track of view references)
 
 - handle_metadata.c/h
@@ -52,22 +52,22 @@ Library files:
     check for N/A).
 
 - handle_vector_views.c/h
-    Contains functions for handling vector views (i.e create, drop, 
+    Contains functions for handling vector views (i.e create, drop,
     materialize views and keep track of view references)
 
 - insert_matrix_data.c/h
-    Contains functions for inserting data to an EMPTY matrix either explicitely 
+    Contains functions for inserting data to an EMPTY matrix either explicitely
     or load from a file
 
 - insert_vector_data.c/h
-    Contains functions for inserting data to a vector either explicitely 
+    Contains functions for inserting data to a vector either explicitely
     or load from a file
 
 - matrix_function.c/h
     Contains functions for matrices (multiplication)
 
 - set_vector_data.c/h
-    Contains functions for updating elements in an existing vector (setting a 
+    Contains functions for updating elements in an existing vector (setting a
     single value, range of values, sparce values, with dbvectors containing
     indexes and logic vectors).
 

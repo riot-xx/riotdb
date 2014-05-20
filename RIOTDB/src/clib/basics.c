@@ -5,13 +5,13 @@
  *
  * Author: Herodotos Herodotou
  * Date:   Sep 17, 2008
- * 
+ *
  * Revision 1 :
  * By Yi Zhang
  * Date:   Jan 4, 2009
- * The sxp_spare field is used for reference counting, and should be 
+ * The sxp_spare field is used for reference counting, and should be
  * initialized to 0.
- * 
+ *
  ****************************************************************************/
 
 #include <stdio.h>
@@ -26,7 +26,7 @@ int connectToLocalDB(MYSQL ** sqlConn)
 {
   /* Connect to local db */
   *sqlConn = mysql_init(NULL);
-  *sqlConn = mysql_real_connect(*sqlConn, DB_SERVER, DB_USERNAME, DB_PASSWORD, 
+  *sqlConn = mysql_real_connect(*sqlConn, DB_SERVER, DB_USERNAME, DB_PASSWORD,
 		DB_NAME, DB_PORT, NULL, 0/*CLIENT_MULTI_STATEMENTS*/);
 
   if( sqlConn == NULL || *sqlConn == NULL )
@@ -236,7 +236,7 @@ void clearRDBVector(rdbVector ** vectorInfo)
 }
 
 
-int loadAllRDBVectors(MYSQL * sqlConn, rdbVector *** arrayVectorInfoObjects, 
+int loadAllRDBVectors(MYSQL * sqlConn, rdbVector *** arrayVectorInfoObjects,
 		      unsigned long int * numObjects)
 {
   /* Execute the query */
@@ -258,7 +258,7 @@ int loadAllRDBVectors(MYSQL * sqlConn, rdbVector *** arrayVectorInfoObjects,
   if( (*numObjects) != 0 )
   {
     /* Create all the vectorInfo objects */
-    *arrayVectorInfoObjects = (rdbVector **)malloc( 
+    *arrayVectorInfoObjects = (rdbVector **)malloc(
 				(*numObjects) * sizeof(rdbVector *) );
 
     sqlRow = mysql_fetch_row(sqlRes);
@@ -381,7 +381,7 @@ void clearRDBMatrix(rdbMatrix ** matrixInfo)
 }
 
 
-int loadAllRDBMatrices(MYSQL * sqlConn, rdbMatrix *** arrayMatrixInfoObjects, 
+int loadAllRDBMatrices(MYSQL * sqlConn, rdbMatrix *** arrayMatrixInfoObjects,
 		       unsigned long int * numObjects)
 {
   /* Execute the query */
@@ -403,7 +403,7 @@ int loadAllRDBMatrices(MYSQL * sqlConn, rdbMatrix *** arrayMatrixInfoObjects,
   if( (*numObjects) != 0 )
   {
     /* Create all the matrixInfo objects */
-    *arrayMatrixInfoObjects = (rdbMatrix **)malloc( 
+    *arrayMatrixInfoObjects = (rdbMatrix **)malloc(
 				(*numObjects) * sizeof(rdbMatrix *) );
 
     sqlRow = mysql_fetch_row(sqlRes);

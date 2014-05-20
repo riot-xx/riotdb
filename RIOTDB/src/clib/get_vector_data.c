@@ -1,6 +1,6 @@
 /*****************************************************************************
- * Contains functions for accessing elements in vectors (get all, single 
- * values, range of values, sparse values, with other dbvectors as indexes 
+ * Contains functions for accessing elements in vectors (get all, single
+ * values, range of values, sparse values, with other dbvectors as indexes
  * or with logic dbvectors)
  *
  * Author: Herodotos Herodotou
@@ -21,7 +21,7 @@
 
 /* --------- Functions to access vector tables by element -------------- */
 
-int getIntElement(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int getIntElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 		  unsigned int index, int * value, char * byte)
 {
   /* Execute the query to get element */
@@ -49,7 +49,7 @@ int getIntElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int getDoubleElement(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int getDoubleElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 		     unsigned int index, double * value, char * byte)
 {
   /* Execute the query to get element */
@@ -77,7 +77,7 @@ int getDoubleElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int getStringElement(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int getStringElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 		     unsigned int index, char ** value, char * byte)
 {
   /* Execute the query to get element */
@@ -106,7 +106,7 @@ int getStringElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int getComplexElement(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int getComplexElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 		      unsigned int index, Rcomplex * value, char * byte)
 {
   /* Execute the query to get element */
@@ -135,7 +135,7 @@ int getComplexElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int getLogicElement(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int getLogicElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 		    unsigned int index, int * value, char * byte)
 {
   /* Execute the query to get element */
@@ -166,7 +166,7 @@ int getLogicElement(MYSQL * sqlConn, rdbVector * vectorInfo,
 int execGetElementSQLCall(MYSQL * sqlConn, char* tableName, unsigned int index)
 {
   /* Build the sql string */
-  int length = strlen(sqlTemplateGetSingleValue) + strlen(tableName) + 
+  int length = strlen(sqlTemplateGetSingleValue) + strlen(tableName) +
                MAX_INT_LENGTH + 1;
   char strGetElem[length];
   sprintf( strGetElem, sqlTemplateGetSingleValue, tableName, index );
@@ -180,7 +180,7 @@ int execGetElementSQLCall(MYSQL * sqlConn, char* tableName, unsigned int index)
 /* ------------------------------------------------------------------ */
 /* ----- Functions to access vector tables and get all elements ----- */
 
-int getAllIntElements(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int getAllIntElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 		      int values[], char byteArray[])
 {
   /* Execute the query to get element */
@@ -298,7 +298,7 @@ int getAllComplexElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int getAllLogicElements(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int getAllLogicElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 			int values[], char byteArray[])
 {
   /* Execute the query to get element */
@@ -343,8 +343,8 @@ int execGetAllElementsSQLCall(MYSQL * sqlConn, char * tableName)
 /* ------------------------------------------------------------------ */
 /* -------- Functions to access vector tables with ranges -------- */
 
-int getRangeIntElements(MYSQL * sqlConn, rdbVector * vectorInfo, 
-			unsigned int greaterThan, unsigned int lessThan, 
+int getRangeIntElements(MYSQL * sqlConn, rdbVector * vectorInfo,
+			unsigned int greaterThan, unsigned int lessThan,
 			int values[], char byteArray[])
 {
   /* Execute the query to get element */
@@ -374,8 +374,8 @@ int getRangeIntElements(MYSQL * sqlConn, rdbVector * vectorInfo,
   return 1;
 }
 
-int getRangeDoubleElements(MYSQL * sqlConn, rdbVector * vectorInfo, 
-			   unsigned int greaterThan, unsigned int lessThan, 
+int getRangeDoubleElements(MYSQL * sqlConn, rdbVector * vectorInfo,
+			   unsigned int greaterThan, unsigned int lessThan,
 			   double values[], char byteArray[])
 {
   /* Execute the query to get element */
@@ -406,8 +406,8 @@ int getRangeDoubleElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int getRangeStringElements(MYSQL * sqlConn, rdbVector * vectorInfo, 
-			   unsigned int greaterThan, unsigned int lessThan, 
+int getRangeStringElements(MYSQL * sqlConn, rdbVector * vectorInfo,
+			   unsigned int greaterThan, unsigned int lessThan,
 			   char * values[], char byteArray[])
 {
   /* Execute the query to get element */
@@ -439,8 +439,8 @@ int getRangeStringElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int getRangeComplexElements(MYSQL * sqlConn, rdbVector * vectorInfo, 
-			    unsigned int greaterThan, unsigned int lessThan, 
+int getRangeComplexElements(MYSQL * sqlConn, rdbVector * vectorInfo,
+			    unsigned int greaterThan, unsigned int lessThan,
 			    Rcomplex values[], char byteArray[])
 {
   /* Execute the query to get element */
@@ -472,8 +472,8 @@ int getRangeComplexElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int getRangeLogicElements(MYSQL * sqlConn, rdbVector * vectorInfo, 
-			  unsigned int greaterThan, unsigned int lessThan, 
+int getRangeLogicElements(MYSQL * sqlConn, rdbVector * vectorInfo,
+			  unsigned int greaterThan, unsigned int lessThan,
 			  int values[], char byteArray[])
 {
   /* Execute the query to get element */
@@ -508,7 +508,7 @@ int execGetRangeElementsSQLCall(MYSQL * sqlConn, char * tableName,
 			     unsigned int greaterThan, unsigned int lessThan)
 {
   /* Build the sql string */
-  int length = strlen(sqlTemplateGetRangeValues) + strlen(tableName) + 
+  int length = strlen(sqlTemplateGetRangeValues) + strlen(tableName) +
                2*MAX_INT_LENGTH + 1;
   char strGetElems[length];
   sprintf( strGetElems, sqlTemplateGetRangeValues, tableName,
@@ -525,7 +525,7 @@ int execGetRangeElementsSQLCall(MYSQL * sqlConn, char * tableName,
 /* ---- Functions to access vector tables and get some elements ----- */
 
 int getSparseIntElements(MYSQL * sqlConn, rdbVector * vectorInfo,
-			 unsigned int indexes[], int size, 
+			 unsigned int indexes[], int size,
 			 int values[], char byteArray[])
 {
   /* Some error checking */
@@ -602,7 +602,7 @@ int getSparseDoubleElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int getSparseStringElements(MYSQL * sqlConn, rdbVector * vectorInfo, 
+int getSparseStringElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 			    unsigned int indexes[], int size,
 			    char * values[], char byteArray[])
 {
@@ -642,8 +642,8 @@ int getSparseStringElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int getSparseComplexElements(MYSQL * sqlConn, rdbVector * vectorInfo, 
-			     unsigned int indexes[], int size, 
+int getSparseComplexElements(MYSQL * sqlConn, rdbVector * vectorInfo,
+			     unsigned int indexes[], int size,
 			     Rcomplex values[], char byteArray[])
 {
   /* Some error checking */
@@ -683,7 +683,7 @@ int getSparseComplexElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 
 
 int getSparseLogicElements(MYSQL * sqlConn, rdbVector * vectorInfo,
-			   unsigned int indexes[], int size, 
+			   unsigned int indexes[], int size,
 			   int values[], char byteArray[])
 {
   /* Some error checking */
@@ -721,7 +721,7 @@ int getSparseLogicElements(MYSQL * sqlConn, rdbVector * vectorInfo,
 }
 
 
-int execGetSparseElementsSQLCall(MYSQL * sqlConn, char * tableName, 
+int execGetSparseElementsSQLCall(MYSQL * sqlConn, char * tableName,
 				 unsigned int indexes[], int size)
 {
   /* Initialize necessary strings */
@@ -737,12 +737,12 @@ int execGetSparseElementsSQLCall(MYSQL * sqlConn, char * tableName,
      sprintf(temp, sqlTemplateVIndexOR, indexes[i]);
      strcat(strIndexes, temp);
   }
-  
+
   sprintf(temp, sqlTemplateVIndex, indexes[i]);
   strcat(strIndexes, temp);
 
   /* Build the sql string */
-  int length = strlen(sqlTemplateGetSparseValues) + strlen(tableName) + 
+  int length = strlen(sqlTemplateGetSparseValues) + strlen(tableName) +
                strlen(strIndexes) + 1;
   char strGetElems[length];
   sprintf( strGetElems, sqlTemplateGetSparseValues, tableName, strIndexes);
@@ -755,7 +755,7 @@ int execGetSparseElementsSQLCall(MYSQL * sqlConn, char * tableName,
 
 
 /* ---------- Functions to access vector tables by DBVectors ------------ */
-int getIntElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector, 
+int getIntElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 			       rdbVector * indexVector, rdbVector * resultVector)
 {
   if( indexVector->sxp_type != SXP_TYPE_INTEGER &&
@@ -784,7 +784,7 @@ int getIntElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 }
 
 
-int getDoubleElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector, 
+int getDoubleElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 				  rdbVector * indexVector,
 				  rdbVector * resultVector)
 {
@@ -814,8 +814,8 @@ int getDoubleElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 }
 
 
-int getStringElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector, 
-				  rdbVector * indexVector, 
+int getStringElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
+				  rdbVector * indexVector,
 				  rdbVector * resultVector)
 {
   if( indexVector->sxp_type != SXP_TYPE_INTEGER &&
@@ -845,7 +845,7 @@ int getStringElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 
 
 int getComplexElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
-				   rdbVector * indexVector, 
+				   rdbVector * indexVector,
 				   rdbVector * resultVector)
 {
   if( indexVector->sxp_type != SXP_TYPE_INTEGER &&
@@ -874,8 +874,8 @@ int getComplexElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 }
 
 
-int getLogicElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector, 
-				 rdbVector * indexVector, 
+int getLogicElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
+				 rdbVector * indexVector,
 				 rdbVector * resultVector)
 {
   if( indexVector->sxp_type != SXP_TYPE_INTEGER &&
@@ -907,7 +907,7 @@ int getLogicElementsWithDBVector(MYSQL * sqlConn, rdbVector * dataVector,
 void buildGetElemWithDBVectorSQL(char ** strGetElems, char * sqlTemplate,
 				rdbVector* dataVector, rdbVector* indexVector)
 {
-  int length = strlen(sqlTemplate) + strlen(dataVector->tableName) + 
+  int length = strlen(sqlTemplate) + strlen(dataVector->tableName) +
                strlen(indexVector->tableName) + 1;
   *strGetElems = (char*) malloc( length * sizeof(char) );
   sprintf( *strGetElems, sqlTemplate, dataVector->tableName,
@@ -916,31 +916,31 @@ void buildGetElemWithDBVectorSQL(char ** strGetElems, char * sqlTemplate,
 
 
 /* ------ Functions to access vector tables by Logic DBVectors -------- */
-int getIntElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector, 
+int getIntElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
 			    rdbVector * logicVector, rdbVector * resultVector)
 {
-  return internalGetElementsWithLogic(sqlConn, dataVector, 
-				      logicVector, resultVector, 
+  return internalGetElementsWithLogic(sqlConn, dataVector,
+				      logicVector, resultVector,
 				      sqlTemplateGetValuesWithLogic,
 				      sqlTemplateTransformResults);
 }
 
 
-int getDoubleElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector, 
+int getDoubleElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
 			       rdbVector * logicVector, rdbVector * resultVector)
 {
-  return internalGetElementsWithLogic(sqlConn, dataVector, 
-				      logicVector, resultVector, 
+  return internalGetElementsWithLogic(sqlConn, dataVector,
+				      logicVector, resultVector,
 				      sqlTemplateGetValuesWithLogic,
 				      sqlTemplateTransformResults);
 }
 
 
-int getStringElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector, 
+int getStringElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
 			       rdbVector * logicVector, rdbVector * resultVector)
 {
-  return internalGetElementsWithLogic(sqlConn, dataVector, 
-				      logicVector, resultVector, 
+  return internalGetElementsWithLogic(sqlConn, dataVector,
+				      logicVector, resultVector,
 				      sqlTemplateGetValuesWithLogic,
 				      sqlTemplateTransformResults);
 }
@@ -949,24 +949,24 @@ int getStringElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
 int getComplexElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
 				rdbVector * logicVector, rdbVector * resultVector)
 {
-  return internalGetElementsWithLogic(sqlConn, dataVector, 
-				      logicVector, resultVector, 
+  return internalGetElementsWithLogic(sqlConn, dataVector,
+				      logicVector, resultVector,
 				      sqlTemplateGetCplxValuesWithLogic,
 				      sqlTemplateTransformCplxResults);
 }
 
 
-int getLogicElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector, 
+int getLogicElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
 			      rdbVector * logicVector, rdbVector * resultVector)
 {
-  return internalGetElementsWithLogic(sqlConn, dataVector, 
-				      logicVector, resultVector, 
+  return internalGetElementsWithLogic(sqlConn, dataVector,
+				      logicVector, resultVector,
 				      sqlTemplateGetValuesWithLogic,
 				      sqlTemplateTransformResults);
 }
 
 
-int internalGetElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector, 
+int internalGetElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
 			       rdbVector * logicVector, rdbVector * resultVector,
 			       char * sqlTemplateTemp, char * sqlTemplateFinal)
 {
@@ -984,19 +984,19 @@ int internalGetElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
   int success = 0;
   switch( dataVector->sxp_type )
   {
-    case SXP_TYPE_INTEGER: 
+    case SXP_TYPE_INTEGER:
       success = createNewIntegerVectorView(sqlConn, tempView, strResults);
       break;
-    case SXP_TYPE_DOUBLE: 
+    case SXP_TYPE_DOUBLE:
       success = createNewDoubleVectorView(sqlConn, tempView, strResults);
       break;
-    case SXP_TYPE_STRING: 
+    case SXP_TYPE_STRING:
       success = createNewStringVectorView(sqlConn, tempView, strResults);
       break;
-    case SXP_TYPE_COMPLEX: 
+    case SXP_TYPE_COMPLEX:
       success = createNewComplexVectorView(sqlConn, tempView, strResults);
       break;
-    case SXP_TYPE_LOGIC: 
+    case SXP_TYPE_LOGIC:
       success = createNewLogicVectorView(sqlConn, tempView, strResults);
       break;
   }
@@ -1019,23 +1019,23 @@ int internalGetElementsWithLogic(MYSQL * sqlConn, rdbVector * dataVector,
   success = 0;
   switch( dataVector->sxp_type )
   {
-    case SXP_TYPE_INTEGER: 
+    case SXP_TYPE_INTEGER:
       success = createNewIntegerVectorView(sqlConn, resultVector, strFinal);
       break;
-    case SXP_TYPE_DOUBLE: 
+    case SXP_TYPE_DOUBLE:
       success = createNewDoubleVectorView(sqlConn, resultVector, strFinal);
       break;
-    case SXP_TYPE_STRING: 
+    case SXP_TYPE_STRING:
       success = createNewStringVectorView(sqlConn, resultVector, strFinal);
       break;
-    case SXP_TYPE_COMPLEX: 
+    case SXP_TYPE_COMPLEX:
       success = createNewComplexVectorView(sqlConn, resultVector, strFinal);
       break;
-    case SXP_TYPE_LOGIC: 
+    case SXP_TYPE_LOGIC:
       success = createNewLogicVectorView(sqlConn, resultVector, strFinal);
       break;
   }
-  
+
   /* Get the results from the view */
   if( success )
   {
@@ -1061,7 +1061,7 @@ void buildGetElemWithLogicSQL(char ** strGetElems, char * sqlTemplate,
 			     rdbVector* dataVector, rdbVector* logicVector)
 {
   int size = logicVector->size;
-  int length = strlen(sqlTemplate) + strlen(dataVector->tableName) + 
+  int length = strlen(sqlTemplate) + strlen(dataVector->tableName) +
                strlen(logicVector->tableName) + 2*MAX_INT_LENGTH + 1;
   *strGetElems = (char*) malloc( length * sizeof(char) );
 
@@ -1074,7 +1074,7 @@ void buildTranformResultsSQL(char ** strResults, char * sqlTemplate,
 			     rdbVector* resultsVector, rdbVector* logicVector)
 {
   int size = logicVector->size;
-  int length = strlen(sqlTemplate) + strlen(resultsVector->tableName) + 
+  int length = strlen(sqlTemplate) + strlen(resultsVector->tableName) +
                2*strlen(logicVector->tableName) + 2*MAX_INT_LENGTH + 1;
   *strResults = (char*) malloc( length * sizeof(char) );
 
